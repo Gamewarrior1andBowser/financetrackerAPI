@@ -14,7 +14,6 @@ public class BudgetController : ControllerBase {
         _context = context;
     }
 
-
     // Create Budget
     [Authorize]
     [HttpPost]
@@ -30,7 +29,6 @@ public class BudgetController : ControllerBase {
         return Ok(budget);
     }
 
-
     // Get All User Budgets
     [Authorize]
     [HttpGet]
@@ -43,7 +41,6 @@ public class BudgetController : ControllerBase {
 
         return Ok(budget);
     }
-
 
     // Get Single Budget
     [Authorize]
@@ -64,7 +61,6 @@ public class BudgetController : ControllerBase {
 
         return Ok(budget);
     }
-
 
     // Update Budget
     [Authorize]
@@ -96,7 +92,6 @@ public class BudgetController : ControllerBase {
 
         return Ok(budget);
     }
-
 
     // Delete Budget
     [Authorize]
