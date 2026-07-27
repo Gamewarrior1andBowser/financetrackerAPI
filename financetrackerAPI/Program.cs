@@ -1,12 +1,11 @@
 using financetrackerAPI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Database
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -17,59 +16,50 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 
-// Controllers
-builder.Services.AddControllers();
-
+// MVC + API Controllers
+builder.Services.AddControllersWithViews();
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(
-                    builder.Configuration["Jwt:Key"]
-                )
-            )
-        };
-    });
+.AddJwtBearer(options =>
+ {
+     options.TokenValidationParameters = new TokenValidationParameters {
+         ValidateIssuer = false,
+         ValidateAudience = false,
+         ValidateLifetime = true,
+         ValidateIssuerSigningKey = true,
+         IssuerSigningKey = new SymmetricSecurityKey(
+             Encoding.UTF8.GetBytes(
+                 builder.Configuration["Jwt:Key"]
+             )
+         )
+     };
+ });
 
 
 builder.Services.AddAuthorization();
 
 
 // Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-
+builder.Services.AddEndpointsApiExplorer();builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 
-// Swagger
-if (app.Environment.IsDevelopment())
-{
+if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-
 app.UseHttpsRedirection();
-
-
-// Authentication MUST come before Authorization
 app.UseAuthentication();
-
 app.UseAuthorization();
 
+// MVC Views
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=AuthPage}/{action=Register}/{id?}");
 
+// API Controllers
 app.MapControllers();
-
 
 app.Run();
