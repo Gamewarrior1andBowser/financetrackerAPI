@@ -7,84 +7,84 @@ namespace financetrackerAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BudgetController : ControllerBase {
+public class CategoryController : ControllerBase {
     private readonly AppDbContext _context;
 
-    public BudgetController(AppDbContext context) {
+    public CategoryController(AppDbContext context) {
         _context = context;
     }
 
-    // Create Budget
+    // Create Category
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> Create(Budget budget) {
+    public async Task<IActionResult> Create(Category budget) {
         var userId = int.Parse(User.FindFirst("id").Value);
 
         budget.UserID = userId;
 
-        _context.Budgets.Add(budget);
+        _context.Categories.Add(budget);
 
         await _context.SaveChangesAsync();
 
         return Ok(budget);
     }
 
-    // Get All User Budgets
+    // Get All User Categories
     [Authorize]
     [HttpGet]
     public IActionResult GetAll() {
         var userId = int.Parse(User.FindFirst("id").Value);
 
-        var budget = _context.Budgets
+        var budget = _context.Categories
             .Where(t => t.UserID == userId)
             .ToList();
 
         return Ok(budget);
     }
 
-    // Get Single Budget
+    // Get Single Category
     [Authorize]
     [HttpGet("{id}")]
     public IActionResult GetById(int id) {
         var userId = int.Parse(User.FindFirst("id").Value);
 
-        var budget = _context.Budgets
+        var budget = _context.Categories
             .FirstOrDefault(t =>
-                t.BudgetID == id &&
+                t.CategoryID == id &&
                 t.UserID == userId);
 
 
         if (budget == null) {
-            return NotFound("Budget not found");
+            return NotFound("Category not found");
         }
 
 
         return Ok(budget);
     }
 
-    // Update Budget
+    // Update Category
     [Authorize]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Budget updatedBudget) {
+    public async Task<IActionResult> Update(int id, Category updatedCategory) {
         var userId = int.Parse(User.FindFirst("id").Value);
 
 
-        var budget = _context.Budgets
+        var budget = _context.Categories
             .FirstOrDefault(t =>
-                t.BudgetID == id &&
+                t.CategoryID == id &&
                 t.UserID == userId);
 
 
         if (budget == null) {
-            return NotFound("Budget not found");
+            return NotFound("Category not found");
         }
 
 
-        budget.Limit = updatedBudget.Limit;
+        budget.Name = updatedCategory.Name;
 
-        budget.BudgetID = updatedBudget.BudgetID;
+        budget.CategoryID = updatedCategory.CategoryID;
 
-        budget.Date = updatedBudget.Date;
+        budget.Type = updatedCategory.Type;
 
 
         await _context.SaveChangesAsync();
@@ -93,29 +93,29 @@ public class BudgetController : ControllerBase {
         return Ok(budget);
     }
 
-    // Delete Budget
+    // Delete Category
     [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id) {
         var userId = int.Parse(User.FindFirst("id").Value);
 
 
-        var budget = _context.Budgets
+        var budget = _context.Categories
             .FirstOrDefault(t =>
-                t.BudgetID == id &&
+                t.CategoryID == id &&
                 t.UserID == userId);
 
 
         if (budget == null) {
-            return NotFound("Budget not found");
+            return NotFound("Category not found");
         }
 
 
-        _context.Budgets.Remove(budget);
+        _context.Categories.Remove(budget);
 
         await _context.SaveChangesAsync();
 
 
-        return Ok("Budget deleted");
+        return Ok("Category deleted");
     }
 }
