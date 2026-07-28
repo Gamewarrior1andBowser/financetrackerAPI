@@ -1,7 +1,6 @@
 using financetrackerAPI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -15,42 +14,45 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     );
 });
 
-
 // MVC + API Controllers
 builder.Services.AddControllersWithViews();
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(options =>
- {
-     options.TokenValidationParameters = new TokenValidationParameters {
-         ValidateIssuer = false,
-         ValidateAudience = false,
-         ValidateLifetime = true,
-         ValidateIssuerSigningKey = true,
-         IssuerSigningKey = new SymmetricSecurityKey(
-             Encoding.UTF8.GetBytes(
-                 builder.Configuration["Jwt:Key"]
-             )
-         )
-     };
- });
-
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+            )
+        };
+    });
 
 builder.Services.AddAuthorization();
 
-
 // Swagger
-builder.Services.AddEndpointsApiExplorer();builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
-
-if (app.Environment.IsDevelopment()) {
+// Development
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+// Enable CSS, JavaScript, Images from wwwroot
+app.UseStaticFiles();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
