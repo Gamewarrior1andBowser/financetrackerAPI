@@ -1,5 +1,44 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{ ViewData["Title"] = "Budgets"; }
+
+<div class="container">
+    <h1 class="mb-4"> Budgets </h1>
+
+    <table class="table table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th> Date </th>
+                <th>Limit </th>
+            </tr>
+        </thead>
+        <tbody id="budgetTable">
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+
+        const token = localStorage.getItem("token");
+
+        fetch("/api/Budget", {
+            headers: { "Authorization": "Bearer " + token }
+        })
+
+            .then(response => response.json())
+
+            .then(data => {
+                let rows = "";
+                data.forEach(budget => { rows += `
+                <tr>
+                    <td>${budget.date}</td>
+                    <td>${budget.limit}</td>
+                </tr> `;
+                });
+
+                document.getElementById("budgetTable").innerHTML = rows;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    </script>
 }
