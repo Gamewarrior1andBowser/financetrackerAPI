@@ -65,7 +65,7 @@ public class AuthController : ControllerBase
 
         if (user == null)
         {
-            return Unauthorized("Invalid email or password");
+            return Unauthorized("This account doesn't existy");
         }
 
 
