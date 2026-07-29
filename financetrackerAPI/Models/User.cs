@@ -6,7 +6,7 @@ namespace financetrackerAPI.Models
     {
 
         [Key]
-        public int UserID { get; set; }
+        public int userID { get; set; }
         public string email { get; set; }
         public string password { get; set; }
         public DateTime creationTime { get; set; }
