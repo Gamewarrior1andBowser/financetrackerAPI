@@ -18,9 +18,9 @@ public class CategoryController : ControllerBase {
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create(Category budget) {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
-        budget.UserID = userId;
+        budget.userID = userID;
 
         _context.Categories.Add(budget);
 
@@ -33,10 +33,10 @@ public class CategoryController : ControllerBase {
     [Authorize]
     [HttpGet]
     public IActionResult GetAll() {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
         var budget = _context.Categories
-            .Where(t => t.UserID == userId)
+            .Where(t => t.userID == userID)
             .ToList();
 
         return Ok(budget);
@@ -46,12 +46,12 @@ public class CategoryController : ControllerBase {
     [Authorize]
     [HttpGet("{id}")]
     public IActionResult GetById(int id) {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
         var budget = _context.Categories
             .FirstOrDefault(t =>
                 t.CategoryID == id &&
-                t.UserID == userId);
+                t.userID == userID);
 
 
         if (budget == null) {
@@ -66,13 +66,13 @@ public class CategoryController : ControllerBase {
     [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, Category updatedCategory) {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
 
         var budget = _context.Categories
             .FirstOrDefault(t =>
                 t.CategoryID == id &&
-                t.UserID == userId);
+                t.userID == userID);
 
 
         if (budget == null) {
@@ -97,13 +97,13 @@ public class CategoryController : ControllerBase {
     [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id) {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
 
         var budget = _context.Categories
             .FirstOrDefault(t =>
                 t.CategoryID == id &&
-                t.UserID == userId);
+                t.userID == userID);
 
 
         if (budget == null) {

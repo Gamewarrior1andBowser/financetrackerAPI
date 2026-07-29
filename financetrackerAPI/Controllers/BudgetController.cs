@@ -18,9 +18,9 @@ public class BudgetController : ControllerBase {
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create(Budget budget) {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
-        budget.UserID = userId;
+        budget.userID = userID;
 
         _context.Budgets.Add(budget);
 
@@ -33,10 +33,10 @@ public class BudgetController : ControllerBase {
     [Authorize]
     [HttpGet]
     public IActionResult GetAll() {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
         var budget = _context.Budgets
-            .Where(t => t.UserID == userId)
+            .Where(t => t.userID == userID)
             .ToList();
 
         return Ok(budget);
@@ -46,12 +46,12 @@ public class BudgetController : ControllerBase {
     [Authorize]
     [HttpGet("{id}")]
     public IActionResult GetById(int id) {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
         var budget = _context.Budgets
             .FirstOrDefault(t =>
                 t.BudgetID == id &&
-                t.UserID == userId);
+                t.userID == userID);
 
 
         if (budget == null) {
@@ -66,13 +66,13 @@ public class BudgetController : ControllerBase {
     [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, Budget updatedBudget) {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
 
         var budget = _context.Budgets
             .FirstOrDefault(t =>
                 t.BudgetID == id &&
-                t.UserID == userId);
+                t.userID == userID);
 
 
         if (budget == null) {
@@ -97,13 +97,13 @@ public class BudgetController : ControllerBase {
     [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id) {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
 
         var budget = _context.Budgets
             .FirstOrDefault(t =>
                 t.BudgetID == id &&
-                t.UserID == userId);
+                t.userID == userID);
 
 
         if (budget == null) {
