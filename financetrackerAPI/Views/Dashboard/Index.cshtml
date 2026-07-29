@@ -1,135 +1,63 @@
-﻿@{
-    ViewData["Title"] = "Dashboard";
-}
+﻿@{ ViewData["Title"] = "Dashboard"; }
 
 <div class="container">
 
-    <h1 class="mb-4">
-        Finance Dashboard
-    </h1>
-
+    <h1 class="mb-4"> Finance Dashboard </h1>
 
     <div class="row">
 
-
         <div class="col-md-4">
             <div class="card shadow p-3">
-
-                <h5>
-                    Total Balance
-                </h5>
-
-                <h2 id="balance">
-                    $0
-                </h2>
-
+                <h5> Total Balance  </h5>
+                <h2 id="balance"> $0 </h2>
             </div>
         </div>
 
-
-
         <div class="col-md-4">
-
             <div class="card shadow p-3">
-
-                <h5>
-                    Total Income
-                </h5>
-
-                <h2 id="income">
-                    $0
-                </h2>
-
+                <h5>Total Income </h5>
+                <h2 id="income">  $0 </h2>
             </div>
-
         </div>
 
-
-
         <div class="col-md-4">
-
             <div class="card shadow p-3">
-
-                <h5>
-                    Total Expenses
-                </h5>
-
-                <h2 id="expense">
-                    $0
-                </h2>
-
+                <h5> Total Expenses </h5>
+                <h2 id="expense"> $0 </h2>
             </div>
-
         </div>
-
-
     </div>
-
-
 </div>
 
-
 @section Scripts {
-
     <script>
-
         const token = localStorage.getItem("token");
-
-
         fetch("/api/Transactions", {
-
-            headers: {
-
+           headers: {
                 "Authorization": "Bearer " + token
-
             }
-
         })
             .then(response => response.json())
-
             .then(data => {
-
                 let income = 0;
                 let expense = 0;
-
-
                 data.forEach(transaction => {
-
-
                     if (transaction.type === "Income") {
                         income += transaction.amount;
                     }
                     else {
                         expense += transaction.amount;
                     }
-
-
                 });
 
+                document.getElementById("income").innerHTML = "$" + income;
 
+                document.getElementById("expense").innerHTML = "$" + expense;
 
-                document.getElementById("income").innerHTML =
-                    "$" + income;
-
-
-                document.getElementById("expense").innerHTML =
-                    "$" + expense;
-
-
-                document.getElementById("balance").innerHTML =
-                    "$" + (income - expense);
-
-
+                document.getElementById("balance").innerHTML = "$" + (income - expense);
             })
-
-
             .catch(error => {
-
                 console.log(error);
-
             });
-
-
     </script>
-
 }
