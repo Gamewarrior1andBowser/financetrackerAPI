@@ -2,13 +2,13 @@
 {
     public class Transaction
     {
-        public int TransactionID { get; set; }
+        public int transactionID { get; set; }
 
         public decimal Amount { get; set; }
 
         public int userID { get; set; }
 
-        public int CategoryID { get; set; }
+        public int categoryID { get; set; }
         public DateTime Date { get; set; }
     }
 }
