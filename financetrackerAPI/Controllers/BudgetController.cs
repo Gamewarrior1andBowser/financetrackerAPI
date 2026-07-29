@@ -50,7 +50,7 @@ public class BudgetController : ControllerBase {
 
         var budget = _context.Budgets
             .FirstOrDefault(t =>
-                t.BudgetID == id &&
+                t.budgetID == id &&
                 t.userID == userID);
 
 
@@ -71,7 +71,7 @@ public class BudgetController : ControllerBase {
 
         var budget = _context.Budgets
             .FirstOrDefault(t =>
-                t.BudgetID == id &&
+                t.budgetID == id &&
                 t.userID == userID);
 
 
@@ -82,7 +82,7 @@ public class BudgetController : ControllerBase {
 
         budget.Limit = updatedBudget.Limit;
 
-        budget.BudgetID = updatedBudget.BudgetID;
+        budget.budgetID = updatedBudget.budgetID;
 
         budget.Date = updatedBudget.Date;
 
@@ -102,7 +102,7 @@ public class BudgetController : ControllerBase {
 
         var budget = _context.Budgets
             .FirstOrDefault(t =>
-                t.BudgetID == id &&
+                t.budgetID == id &&
                 t.userID == userID);
 
 
