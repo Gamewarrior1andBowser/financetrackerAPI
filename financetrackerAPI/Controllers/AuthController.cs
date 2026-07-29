@@ -37,7 +37,6 @@ public class AuthController : ControllerBase
             return BadRequest("Email already exists");
         }
 
-        user.userID = _context.Users.Count();
 
         user.password =
             BCrypt.Net.BCrypt.HashPassword(user.password);
