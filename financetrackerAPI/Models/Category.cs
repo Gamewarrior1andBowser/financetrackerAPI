@@ -4,7 +4,7 @@ public class Category
 {
     public int CategoryID { get; set; }
 
-    public int UserID { get; set; }
+    public int userID { get; set; }
 
     public string Name { get; set; }
 

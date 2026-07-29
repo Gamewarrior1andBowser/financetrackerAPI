@@ -2,7 +2,7 @@
     public class Budget {
         public int BudgetID { get; set; }
 
-        public int UserID { get; set; }
+        public int userID { get; set; }
 
         public DateTime Date { get; set; }
 

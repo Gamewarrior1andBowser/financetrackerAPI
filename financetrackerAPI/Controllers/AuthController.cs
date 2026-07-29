@@ -38,6 +38,7 @@ public class AuthController : ControllerBase
             return BadRequest("Email already exists");
         }
 
+        user.userID = _context.Users.Count();
 
         user.password =
             BCrypt.Net.BCrypt.HashPassword(user.password);
@@ -73,7 +74,7 @@ public class AuthController : ControllerBase
 
         if (user == null)
         {
-            return Unauthorized("Invalid email or password");
+            return Unauthorized("This account doesn't existy");
         }
 
 
@@ -119,7 +120,7 @@ public class AuthController : ControllerBase
         {
             new Claim(
                 "id",
-                user.UserID.ToString()
+                user.userID.ToString()
             )
         };
 

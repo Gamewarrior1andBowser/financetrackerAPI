@@ -22,9 +22,9 @@ public class TransactionsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(Transaction transaction)
     {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
-        transaction.UserID = userId;
+        transaction.userID = userID;
 
         _context.Transactions.Add(transaction);
 
@@ -39,10 +39,10 @@ public class TransactionsController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
         var transactions = _context.Transactions
-            .Where(t => t.UserID == userId)
+            .Where(t => t.userID == userID)
             .ToList();
 
         return Ok(transactions);
@@ -54,12 +54,12 @@ public class TransactionsController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
                 t.TransactionID == id &&
-                t.UserID == userId);
+                t.userID == userID);
 
 
         if (transaction == null)
@@ -77,13 +77,13 @@ public class TransactionsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, Transaction updatedTransaction)
     {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
                 t.TransactionID == id &&
-                t.UserID == userId);
+                t.userID == userID);
 
 
         if (transaction == null)
@@ -111,13 +111,13 @@ public class TransactionsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var userId = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id").Value);
 
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
                 t.TransactionID == id &&
-                t.UserID == userId);
+                t.userID == userID);
 
 
         if (transaction == null)
