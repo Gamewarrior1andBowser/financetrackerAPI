@@ -58,7 +58,7 @@ public class TransactionsController : ControllerBase
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
-                t.TransactionID == id &&
+                t.transactionID == id &&
                 t.userID == userID);
 
 
@@ -82,7 +82,7 @@ public class TransactionsController : ControllerBase
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
-                t.TransactionID == id &&
+                t.transactionID == id &&
                 t.userID == userID);
 
 
@@ -94,7 +94,7 @@ public class TransactionsController : ControllerBase
 
         transaction.Amount = updatedTransaction.Amount;
 
-        transaction.CategoryID = updatedTransaction.CategoryID;
+        transaction.categoryID = updatedTransaction.categoryID;
 
         transaction.Date = updatedTransaction.Date;
 
@@ -116,7 +116,7 @@ public class TransactionsController : ControllerBase
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
-                t.TransactionID == id &&
+                t.transactionID == id &&
                 t.userID == userID);
 
 

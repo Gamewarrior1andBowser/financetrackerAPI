@@ -50,7 +50,7 @@ public class CategoryController : ControllerBase {
 
         var budget = _context.Categories
             .FirstOrDefault(t =>
-                t.CategoryID == id &&
+                t.categoryID == id &&
                 t.userID == userID);
 
 
@@ -71,7 +71,7 @@ public class CategoryController : ControllerBase {
 
         var budget = _context.Categories
             .FirstOrDefault(t =>
-                t.CategoryID == id &&
+                t.categoryID == id &&
                 t.userID == userID);
 
 
@@ -82,7 +82,7 @@ public class CategoryController : ControllerBase {
 
         budget.Name = updatedCategory.Name;
 
-        budget.CategoryID = updatedCategory.CategoryID;
+        budget.categoryID = updatedCategory.categoryID;
 
         budget.Type = updatedCategory.Type;
 
@@ -102,7 +102,7 @@ public class CategoryController : ControllerBase {
 
         var budget = _context.Categories
             .FirstOrDefault(t =>
-                t.CategoryID == id &&
+                t.categoryID == id &&
                 t.userID == userID);
 
 

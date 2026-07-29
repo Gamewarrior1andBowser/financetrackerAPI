@@ -1,6 +1,6 @@
 ﻿namespace financetrackerAPI.Models {
     public class Budget {
-        public int BudgetID { get; set; }
+        public int budgetID { get; set; }
 
         public int userID { get; set; }
 
