@@ -1,5 +1,57 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{  ViewData["Title"] = "Categories";}
+
+<div class="container">
+
+    <h1 class="mb-4"> Categories </h1>
+
+    <div class="mb-3">
+        <a class="btn btn-primary" href="#"> Add Category </a>
+    </div>
+
+    <table class="table table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th> Category Name </th>
+                <th>  Actions </th>
+            </tr>
+        </thead>
+
+        <tbody id="categoryTable"> </tbody>
+    </table>
+</div>
+
+@section Scripts {
+
+    <script>
+        const token = localStorage.getItem("token");
+
+        fetch("/api/Category", {  headers: { "Authorization": "Bearer " + token }
+        })
+            .then(response => response.json())
+
+            .then(data => {
+
+                let rows = "";
+
+                data.forEach(category => {
+                    rows += `
+
+                    <tr>
+                        <td> ${category.name} </td>
+                        <td> ${category.type} </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm"> Edit  </button>
+                            <button class="btn btn-danger btn-sm">  Delete  </button>
+                        </td> 
+                     </tr>  `;
+                });
+
+                document.getElementById("categoryTable").innerHTML = rows;
+
+            })
+
+            .catch(error => {
+                console.log(error);
+            });
+    </script>
 }
