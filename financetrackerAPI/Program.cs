@@ -59,7 +59,7 @@ app.UseAuthorization();
 // MVC Views
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=AuthPage}/{action=Register}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // API Controllers
 app.MapControllers();
