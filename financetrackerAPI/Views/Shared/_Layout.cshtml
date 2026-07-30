@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
+
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
 
@@ -23,24 +24,33 @@
 </head>
 
 
+
 <body>
 
 
 <header>
 
+
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
 
+
         <div class="container">
+
 
 
             <a class="navbar-brand fw-bold text-primary"
                asp-controller="Home"
                asp-action="Index">
 
+
                 <i class="bi bi-wallet2 me-2"></i>
+
                 Finance Tracker
 
+
             </a>
+
+
 
 
 
@@ -49,9 +59,14 @@
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarNav">
 
+
                 <span class="navbar-toggler-icon"></span>
 
+
             </button>
+
+
+
 
 
 
@@ -59,54 +74,83 @@
                  id="navbarNav">
 
 
-                <ul class="navbar-nav ms-auto">
 
+                <ul class="navbar-nav ms-auto"
+                    id="navbarLinks">
+
+
+
+                    <!-- Public Navbar -->
 
                     <li class="nav-item">
+
 
                         <a class="nav-link"
                            asp-controller="Home"
                            asp-action="Index">
 
+
                             <i class="bi bi-house-door-fill me-1"></i>
+
                             Home
 
+
                         </a>
+
 
                     </li>
 
 
 
+
+
                     <li class="nav-item">
+
 
                         <a class="nav-link"
                            asp-controller="AuthPage"
                            asp-action="Login">
 
+
                             <i class="bi bi-box-arrow-in-right me-1"></i>
+
                             Login
+
 
                         </a>
 
+
                     </li>
+
+
+
 
 
 
                     <li class="nav-item">
 
+
                         <a class="btn btn-primary ms-2"
                            asp-controller="AuthPage"
                            asp-action="Register">
 
+
                             <i class="bi bi-person-plus-fill me-1"></i>
+
                             Register
 
+
                         </a>
+
 
                     </li>
 
 
+
+
                 </ul>
+
+
 
 
             </div>
@@ -122,35 +166,214 @@
 
 
 
+
+
 <div class="container mt-4">
 
+
     @RenderBody()
+
 
 </div>
 
 
 
+
+
 <footer class="border-top footer text-muted mt-5">
+
 
     <div class="container">
 
+
         <i class="bi bi-c-circle"></i>
+
         2026 Finance Tracker
 
+
     </div>
+
 
 </footer>
 
 
 
+
+
+
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
+
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+
+<script>
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+
+    const token = localStorage.getItem("token");
+
+    const navbar = document.getElementById("navbarLinks");
+
+
+
+
+    if(token && navbar){
+
+
+
+        navbar.innerHTML = `
+
+
+
+        <li class="nav-item">
+
+            <a class="nav-link"
+               href="/Dashboard">
+
+
+                <i class="bi bi-speedometer2 me-1"></i>
+
+                Dashboard
+
+
+            </a>
+
+        </li>
+
+
+
+
+
+        <li class="nav-item">
+
+
+            <a class="nav-link"
+               href="/TransactionPage">
+
+
+                <i class="bi bi-cash-stack me-1"></i>
+
+                Transactions
+
+
+            </a>
+
+
+        </li>
+
+
+
+
+
+        <li class="nav-item">
+
+
+            <a class="nav-link"
+               href="/CategoryPage">
+
+
+                <i class="bi bi-tags-fill me-1"></i>
+
+                Categories
+
+
+            </a>
+
+
+        </li>
+
+
+
+
+
+        <li class="nav-item">
+
+
+            <a class="nav-link"
+               href="/BudgetPage">
+
+
+                <i class="bi bi-wallet2 me-1"></i>
+
+                Budgets
+
+
+            </a>
+
+
+        </li>
+
+
+
+
+
+        <li class="nav-item">
+
+
+            <button class="btn btn-danger ms-2"
+                    onclick="logout()">
+
+
+
+                <i class="bi bi-box-arrow-right me-1"></i>
+
+
+                Logout
+
+
+
+            </button>
+
+
+        </li>
+
+
+
+        `;
+
+
+    }
+
+
+
+});
+
+
+
+
+
+
+function logout(){
+
+
+    localStorage.removeItem("token");
+
+
+    window.location.href="/";
+
+
+}
+
+
+
+</script>
+
+
+
 
 
 @await RenderSectionAsync("Scripts", required: false)
 
 
 </body>
+
 
 </html>
