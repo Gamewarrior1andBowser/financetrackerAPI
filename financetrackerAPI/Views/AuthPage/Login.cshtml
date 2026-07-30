@@ -1,39 +1,112 @@
-﻿<h2>Login</h2>
+﻿@{
+    ViewData["Title"] = "Login";
+}
 
-<input id="email" placeholder="Email" />
-<br />
-<br />
+<div class="container">
 
-<input id="password" type="password" />
-<br />
-<br />
+    <div class="row justify-content-center mt-5">
 
-<button onclick="login()">Login</button>
+        <div class="col-md-5">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-body p-5">
+
+                    <h2 class="text-center text-primary mb-3">
+                        Welcome Back
+                    </h2>
+
+                    <p class="text-center text-muted mb-4">
+                        Sign in to continue to Finance Tracker
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+
+                        <input id="email"
+                               type="email"
+                               class="form-control"
+                               placeholder="Enter your email" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Password</label>
+
+                        <input id="password"
+                               type="password"
+                               class="form-control"
+                               placeholder="Enter your password" />
+                    </div>
+
+                    <button class="btn btn-primary w-100"
+                            onclick="login()">
+                        Login
+                    </button>
+
+                    <hr class="my-4" />
+
+                    <p class="text-center mb-2">
+                        New user?
+                        <a asp-controller="AuthPage"
+                           asp-action="Register">
+                            Register here
+                        </a>
+                    </p>
+
+                    <p class="text-center">
+                        <a asp-controller="Home"
+                           asp-action="Index">
+                            ← Back to Home
+                        </a>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 <script>
     async function login() {
+
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
         const response = await fetch("/api/Auth/login", {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
                 email,
                 password
             })
+
         });
 
         const data = await response.json();
 
         if (response.ok) {
+
             localStorage.setItem("token", data.token);
-            alert("Logged in!");
-        } else {
-            alert("Invalid login");
+
+            alert("Login successful!");
+
+            window.location.href = "/Dashboard";
+
         }
+        else {
+
+            alert("Invalid email or password.");
+
+        }
+
     }
 </script>
-
