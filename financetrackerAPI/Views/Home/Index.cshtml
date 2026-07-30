@@ -63,9 +63,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
-    <style>
+    <title>@ViewData["Title"] - Finance Tracker</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @* <style>
             main {
                 min-height: 100vh;
                 display: flex;
@@ -97,30 +98,34 @@
             .btn-lg {
                 padding: 0.75rem 1rem;
             }
-    </style>
+    </style> *@
 </head>
-<body>
-    <!-- As a heading -->
-    <nav class="navbar bg-body-tertiary">
-        @* <div class="container-fluid">
+<body class="">
+    <div class="container bg-primary text-white">
+        <header>
+            <!-- As a heading -->
+            <nav class="navbar bg-body-tertiary">
+                @* <div class="container-fluid">
             <span class="navbar-brand mb-0 h1">Financial Tracker</span>
         </div> *@
-        <div class="text-bg-primary p-3">Financial Tracker</div>
-    </nav>
+                <h2 class="pb-2 mb-4 border-bottom border-dark">Financial Tracker</h2>@*Make this bigger and blend it with the main body*@
+            </nav>
+        </header>
 
-    <main>
-        <div class="home-card">
-            <h1>Welcome</h1>
-            <p>Please log in to your account or create a new one to get started.</p>
 
-            <div class="d-grid gap-3">
-                <a asp-controller="AuthPage"
-                   asp-action="Login" class="btn btn-primary btn-lg">Login</a>
-                <a asp-controller="AuthPage"
-                   asp-action="Register" class="btn btn-outline-primary btn-lg">Register</a>
+        <main>
+            <div class="home-card">
+                <h4>Welcome</h4>
+                <p>Please log in to your account or create a new one to get started.</p>
+
+                <div class="d-grid gap-3">
+                    <a asp-controller="AuthPage"
+                       asp-action="Login" class="btn btn-primary btn-lg">Login</a>
+                    <a asp-controller="AuthPage"
+                       asp-action="Register" class="btn btn-outline-primary btn-lg">Register</a>
+                </div>
             </div>
-        </div>
-    </main>
-
+        </main>
+    </div>
 </body>
 </html>
