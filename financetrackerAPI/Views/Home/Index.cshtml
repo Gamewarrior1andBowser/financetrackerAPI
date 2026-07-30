@@ -1,8 +1,95 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+
+    <div class="text-center py-5">
+
+        <h1 class="display-4 fw-bold text-primary">
+            Welcome to Finance Tracker
+        </h1>
+
+        <p class="lead mt-3">
+            Manage your income, expenses, budgets, and financial goals in one place.
+        </p>
+
+        <div class="mt-4">
+            <a asp-controller="AuthPage"
+               asp-action="Login"
+               class="btn btn-primary btn-lg me-2">
+                Login
+            </a>
+
+            <a asp-controller="AuthPage"
+               asp-action="Register"
+               class="btn btn-outline-primary btn-lg">
+                Register
+            </a>
+        </div>
+
+    </div>
+
+
+    <div class="row mt-5">
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <h4>Track Transactions</h4>
+
+                    <p>
+                        Record your income and expenses to monitor your daily financial activity.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+
+                    <h4>Organize Categories</h4>
+
+                    <p>
+                        Group your transactions into categories for better financial insights.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <h4>Manage Budgets</h4>
+
+                    <p>
+                        Set spending limits and monitor your progress to stay within your budget.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
