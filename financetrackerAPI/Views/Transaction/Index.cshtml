@@ -1,5 +1,45 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{ ViewData["Title"] = "Transactions";}
+
+<div class="container">
+    <h1 class="mb-4"> Transactions </h1>
+    <table class="table table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th> Description </th>
+                <th> Amount </th>
+                <th> Type </th>
+                <th> Date </th>
+            </tr>
+        </thead>
+        <tbody id="transactionTable"> </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        const token = localStorage.getItem("token");
+        fetch("/api/Transactions", {
+            headers:
+            { "Authorization": "Bearer " + token  }
+        })
+
+            .then(response => response.json())
+            .then(data => {
+                let rows = "";
+                data.forEach(transaction => {
+                    rows += `
+                <tr>
+                    <td> ${transaction.description} </td>
+                    <td>${transaction.amount}</td>
+                    <td> ${transaction.type}</td>
+                    <td> ${transaction.date}</td>
+                </tr>  `;
+                });
+
+                document.getElementById("transactionTable").innerHTML = rows;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    </script>
 }
