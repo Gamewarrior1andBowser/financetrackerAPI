@@ -13,8 +13,12 @@
         </thead>
         <tbody id="transactionTable"> </tbody>
     </table>
-</div>
 
+</div>
+    <div class="container">
+        <a asp-controller="Dashboard"
+           asp-action="Index" class="btn btn-primary">Go to Dashboard</a>
+    </div>
 @section Scripts {
     <script>
         const token = localStorage.getItem("token");
