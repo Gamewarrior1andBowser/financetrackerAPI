@@ -1,22 +1,336 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+@media (min-width:768px) {
+
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
 
-html {
-  position: relative;
-  min-height: 100%;
-}
 
 body {
-  margin-bottom: 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient( 135deg, #fffaf5, #f8f9ff, #f5ffff, #fff5fb );
+}
+
+
+
+main {
+    flex: 1;
+}
+
+
+
+
+/* ================= NAVBAR ================= */
+
+
+.navbar {
+    background: linear-gradient( 90deg, #ff6a00, #ee0979, #9b5de5, #00b4db ) !important;
+    background-size: 300% 300%;
+    animation: navbarMove 10s ease infinite;
+    box-shadow: 0 8px 25px rgba(0,0,0,.15);
+}
+
+
+
+
+@keyframes navbarMove {
+
+
+    0% {
+        background-position: 0% 50%;
+    }
+
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+
+
+
+.navbar-brand {
+    color: white !important;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+
+
+.nav-link {
+    color: white !important;
+    font-weight: 600;
+    padding: 10px 18px !important;
+    margin: 0 5px;
+    border-radius: 25px;
+    transition: .3s;
+}
+
+
+
+
+    .nav-link:hover {
+        background: white;
+        color: #9b5de5 !important;
+        transform: translateY(-3px);
+    }
+
+
+
+
+
+/* ================= HERO ================= */
+
+
+.hero {
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+    .hero h1 {
+        color: white;
+        font-size: 65px;
+        font-weight: 900;
+    }
+
+
+
+    .hero p {
+        color: white;
+        font-size: 22px;
+    }
+
+
+
+
+
+    .hero img {
+        width: 350px;
+        filter: drop-shadow(0 25px 40px rgba(0,0,0,.3));
+        animation: floating 4s infinite ease-in-out;
+    }
+
+
+
+@keyframes floating {
+
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+
+
+
+
+/* ================= CARDS ================= */
+
+
+.card {
+    background: white;
+    border: none;
+    border-radius: 25px;
+    color: #333;
+    box-shadow: 0 15px 40px rgba(0,0,0,.12);
+    transition: .4s;
+}
+
+
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 60px rgba(0,0,0,.2);
+    }
+
+
+
+
+.card-title {
+    color: #7b2cbf;
+    font-weight: 800;
+}
+
+
+
+.card-text {
+    color: #555;
+}
+
+
+
+
+
+/* ================= DASHBOARD BOX ================= */
+
+
+.dashboard-box {
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.12);
+    transition: .3s;
+}
+
+
+
+    .dashboard-box:hover {
+        transform: translateY(-8px);
+    }
+
+
+
+
+
+/* ================= BUTTONS ================= */
+
+
+.btn {
+    border-radius: 30px;
+    padding: 12px 30px;
+    font-weight: 700;
+    transition: .3s;
+}
+
+
+
+
+.btn-primary {
+    background: linear-gradient( 45deg, #ff416c, #ff4b2b );
+    border: none;
+}
+
+
+
+
+    .btn-primary:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(255,65,108,.4);
+    }
+
+
+
+
+
+.btn-outline-primary {
+    border: 2px solid white;
+    color: white;
+}
+
+
+
+    .btn-outline-primary:hover {
+        background: white;
+        color: #9b5de5;
+    }
+
+
+
+
+
+/* ================= ICONS ================= */
+
+
+.bi {
+    transition: .3s;
+}
+
+
+
+    .bi:hover {
+        transform: scale(1.2) rotate(5deg);
+    }
+
+
+
+
+
+/* ================= INPUTS ================= */
+
+
+.form-control {
+    border-radius: 20px;
+    padding: 13px;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+}
+
+
+
+    .form-control:focus {
+        border: none;
+        box-shadow: 0 0 20px rgba(155,91,229,.4);
+    }
+
+
+
+
+
+/* ================= FOOTER ================= */
+
+
+footer {
+    margin-top: auto;
+    background: linear-gradient( 90deg, #5f0f40, #9a031e, #fb8b24 );
+    color: white !important;
+    padding: 25px;
+}
+
+
+    footer i {
+        color: #ffd166;
+
+    }
+
+
+
+
+
+/* ================= PAGE ANIMATION ================= */
+
+
+.container {
+    animation: pageShow .6s ease;
+}
+
+
+
+
+@keyframes pageShow {
+
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

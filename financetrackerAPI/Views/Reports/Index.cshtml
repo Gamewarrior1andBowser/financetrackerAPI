@@ -1,67 +1,257 @@
-﻿@{ViewData["Title"] = "Reports";}
+﻿@{
+    ViewData["Title"] = "Reports";
+}
+
 
 <div class="container">
-    <h1 class="mb-4">   Financial Reports </h1>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card shadow p-3">
-                <h5> Income vs Expenses  </h5>
-                <canvas id="incomeExpenseChart"></canvas>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card shadow p-3">
-                <h5> Spending by Category  </h5>
-                <canvas id="categoryChart"></canvas>
-            </div>
-        </div>
+
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold text-white">
+
+            <i class="bi bi-bar-chart-fill me-2"></i>
+
+            Financial Reports
+
+        </h1>
+
+
+        <p class="text-white">
+
+            Track your income, expenses, and spending patterns.
+
+        </p>
+
+
     </div>
+
+
+
+
+
+
+    <div class="row g-4">
+
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow p-4">
+
+
+                <h5 class="card-title">
+
+                    <i class="bi bi-graph-up-arrow me-2"></i>
+
+                    Income vs Expenses
+
+                </h5>
+
+
+
+                <canvas id="incomeExpenseChart"></canvas>
+
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow p-4">
+
+
+                <h5 class="card-title">
+
+                    <i class="bi bi-pie-chart-fill me-2"></i>
+
+                    Spending by Category
+
+                </h5>
+
+
+
+                <canvas id="categoryChart"></canvas>
+
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
 </div>
+
+
+
+
 
 
 @section Scripts {
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <script>
 
-        const incomeExpenseChart =
-            document.getElementById("incomeExpenseChart");
+<script>
 
-        new Chart(incomeExpenseChart, {
 
-            type: "bar",
-            data: {
+// Income vs Expense Chart
 
-                labels: [
-                    "Income",
-                    "Expenses"
-                ],
 
-                datasets: [
-                    {
-                        label: "Amount",
-                        data: [ 0, 0 ]
-                    }]
-            }
+const incomeExpenseChart = document
+    .getElementById("incomeExpenseChart");
 
-        });
 
-        const categoryChart =
-            document.getElementById("categoryChart");
 
-        new Chart(categoryChart, {
+new Chart(incomeExpenseChart, {
 
-            type: "pie",
 
-            data: {
+    type: "bar",
 
-                labels: [],
 
-                datasets: [ {  data: [] } ]
-            }
-        });
-    </script>
+    data: {
+
+
+        labels: [
+
+            "Income",
+
+            "Expenses"
+
+        ],
+
+
+
+        datasets: [{
+
+            label: "Amount ($)",
+
+
+            data: [
+
+                0,
+
+                0
+
+            ],
+
+
+            borderWidth: 2
+
+
+        }]
+
+    },
+
+
+
+    options: {
+
+
+        responsive: true,
+
+
+        animation: {
+
+
+            duration: 1500
+
+        }
+
+
+    }
+
+
+});
+
+
+
+
+
+
+
+// Category Spending Chart
+
+
+const categoryChart = document
+    .getElementById("categoryChart");
+
+
+
+new Chart(categoryChart, {
+
+
+
+    type: "doughnut",
+
+
+
+
+        datasets: [{
+
+            data: [
+
+                0,
+
+                0,
+
+                0,
+
+                0
+
+            ],
+
+
+            borderWidth: 2
+
+
+        }]
+
+
+    },
+
+
+
+    options: {
+
+
+        responsive:true,
+
+
+        animation:{
+
+
+            duration:1500
+
+
+        }
+
+
+    }
+
+
+
+});
+
+
+
+</script>
+
+
 }
