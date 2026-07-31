@@ -5,7 +5,7 @@
     <h1 class="mb-4"> Categories </h1>
 
     <div class="mb-3">
-        <a class="btn btn-primary" href="#"> Add Category </a>
+        <a asp-controller="CategoryPage" asp-action="Create" class="btn btn-primary" > Add Category </a>
     </div>
 
     <table class="table table-bordered">
@@ -17,6 +17,8 @@
         </thead>
 
         <tbody id="categoryTable"> </tbody>
+        @*For: Category Names: The names of the new categories made by the user*@
+        @*For: Actions: Icons of the Delete and Edit functions to allow the user Delete and or edit a category*@
     </table>
     <a asp-controller="Dashboard"
        asp-action="Index" class="btn btn-primary">Go to Dashboard</a>
