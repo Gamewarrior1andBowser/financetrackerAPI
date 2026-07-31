@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
 using Microsoft.AspNetCore.Authorization;
-
-
 
 namespace financetrackerAPI.Controllers
 {
@@ -12,15 +9,6 @@ namespace financetrackerAPI.Controllers
         public IActionResult Index()
         {
             return View("~/Views/Budget/Index.cshtml");
-        }
-        public IActionResult Index()
-        {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "AuthPage");
-            }
-
-            return View();
         }
     }
 }
