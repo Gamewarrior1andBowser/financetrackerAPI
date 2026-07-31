@@ -27,28 +27,28 @@ public class AuthController : ControllerBase
         _config = config;
     }
 
-    [AllowAnonymous]
+
     [HttpPost("register")]
     public async Task<IActionResult> Register(User user)
     {
-        user.email = user.email.ToLower();
+        if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+        {
+            return BadRequest("Email and password are required");
+        }
 
-      var existingUser = await _context.Users
-       .FirstOrDefaultAsync(u => u.email == user.email);
+        user.email = user.email.ToLower().Trim();
+
+        User? existingUser = await _context.Users
+            .FirstOrDefaultAsync(u => u.email == user.email);
 
         if (existingUser != null)
         {
-            return BadRequest("Email already exists");
+            return BadRequest("An account with this email already exists");
         }
 
-        user.userID = _context.Users.Count();
-
-        user.password =
-            BCrypt.Net.BCrypt.HashPassword(user.password);
-
+        user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
 
         user.creationTime = DateTime.Now;
-        
 
         _context.Users.Add(user);
 
@@ -56,17 +56,18 @@ public class AuthController : ControllerBase
         {
             await _context.SaveChangesAsync();
         }
-        catch
+        catch (DbUpdateException)
         {
-         
-            return BadRequest("Email already exists");
+            return BadRequest("Unable to create account. Please try again later");
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unexpected error occurred");
         }
 
-
-        return Ok("Registered");
+        return Ok("Registration successful");
     }
 
-    [AllowAnonymous]
 
     [HttpPost("login")]
     public IActionResult Login(User login)

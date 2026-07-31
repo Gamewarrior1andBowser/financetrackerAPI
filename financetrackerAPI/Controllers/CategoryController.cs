@@ -7,6 +7,7 @@ namespace financetrackerAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class CategoryController : ControllerBase {
     private readonly AppDbContext _context;
 

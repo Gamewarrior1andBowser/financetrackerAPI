@@ -1,4 +1,4 @@
-﻿const token = localStorage.getItem("token");
+const token = localStorage.getItem("token");
 
 if (!token) {
     alert("Please log in or register your account");
