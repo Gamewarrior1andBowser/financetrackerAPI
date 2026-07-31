@@ -18,13 +18,8 @@
                     Sign Out
                 }
     *@
-    @if (User.Identity.IsAuthenticated)
-    {
-        <h2>Hello, @User.Identity.Name!</h2>
-        <p>Welcome back.</p>
-    }
-    <br />
-    <br />
+    
+    
     <hr class="dropdown-divider">
 
     <h4> Account Overview</h4>
@@ -105,94 +100,81 @@
 
 @section Scripts {
 
+    <script src="~/js/authGuard.js"></script>
+
     <script>
-        
         const token = localStorage.getItem("token");
-        // fetch("/api/Transactions", {
-        //    headers: {
-        //         "Authorization": "Bearer " + token
-        //     }
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         let income = 0;
-        //         let expense = 0;
-        //         data.forEach(transaction => {
-        //             if (transaction.type === "Income") {
-        //                 income += transaction.amount;
-        //             }
-        //             else {
-        //                 expense += transaction.amount;
-        //             }
-        //         });
 
-        //         document.getElementById("income").innerHTML = "$" + income;
-
-        //         document.getElementById("expense").innerHTML = "$" + expense;
-
-        //         document.getElementById("balance").innerHTML = "$" + (income - expense);
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //     }); 
-        fetch("/api/Budget", {
-        headers: {
-        "Authorization": "Bearer " + token
+        if (!token) {
+            window.location.href = "/AuthPage/Login";
         }
+
+        function handleAuthError(response) {
+            if (response.status === 401) {
+                localStorage.removeItem("token");
+                window.location.href = "/AuthPage/Login";
+                return true;
+            }
+            return false;
+        }
+
+        // ✅ Budget
+        fetch("/api/Budget", {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
         })
-        .then(response => response.json())
-        .then(budget => {
+            .then(response => {
+                if (handleAuthError(response)) return;
+                return response.json();
+            })
+            .then(budget => {
+                if (!budget) return;
 
-        document.getElementById("budgetName").innerHTML =
-        budget.budgetName;
+                document.getElementById("budgetName").innerHTML = budget.budgetName;
+                document.getElementById("budgetAmount").innerHTML = "$" + budget.amount;
+            });
 
-        document.getElementById("budgetAmount").innerHTML =
-        "$" + budget.amount;
-
-        });
-
+        // ✅ Category
         fetch("/api/Category", {
-    headers: {
-        "Authorization": "Bearer " + token
-    }
-})
-.then(response => response.json())
-.then(category => {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then(response => {
+                if (handleAuthError(response)) return;
+                return response.json();
+            })
+            .then(category => {
+                if (!category) return;
 
-    document.getElementById("categoryName").innerHTML =
-        category.categoryName;
+                document.getElementById("categoryName").innerHTML = category.categoryName;
+                document.getElementById("categoryAmount").innerHTML = "$" + category.totalSpent;
+            });
 
-    document.getElementById("categoryAmount").innerHTML =
-        "$" + category.totalSpent;
+        // ✅ Transactions
+        fetch("/api/Transactions", {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then(response => {
+                if (handleAuthError(response)) return;
+                return response.json();
+            })
+            .then(transactions => {
+                if (!transactions) return;
 
-});
+                let html = "";
 
-fetch("/api/Transactions", {
-    headers: {
-        "Authorization": "Bearer " + token
-    }
-})
-.then(response => response.json())
-.then(transactions => {
+                transactions.forEach(transaction => {
+                    html += `<p>${transaction.description} - $${transaction.amount}</p>`;
+                });
 
-    let html = "";
+                document.getElementById("recentTransactions").innerHTML = html;
+            });
 
-    transactions.forEach(transaction => {
-
-        html += `
-            <p>
-                ${transaction.description}
-                - $${transaction.amount}
-            </p>
-        `;
-
-    });
-
-    document.getElementById("recentTransactions").innerHTML = html;
-
-});
     </script>
 }
+}
 
-
-<script src="~/js/authGuard.js"></script>

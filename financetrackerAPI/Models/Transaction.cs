@@ -1,8 +1,13 @@
-﻿namespace financetrackerAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace financetrackerAPI.Models
 {
     public class Transaction
     {
-        public int transactionID { get; set; }
+
+
+        [Key]
+        public int transactionsID { get; set; }
 
         public decimal Amount { get; set; }
 
