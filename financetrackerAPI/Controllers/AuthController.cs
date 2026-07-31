@@ -6,12 +6,15 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace financetrackerAPI.Controllers;
 
 
 [ApiController]
 [Route("api/[controller]")]
+
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -24,7 +27,7 @@ public class AuthController : ControllerBase
         _config = config;
     }
 
-
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register(User user)
     {
@@ -55,7 +58,7 @@ public class AuthController : ControllerBase
         }
         catch
         {
-            // Handles race condition / DB unique constraint
+         
             return BadRequest("Email already exists");
         }
 
@@ -63,7 +66,7 @@ public class AuthController : ControllerBase
         return Ok("Registered");
     }
 
-
+    [AllowAnonymous]
 
     [HttpPost("login")]
     public IActionResult Login(User login)
