@@ -9,7 +9,7 @@ namespace financetrackerAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-
+[Authorize]
 
 public class BudgetController : ControllerBase {
     private readonly AppDbContext _context;
@@ -19,7 +19,7 @@ public class BudgetController : ControllerBase {
     }
 
     // Create Budget
-    [Authorize]
+    
     [HttpPost]
     public async Task<IActionResult> Create(Budget budget) {
         var userID = int.Parse(User.FindFirst("id").Value);
@@ -34,7 +34,7 @@ public class BudgetController : ControllerBase {
     }
 
     // Get All User Budgets
-    [Authorize]
+    
     [HttpGet]
     public IActionResult GetAll() {
         var userID = int.Parse(User.FindFirst("id").Value);
@@ -47,7 +47,7 @@ public class BudgetController : ControllerBase {
     }
 
     // Get Single Budget
-    [Authorize]
+
     [HttpGet("{id}")]
     public IActionResult GetById(int id) {
         var userID = int.Parse(User.FindFirst("id").Value);
@@ -67,7 +67,7 @@ public class BudgetController : ControllerBase {
     }
 
     // Update Budget
-    [Authorize]
+   
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, Budget updatedBudget) {
         var userID = int.Parse(User.FindFirst("id").Value);
@@ -98,7 +98,7 @@ public class BudgetController : ControllerBase {
     }
 
     // Delete Budget
-    [Authorize]
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id) {
         var userID = int.Parse(User.FindFirst("id").Value);

@@ -1,4 +1,6 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿const token = localStorage.getItem("token");
 
-// Write your JavaScript code.
+if (!token) {
+    alert("Please log in or register your account");
+    window.location.href = "/AuthPage/Login";
+}
