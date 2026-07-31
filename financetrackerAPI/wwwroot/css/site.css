@@ -9,8 +9,6 @@ html {
     }
 }
 
-
-
 body {
     min-height: 100vh;
     display: flex;
@@ -20,18 +18,9 @@ body {
     background: linear-gradient( 135deg, #fffaf5, #f8f9ff, #f5ffff, #fff5fb );
 }
 
-
-
 main {
     flex: 1;
 }
-
-
-
-
-/* ================= NAVBAR ================= */
-
-
 .navbar {
     background: linear-gradient( 90deg, #ff6a00, #ee0979, #9b5de5, #00b4db ) !important;
     background-size: 300% 300%;
@@ -39,38 +28,23 @@ main {
     box-shadow: 0 8px 25px rgba(0,0,0,.15);
 }
 
-
-
-
 @keyframes navbarMove {
-
-
     0% {
         background-position: 0% 50%;
     }
-
-
     50% {
         background-position: 100% 50%;
     }
-
-
     100% {
         background-position: 0% 50%;
     }
 }
-
-
-
-
 
 .navbar-brand {
     color: white !important;
     font-size: 24px;
     font-weight: 800;
 }
-
-
 
 .nav-link {
     color: white !important;
@@ -80,22 +54,11 @@ main {
     border-radius: 25px;
     transition: .3s;
 }
-
-
-
-
     .nav-link:hover {
         background: white;
         color: #9b5de5 !important;
         transform: translateY(-3px);
     }
-
-
-
-
-
-/* ================= HERO ================= */
-
 
 .hero {
     min-height: 600px;
@@ -103,25 +66,15 @@ main {
     align-items: center;
     justify-content: center;
 }
-
-
-
     .hero h1 {
         color: white;
         font-size: 65px;
         font-weight: 900;
     }
-
-
-
     .hero p {
         color: white;
         font-size: 22px;
     }
-
-
-
-
 
     .hero img {
         width: 350px;
@@ -129,27 +82,15 @@ main {
         animation: floating 4s infinite ease-in-out;
     }
 
-
-
 @keyframes floating {
-
-
     0%,100% {
         transform: translateY(0);
     }
-
 
     50% {
         transform: translateY(-20px);
     }
 }
-
-
-
-
-
-/* ================= CARDS ================= */
-
 
 .card {
     background: white;
@@ -159,34 +100,19 @@ main {
     box-shadow: 0 15px 40px rgba(0,0,0,.12);
     transition: .4s;
 }
-
-
-
     .card:hover {
         transform: translateY(-10px);
         box-shadow: 0 25px 60px rgba(0,0,0,.2);
     }
-
-
-
 
 .card-title {
     color: #7b2cbf;
     font-weight: 800;
 }
 
-
-
 .card-text {
     color: #555;
 }
-
-
-
-
-
-/* ================= DASHBOARD BOX ================= */
-
 
 .dashboard-box {
     background: white;
@@ -196,18 +122,9 @@ main {
     transition: .3s;
 }
 
-
-
     .dashboard-box:hover {
         transform: translateY(-8px);
     }
-
-
-
-
-
-/* ================= BUTTONS ================= */
-
 
 .btn {
     border-radius: 30px;
@@ -216,25 +133,15 @@ main {
     transition: .3s;
 }
 
-
-
-
 .btn-primary {
     background: linear-gradient( 45deg, #ff416c, #ff4b2b );
     border: none;
 }
 
-
-
-
     .btn-primary:hover {
         transform: scale(1.05);
         box-shadow: 0 10px 25px rgba(255,65,108,.4);
     }
-
-
-
-
 
 .btn-outline-primary {
     border: 2px solid white;
@@ -249,12 +156,6 @@ main {
     }
 
 
-
-
-
-/* ================= ICONS ================= */
-
-
 .bi {
     transition: .3s;
 }
@@ -264,13 +165,6 @@ main {
     .bi:hover {
         transform: scale(1.2) rotate(5deg);
     }
-
-
-
-
-
-/* ================= INPUTS ================= */
-
 
 .form-control {
     border-radius: 20px;
@@ -286,11 +180,79 @@ main {
         box-shadow: 0 0 20px rgba(155,91,229,.4);
     }
 
+.auth-page {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-card {
+    background: linear-gradient( 135deg, #fff7e6, #fff3cc, #ffe8c2 );
+    padding: 40px;
+    border-radius: 25px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 15px 35px rgba(255, 165, 0, 0.15);
+    animation: authAnimation 0.8s ease;
+}
+
+
+
+    .auth-card h2 {
+        color: #d97706;
+        font-weight: 800;
+    }
+
+
+
+    .auth-card .form-control {
+        border-radius: 20px;
+        border: 1px solid #ffd27f;
+        padding: 12px;
+    }
+
+
+
+        .auth-card .form-control:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 12px rgba(245,158,11,0.25);
+        }
 
 
 
 
-/* ================= FOOTER ================= */
+    .auth-card button {
+        background: linear-gradient( 90deg, #f59e0b, #fbbf24 );
+        border: none;
+        border-radius: 25px;
+        padding: 12px 35px;
+        font-weight: 700;
+        color: white;
+        transition: 0.3s;
+    }
+
+
+
+        .auth-card button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(245,158,11,0.3);
+        }
+
+
+@keyframes authAnimation {
+
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 
 footer {
@@ -305,12 +267,6 @@ footer {
         color: #ffd166;
 
     }
-
-
-
-
-
-/* ================= PAGE ANIMATION ================= */
 
 
 .container {

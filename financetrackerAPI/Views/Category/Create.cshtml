@@ -1,5 +1,57 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+
+
+    Idea for Create file
+
+
+    User clicks on the create Icon. Which is nside the actions part of the category page
+    User then goes to a new page where the user is asked for the name of the category
+    User can click on either clear or complete
+    If user clicks on clear, all text is removed
+    If user clicks complete, new category created
 *@
 @{
 }
+
+   
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+
+<div class="container py-5">
+    <div class="card shadow-lg p-5 mx-auto" style="max-width: 1100px;">
+        <div class="card-header"><h2 class="mb-4 text-center display-2">Create Category</h2></div>
+        <form>
+            <div class=" mb-3">
+                <div class="mb-4">
+                    <label for="categoryName" class="form-label  fs-3">Category Name</label>
+                    <input type="text" class="form-control" id="categoryName" placeholder="Type Name">
+                </div>
+                <div class="mb-4">
+                    <label for="categoryType" class="form-label fs-3">Category Type</label>
+                    <input type="text" class="form-control" id="categoryType" placeholder="Insert type">  @*Could this be a dropdown menu where I need to pick already given types?*@
+                </div>
+            </div>
+            <div class="d-grid gap-2 mb-4">
+                <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                <button type="reset" class="btn btn-outline-warning">Clear</button>
+            </div>
+        </form>
+        <p class="text-center">
+            <a asp-controller="CategoryPage"
+               asp-action="Index">
+                <i class="bi bi-arrow-left-circle"></i> Back to Category
+            </a>
+        </p>
+    </div>
+
+
+    <script>
+        /* When the user clicks Submit:
+                A new Category is added to the list of Categories
+                User is taken back to the Categories Page to see their newly added Category on the Category list
+        */
+    </script>
