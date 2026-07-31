@@ -14,6 +14,8 @@ namespace financetrackerAPI.Models
         public int userID { get; set; }
 
         public int categoryID { get; set; }
+
+        public Category category { get; set; }
         public DateTime Date { get; set; }
     }
 }
