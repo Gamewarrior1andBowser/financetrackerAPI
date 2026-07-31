@@ -3,10 +3,14 @@ using financetrackerAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace financetrackerAPI.Controllers;
+
 
 [ApiController]
 [Route("api/[controller]")]
+
+
 public class BudgetController : ControllerBase {
     private readonly AppDbContext _context;
 
