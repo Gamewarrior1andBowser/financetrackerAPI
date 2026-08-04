@@ -8,5 +8,17 @@ namespace financetrackerAPI.Controllers
         {
             return View("~/Views/Category/Index.cshtml");
         }
+
+        public IActionResult Create()
+        {
+            return View("~/Views/Category/Create.cshtml");
+        }
+
+        public IActionResult Edit(int id)
+        {
+            ViewBag.CategoryID = id;
+
+            return View("~/Views/Category/Edit.cshtml");
+        }
     }
 }
