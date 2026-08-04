@@ -20,11 +20,17 @@ body {
 
 main {
     flex: 1;
+    padding-top: 90px;
 }
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+}
+
 .navbar {
-    background: linear-gradient( 90deg, #ff6a00, #ee0979, #9b5de5, #00b4db ) !important;
+    background: linear-gradient(90deg, #ff6a00, #ee0979, #9b5de5, #00b4db) !important;
     background-size: 300% 300%;
-    animation: navbarMove 10s ease infinite;
     box-shadow: 0 8px 25px rgba(0,0,0,.15);
 }
 
@@ -256,18 +262,29 @@ main {
 
 
 footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 1020;
     margin-top: auto;
-    background: linear-gradient( 90deg, #5f0f40, #9a031e, #fb8b24 );
-    color: white !important;
-    padding: 25px;
+    background: linear-gradient(90deg, #ff6a00, #ee0979, #9b5de5, #00b4db);
+    background-size: 300% 300%;
+    animation: navbarMove 10s ease infinite;
+    color: white;
+    padding: 18px 0;
+    box-shadow: 0 -8px 25px rgba(0,0,0,.15);
 }
 
-
-    footer i {
-        color: #ffd166;
-
+    footer .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
     }
 
+    footer i {
+        color: white;
+        font-size: 18px;
+    }
 
 .container {
     animation: pageShow .6s ease;

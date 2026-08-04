@@ -2,9 +2,7 @@
     ViewData["Title"] = "Reports";
 }
 
-
 <div class="container">
-
 
     <div class="text-center mb-5">
 
@@ -16,29 +14,21 @@
 
         </h1>
 
-
         <p class="text-black">
 
             Track your income, expenses, and spending patterns.
 
         </p>
 
-
     </div>
-
-
-
 
 
 
     <div class="row g-4">
 
-
         <div class="col-md-6">
 
-
             <div class="card shadow p-4">
-
 
                 <h5 class="card-title">
 
@@ -48,28 +38,17 @@
 
                 </h5>
 
-
-
                 <canvas id="incomeExpenseChart"></canvas>
 
-
-
             </div>
-
 
         </div>
 
 
 
-
-
-
-
         <div class="col-md-6">
 
-
             <div class="card shadow p-4">
-
 
                 <h5 class="card-title">
 
@@ -79,179 +58,130 @@
 
                 </h5>
 
-
-
                 <canvas id="categoryChart"></canvas>
-
-
 
             </div>
 
-
         </div>
 
-
     </div>
-
 
 </div>
 
 
-
-
-
-
 @section Scripts {
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
 
+        const incomeExpenseChart =
+            document.getElementById("incomeExpenseChart");
 
+        new Chart(incomeExpenseChart, {
 
-<script>
+            type: "bar",
 
+            data: {
 
-// Income vs Expense Chart
+                labels: [
 
+                    "Income",
 
-const incomeExpenseChart = document
-    .getElementById("incomeExpenseChart");
+                    "Expenses"
 
+                ],
 
+                datasets: [{
 
-new Chart(incomeExpenseChart, {
+                    label: "Amount ($)",
 
+                    data: [
 
-    type: "bar",
+                        0,
 
+                        0
 
-    data: {
+                    ],
 
+                    borderWidth: 2
 
-        labels: [
+                }]
 
-            "Income",
+            },
 
-            "Expenses"
+            options: {
 
-        ],
+                responsive: true,
 
+                animation: {
 
+                    duration: 1500
 
-        datasets: [{
+                }
 
-            label: "Amount ($)",
+            }
 
+        });
 
-            data: [
 
-                0,
 
-                0
 
-            ],
+        const categoryChart =
+            document.getElementById("categoryChart");
 
+        new Chart(categoryChart, {
 
-            borderWidth: 2
+            type: "doughnut",
 
+            data: {
 
-        }]
+                labels: [
 
-    },
+                    "Food",
 
+                    "Transport",
 
+                    "Bills",
 
-    options: {
+                    "Other"
 
+                ],
 
-        responsive: true,
+                datasets: [{
 
+                    data: [
 
-        animation: {
+                        10,
 
+                        30,
 
-            duration: 1500
+                        70,
 
-        }
+                        80
 
+                    ],
 
-    }
+                    borderWidth: 2
 
+                }]
 
-});
+            },
 
+            options: {
 
+                responsive: true,
 
+                animation: {
 
+                    duration: 1500
 
+                }
 
+            }
 
-// Category Spending Chart
+        });
 
-
-const categoryChart = document
-    .getElementById("categoryChart");
-
-
-
-new Chart(categoryChart, {
-
-
-
-    type: "doughnut",
-
-
-
-
-        datasets: [{
-
-            data: [
-
-                0,
-
-                0,
-
-                0,
-
-                0
-
-            ],
-
-
-            borderWidth: 2
-
-
-        }]
-
-
-    },
-
-
-
-    options: {
-
-
-        responsive:true,
-
-
-        animation:{
-
-
-            duration:1500
-
-
-        }
-
-
-    }
-
-
-
-});
-
-
-
-</script>
-
+    </script>
 
 }
