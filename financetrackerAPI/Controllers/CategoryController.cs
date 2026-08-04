@@ -7,114 +7,110 @@ namespace financetrackerAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CategoryController : ControllerBase {
+public class CategoryController : ControllerBase
+{
     private readonly AppDbContext _context;
 
-    public CategoryController(AppDbContext context) {
+    public CategoryController(AppDbContext context)
+    {
         _context = context;
     }
 
     // Create Category
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> Create(Category budget) {
+    public async Task<IActionResult> Create(Category category)
+    {
         var userID = int.Parse(User.FindFirst("id").Value);
 
-        budget.userID = userID;
+        category.userID = userID;
 
-        _context.Categories.Add(budget);
+        _context.Categories.Add(category);
 
         await _context.SaveChangesAsync();
 
-        return Ok(budget);
+        return Ok(category);
     }
 
-    // Get All User Categories
+    // Get All Categories
     [Authorize]
     [HttpGet]
-    public IActionResult GetAll() {
+    public IActionResult GetAll()
+    {
         var userID = int.Parse(User.FindFirst("id").Value);
 
-        var budget = _context.Categories
-            .Where(t => t.userID == userID)
+        var categories = _context.Categories
+            .Where(c => c.userID == userID)
             .ToList();
 
-        return Ok(budget);
+        return Ok(categories);
     }
 
-    // Get Single Category
+    // Get Category By ID
     [Authorize]
     [HttpGet("{id}")]
-    public IActionResult GetById(int id) {
+    public IActionResult GetById(int id)
+    {
         var userID = int.Parse(User.FindFirst("id").Value);
 
-        var budget = _context.Categories
-            .FirstOrDefault(t =>
-                t.CategoryID == id &&
-                t.userID == userID);
+        var category = _context.Categories
+            .FirstOrDefault(c =>
+                c.CategoryID == id &&
+                c.userID == userID);
 
-
-        if (budget == null) {
+        if (category == null)
+        {
             return NotFound("Category not found");
         }
 
-
-        return Ok(budget);
+        return Ok(category);
     }
 
     // Update Category
     [Authorize]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Category updatedCategory) {
+    public async Task<IActionResult> Update(int id, Category updatedCategory)
+    {
         var userID = int.Parse(User.FindFirst("id").Value);
 
+        var category = _context.Categories
+            .FirstOrDefault(c =>
+                c.CategoryID == id &&
+                c.userID == userID);
 
-        var budget = _context.Categories
-            .FirstOrDefault(t =>
-                t.CategoryID == id &&
-                t.userID == userID);
-
-
-        if (budget == null) {
+        if (category == null)
+        {
             return NotFound("Category not found");
         }
 
-
-        budget.Name = updatedCategory.Name;
-
-        budget.CategoryID = updatedCategory.CategoryID;
-
-        budget.Type = updatedCategory.Type;
-
+        category.Name = updatedCategory.Name;
+        category.Type = updatedCategory.Type;
 
         await _context.SaveChangesAsync();
 
-
-        return Ok(budget);
+        return Ok(category);
     }
 
     // Delete Category
     [Authorize]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id) {
+    public async Task<IActionResult> Delete(int id)
+    {
         var userID = int.Parse(User.FindFirst("id").Value);
 
+        var category = _context.Categories
+            .FirstOrDefault(c =>
+                c.CategoryID == id &&
+                c.userID == userID);
 
-        var budget = _context.Categories
-            .FirstOrDefault(t =>
-                t.CategoryID == id &&
-                t.userID == userID);
-
-
-        if (budget == null) {
+        if (category == null)
+        {
             return NotFound("Category not found");
         }
 
-
-        _context.Categories.Remove(budget);
+        _context.Categories.Remove(category);
 
         await _context.SaveChangesAsync();
-
 
         return Ok("Category deleted");
     }
