@@ -22,5 +22,13 @@ namespace financetrackerAPI.Controllers
 
             return View("~/Views/Transaction/Edit.cshtml");
         }
+
+
+        public IActionResult Details(int id)
+        {
+            ViewBag.TransactionID = id;
+
+            return View("~/Views/Transaction/Details.cshtml");
+        }
     }
 }

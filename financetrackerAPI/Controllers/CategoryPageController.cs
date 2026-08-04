@@ -4,15 +4,20 @@ namespace financetrackerAPI.Controllers
 {
     public class CategoryPageController : Controller
     {
+
         public IActionResult Index()
         {
             return View("~/Views/Category/Index.cshtml");
         }
 
+
+
         public IActionResult Create()
         {
             return View("~/Views/Category/Create.cshtml");
         }
+
+
 
         public IActionResult Edit(int id)
         {
@@ -20,5 +25,15 @@ namespace financetrackerAPI.Controllers
 
             return View("~/Views/Category/Edit.cshtml");
         }
+
+
+
+        public IActionResult Details(int id)
+        {
+            ViewBag.CategoryID = id;
+
+            return View("~/Views/Category/Details.cshtml");
+        }
+
     }
 }

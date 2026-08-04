@@ -4,11 +4,19 @@
     {
         public int TransactionID { get; set; }
 
+
         public decimal Amount { get; set; }
+
 
         public int userID { get; set; }
 
+
         public int CategoryID { get; set; }
+
+
+        public Category? Category { get; set; }
+
+
         public DateTime Date { get; set; }
     }
 }

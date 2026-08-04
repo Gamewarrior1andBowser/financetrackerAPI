@@ -2,6 +2,7 @@
 using financetrackerAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace financetrackerAPI.Controllers;
 
@@ -11,10 +12,12 @@ public class TransactionsController : ControllerBase
 {
     private readonly AppDbContext _context;
 
+
     public TransactionsController(AppDbContext context)
     {
         _context = context;
     }
+
 
 
     // Create Transaction
@@ -24,14 +27,21 @@ public class TransactionsController : ControllerBase
     {
         var userID = int.Parse(User.FindFirst("id").Value);
 
+
         transaction.userID = userID;
+
 
         _context.Transactions.Add(transaction);
 
+
         await _context.SaveChangesAsync();
+
 
         return Ok(transaction);
     }
+
+
+
 
 
     // Get All User Transactions
@@ -41,12 +51,35 @@ public class TransactionsController : ControllerBase
     {
         var userID = int.Parse(User.FindFirst("id").Value);
 
+
+
         var transactions = _context.Transactions
+            .Include(t => t.Category)
             .Where(t => t.userID == userID)
+            .Select(t => new
+            {
+                t.TransactionID,
+
+                t.Amount,
+
+                t.Date,
+
+                t.CategoryID,
+
+
+                CategoryName = t.Category.Name
+
+            })
             .ToList();
+
+
 
         return Ok(transactions);
     }
+
+
+
+
 
 
     // Get Single Transaction
@@ -56,10 +89,30 @@ public class TransactionsController : ControllerBase
     {
         var userID = int.Parse(User.FindFirst("id").Value);
 
+
+
         var transaction = _context.Transactions
-            .FirstOrDefault(t =>
+            .Include(t => t.Category)
+            .Where(t =>
                 t.TransactionID == id &&
-                t.userID == userID);
+                t.userID == userID)
+            .Select(t => new
+            {
+                t.TransactionID,
+
+                t.Amount,
+
+                t.Date,
+
+                t.CategoryID,
+
+
+                CategoryName = t.Category.Name
+
+            })
+            .FirstOrDefault();
+
+
 
 
         if (transaction == null)
@@ -68,8 +121,14 @@ public class TransactionsController : ControllerBase
         }
 
 
+
         return Ok(transaction);
     }
+
+
+
+
+
 
 
     // Update Transaction
@@ -80,16 +139,19 @@ public class TransactionsController : ControllerBase
         var userID = int.Parse(User.FindFirst("id").Value);
 
 
+
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
                 t.TransactionID == id &&
                 t.userID == userID);
 
 
+
         if (transaction == null)
         {
             return NotFound("Transaction not found");
         }
+
 
 
         transaction.Amount = updatedTransaction.Amount;
@@ -99,11 +161,18 @@ public class TransactionsController : ControllerBase
         transaction.Date = updatedTransaction.Date;
 
 
+
         await _context.SaveChangesAsync();
+
 
 
         return Ok(transaction);
     }
+
+
+
+
+
 
 
     // Delete Transaction
@@ -114,10 +183,12 @@ public class TransactionsController : ControllerBase
         var userID = int.Parse(User.FindFirst("id").Value);
 
 
+
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
                 t.TransactionID == id &&
                 t.userID == userID);
+
 
 
         if (transaction == null)
@@ -126,9 +197,12 @@ public class TransactionsController : ControllerBase
         }
 
 
+
         _context.Transactions.Remove(transaction);
 
+
         await _context.SaveChangesAsync();
+
 
 
         return Ok("Transaction deleted");

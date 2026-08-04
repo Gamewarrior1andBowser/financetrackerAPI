@@ -1,12 +1,16 @@
-﻿namespace financetrackerAPI.Models;
-
-public class Category
+﻿namespace financetrackerAPI.Models
 {
-    public int CategoryID { get; set; }
+    public class Category
+    {
+        public int CategoryID { get; set; }
 
-    public int userID { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-    public string Name { get; set; }
+        public string Type { get; set; } = string.Empty;
 
-    public string Type { get; set; }
+        public int userID { get; set; }
+
+
+        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+    }
 }

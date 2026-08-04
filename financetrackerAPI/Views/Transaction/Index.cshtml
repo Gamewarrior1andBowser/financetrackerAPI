@@ -1,45 +1,277 @@
-﻿@{ ViewData["Title"] = "Transactions";}
+﻿@{
+    ViewData["Title"] = "Transactions";
+}
+
 
 <div class="container">
-    <h1 class="mb-4"> Transactions </h1>
-    <table class="table table-bordered">
-        <thead class="table-primary">
-            <tr>
-                <th> Description </th>
-                <th> Amount </th>
-                <th> Type </th>
-                <th> Date </th>
-            </tr>
-        </thead>
-        <tbody id="transactionTable"> </tbody>
-    </table>
+
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+
+        <h1 class="fw-bold">
+
+            <i class="bi bi-cash-stack me-2"></i>
+
+            Transactions
+
+        </h1>
+
+
+
+
+        <a asp-controller="TransactionPage"
+           asp-action="Create"
+           class="btn btn-success">
+
+
+            <i class="bi bi-plus-circle me-1"></i>
+
+            Add Transaction
+
+
+        </a>
+
+
+    </div>
+
+
+
+
+
+    <div class="card shadow p-4">
+
+
+        <div class="table-responsive">
+
+
+            <table class="table table-hover">
+
+
+                <thead>
+
+
+                    <tr>
+
+
+                        <th>ID</th>
+
+                        <th>Amount</th>
+
+                        <th>Category</th>
+
+                        <th>Date</th>
+
+                        <th>Actions</th>
+
+
+                    </tr>
+
+
+                </thead>
+
+
+
+                <tbody id="transactionTable">
+
+                </tbody>
+
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+
 </div>
 
+
+
+
+
 @section Scripts {
-    <script>
-        const token = localStorage.getItem("token");
-        fetch("/api/Transactions", {
-            headers:
-            { "Authorization": "Bearer " + token  }
-        })
 
-            .then(response => response.json())
-            .then(data => {
-                let rows = "";
-                data.forEach(transaction => {
-                    rows += `
-                <tr>
-                    <td> ${transaction.description} </td>
-                    <td>${transaction.amount}</td>
-                    <td> ${transaction.type}</td>
-                    <td> ${transaction.date}</td>
-                </tr>  `;
-                });
+<script>
 
-                document.getElementById("transactionTable").innerHTML = rows;
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    </script>
+
+const token = localStorage.getItem("token");
+
+
+loadTransactions();
+
+
+
+
+
+async function loadTransactions()
+{
+
+
+    const response = await fetch("/api/Transactions",
+    {
+
+        headers:
+        {
+
+            "Authorization": "Bearer " + token
+
+        }
+
+
+    });
+
+
+
+
+    if(!response.ok)
+    {
+        alert("Unable to load transactions");
+        return;
+    }
+
+
+
+
+    const transactions = await response.json();
+
+
+
+    let rows = "";
+
+
+
+    transactions.forEach(transaction =>
+    {
+
+
+        rows += `
+
+
+        <tr>
+
+
+            <td>
+                ${transaction.transactionID}
+            </td>
+
+
+
+            <td>
+                $${transaction.amount}
+            </td>
+
+
+
+            <td>
+                ${transaction.categoryName ?? "No Category"}
+            </td>
+
+
+
+            <td>
+                ${transaction.date.substring(0,10)}
+            </td>
+
+
+
+            <td>
+
+
+                <a href="/TransactionPage/Details/${transaction.transactionID}"
+                   class="btn btn-info btn-sm me-1">
+
+                    <i class="bi bi-eye-fill"></i>
+
+                </a>
+
+
+
+
+                <a href="/TransactionPage/Edit/${transaction.transactionID}"
+                   class="btn btn-warning btn-sm me-1">
+
+                    <i class="bi bi-pencil-square"></i>
+
+                </a>
+
+
+
+
+
+                <button class="btn btn-danger btn-sm"
+                        onclick="deleteTransaction(${transaction.transactionID})">
+
+
+                    <i class="bi bi-trash-fill"></i>
+
+
+                </button>
+
+
+            </td>
+
+
+        </tr>
+
+
+        `;
+
+
+    });
+
+
+
+
+    document.getElementById("transactionTable").innerHTML = rows;
+
+
+}
+
+
+
+
+
+
+async function deleteTransaction(id)
+{
+
+
+    const response = await fetch("/api/Transactions/" + id,
+    {
+
+
+        method:"DELETE",
+
+
+        headers:
+        {
+
+            "Authorization":"Bearer " + token
+
+        }
+
+
+    });
+
+
+
+
+    if(response.ok)
+    {
+
+        loadTransactions();
+
+    }
+
+
+}
+
+
+</script>
+
 }

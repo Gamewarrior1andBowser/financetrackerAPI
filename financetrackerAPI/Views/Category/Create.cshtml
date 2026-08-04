@@ -9,28 +9,19 @@
 
         <div class="col-md-6">
 
-
             <div class="card shadow p-4">
 
-
                 <h2 class="mb-4">
-
                     <i class="bi bi-plus-circle-fill me-2"></i>
-
                     Create Category
-
                 </h2>
-
 
 
                 <div class="mb-3">
 
                     <label class="form-label">
-
                         Category Name
-
                     </label>
-
 
                     <input id="name"
                            class="form-control"
@@ -40,36 +31,27 @@
 
 
 
-
-
                 <div class="mb-4">
 
                     <label class="form-label">
-
                         Type
-
                     </label>
 
 
                     <select id="type"
                             class="form-select">
 
-
                         <option value="Income">
                             Income
                         </option>
-
 
                         <option value="Expense">
                             Expense
                         </option>
 
-
                     </select>
 
-
                 </div>
-
 
 
 
@@ -80,15 +62,10 @@
                     <button class="btn btn-success"
                             onclick="createCategory()">
 
-
                         <i class="bi bi-check-circle me-1"></i>
-
                         Save
 
-
                     </button>
-
-
 
 
 
@@ -96,14 +73,10 @@
                        asp-action="Index"
                        class="btn btn-secondary">
 
-
                         <i class="bi bi-arrow-left-circle me-1"></i>
-
                         Back
 
-
                     </a>
-
 
 
                 </div>
@@ -111,104 +84,62 @@
 
             </div>
 
-
         </div>
 
-
     </div>
-
 
 </div>
 
 
 
-
-
 @section Scripts {
 
+<script>
 
-    <script>
+async function createCategory()
+{
 
-
-        async function createCategory() {
-
-
-            const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
 
-            const name = document.getElementById("name").value;
-
-            const type = document.getElementById("type").value;
-
-
-
-
-            const response = await fetch("/api/Category", {
-
-
-                method: "POST",
-
-
-                headers: {
-
-
-                    "Content-Type": "application/json",
-
-                    "Authorization": "Bearer " + token
-
-
-                },
-
-
-                body: JSON.stringify({
-
-
-                    name: name,
-
-                    type: type
-
-
-                })
-
-
-            });
+    const category =
+    {
+        name: document.getElementById("name").value,
+        type: document.getElementById("type").value
+    };
 
 
 
+    const response = await fetch("/api/Category",
+    {
 
-            console.log("Status:", response.status);
+        method: "POST",
 
-
-
-
-
-            if (response.ok) {
-
-
-                window.location.href = "/CategoryPage";
-
-
-            }
+        headers:
+        {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
 
 
-            else {
+        body: JSON.stringify(category)
 
-
-                const error = await response.text();
-
-
-                console.log(error);
-
-
-            }
+    });
 
 
 
-        }
+    if(response.ok)
+{
+    window.location.href = "/CategoryPage";
+}
+else
+{
+    const error = await response.text();
 
+}
 
+}
 
-    </script>
-
+</script>
 
 }
