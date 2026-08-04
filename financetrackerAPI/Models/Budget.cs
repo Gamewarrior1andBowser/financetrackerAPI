@@ -11,7 +11,7 @@ namespace financetrackerAPI.Models {
 
         public DateTime Date { get; set; }
 
-        public Category category { get; set; }
+        public Category categories { get; set; }
 
         public int categoryID { get; set; }
 
