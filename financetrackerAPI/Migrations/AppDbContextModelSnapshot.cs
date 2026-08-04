@@ -24,11 +24,11 @@ namespace financetrackerAPI.Migrations
 
             modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>
                 {
-                    b.Property<int>("BudgetID")
+                    b.Property<int>("budgetID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BudgetID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("budgetID"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -39,18 +39,18 @@ namespace financetrackerAPI.Migrations
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("BudgetID");
+                    b.HasKey("budgetID");
 
                     b.ToTable("Budgets");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Category", b =>
                 {
-                    b.Property<int>("CategoryID")
+                    b.Property<int>("categoryID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("categoryID"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -63,23 +63,23 @@ namespace financetrackerAPI.Migrations
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoryID");
+                    b.HasKey("categoryID");
 
                     b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
                 {
-                    b.Property<int>("TransactionID")
+                    b.Property<int>("transactionID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionID"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("CategoryID")
+                    b.Property<int>("categoryID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -88,7 +88,7 @@ namespace financetrackerAPI.Migrations
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("TransactionID");
+                    b.HasKey("transactionID");
 
                     b.ToTable("Transactions");
                 });

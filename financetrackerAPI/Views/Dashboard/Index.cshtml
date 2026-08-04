@@ -1,63 +1,180 @@
 ﻿@{ ViewData["Title"] = "Dashboard"; }
 
-<div class="container">
+<div class="auth-page">
 
-    <h1 class="mb-4"> Finance Dashboard </h1>
+    <h1 class="mb-4"> Finance Dashboard </h1> 
+    <br />
+    <br />
+    <br />
 
+
+    @*Insert navbar here
+        Navbar has:
+
+            Title{Financial Tracker (for now)}
+
+            Links{
+                    Home,
+                    Sign Out
+                }
+    *@
+    
+    
+    <hr class="dropdown-divider">
+
+    <h4> Account Overview</h4>
+
+    @*Three Cards*@
+    @*Budget Card: Shows latest budget being used*@
+    @*Category Card: Shows category most used*@
+    @*Transaction Card: Shows 3 or 4 transactions*@
     <div class="row">
-
-        <div class="col-md-4">
-            <div class="card shadow p-3">
-                <h5> Total Balance  </h5>
-                <h2 id="balance"> $0 </h2>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow p-3">
-                <h5>Total Income </h5>
-                <h2 id="income">  $0 </h2>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow p-3">
-                <h5> Total Expenses </h5>
-                <h2 id="expense"> $0 </h2>
-            </div>
-        </div>
+  <div class="col-sm-4 mb-3 mb-sm-0">
+    <div class="card">
+        <div class="card-header"><h6>Budget</h6></div>
+      <div class="card-body">
+        <h5 id="budgetName"></h5>
+        <p id="budgetAmount"></p>
+        <a asp-controller="BudgetPage"
+                   asp-action="Index" class="btn btn-primary">Go to Budget</a>
+      </div>
     </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card">
+        <div class="card-header"><h6>Category</h6></div>
+      <div class="card-body">
+        <h5 id="categoryName"></h5>
+        <p id="categoryAmount"></p>
+        <a asp-controller="CategoryPage"
+                   asp-action="Index" class="btn btn-primary">Go to Category</a>
+      </div>
+    </div>
+  </div>
+    <div class="col-sm-4">
+    <div class="card">
+        <div class="card-header"><h6>Transactions</h6></div>
+      <div class="card-body">
+        <h5 id="recentTransactions"></h5>
+        <a asp-controller="TransactionPage"
+                   asp-action="Index" class="btn btn-primary">Go to Transactions</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+    @* <div class="row">
+
+        <div class="col-md-4">
+            <div class="card shadow p-3">
+                <h5 class="card-title">Budget</h5>
+                <h2 id="budgetName"> </h2>
+                <h3 id="budgetAmount"> </h3>
+                <a asp-controller="Budget"
+                   asp-action="Index" class="btn btn-primary">More</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow p-3">
+                <h5 class="card-title">Category</h5>
+                <h2 id="categoryName">  Shows most used category </h2>
+                <h3 id="categoryAmount">Shows how much spent on category</h3>
+                <a asp-controller="Category"
+                   asp-action="Index" class="btn btn-primary">More</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow p-3">
+                <h5 class="card-title">Transaction</h5>
+                <h2 id="recentTransactions"> Shows 3 recent transactions </h2>
+                <a asp-controller="Transaction"
+                   asp-action="Index" class="btn btn-primary">More</a>
+            </div>
+        </div>
+
+        Report coming soon
+    </div> *@
 </div>
 
 @section Scripts {
+
+    <script src="~/js/authGuard.js"></script>
+
     <script>
         const token = localStorage.getItem("token");
-        fetch("/api/Transactions", {
-           headers: {
+
+        if (!token) {
+            window.location.href = "/AuthPage/Login";
+        }
+
+        function handleAuthError(response) {
+            if (response.status === 401) {
+                localStorage.removeItem("token");
+                window.location.href = "/AuthPage/Login";
+                return true;
+            }
+            return false;
+        }
+
+        // ✅ Budget
+        fetch("/api/Budget", {
+            headers: {
                 "Authorization": "Bearer " + token
             }
         })
-            .then(response => response.json())
-            .then(data => {
-                let income = 0;
-                let expense = 0;
-                data.forEach(transaction => {
-                    if (transaction.type === "Income") {
-                        income += transaction.amount;
-                    }
-                    else {
-                        expense += transaction.amount;
-                    }
+            .then(response => {
+                if (handleAuthError(response)) return;
+                return response.json();
+            })
+            .then(budget => {
+                if (!budget) return;
+
+                document.getElementById("budgetName").innerHTML = budget.budgetName;
+                document.getElementById("budgetAmount").innerHTML = "$" + budget.amount;
+            });
+
+        // ✅ Category
+        fetch("/api/Category", {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then(response => {
+                if (handleAuthError(response)) return;
+                return response.json();
+            })
+            .then(category => {
+                if (!category) return;
+
+                document.getElementById("categoryName").innerHTML = category.categoryName;
+                document.getElementById("categoryAmount").innerHTML = "$" + category.totalSpent;
+            });
+
+        // ✅ Transactions
+        fetch("/api/Transactions", {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then(response => {
+                if (handleAuthError(response)) return;
+                return response.json();
+            })
+            .then(transactions => {
+                if (!transactions) return;
+
+                let html = "";
+
+                transactions.forEach(transaction => {
+                    html += `<p>${transaction.description} - $${transaction.amount}</p>`;
                 });
 
-                document.getElementById("income").innerHTML = "$" + income;
-
-                document.getElementById("expense").innerHTML = "$" + expense;
-
-                document.getElementById("balance").innerHTML = "$" + (income - expense);
-            })
-            .catch(error => {
-                console.log(error);
+                document.getElementById("recentTransactions").innerHTML = html;
             });
+
     </script>
 }
+}
+
