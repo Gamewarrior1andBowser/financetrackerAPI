@@ -1,61 +1,150 @@
-﻿@{  ViewData["Title"] = "Categories";}
+﻿@{
+    ViewData["Title"] = "Categories";
+}
 
 <div class="container">
 
-    <h1 class="mb-4"> Categories </h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <div class="mb-3">
-        <a asp-controller="CategoryPage" asp-action="Create" class="btn btn-primary" > Add Category </a>
+        <h1>
+
+            <i class="bi bi-tags-fill me-2"></i>
+
+            Categories
+
+        </h1>
+
+        <a asp-controller="CategoryPage"
+           asp-action="Create"
+           class="btn btn-success">
+
+            <i class="bi bi-plus-circle"></i>
+
+            Create Category
+
+        </a>
+
     </div>
 
-    <table class="table table-bordered">
-        <thead class="table-primary">
+
+    <table class="table table-hover table-bordered align-middle">
+
+        <thead class="table-light">
+
             <tr>
-                <th> Category Name </th>
-                <th>  Actions </th>
+
+                <th>ID</th>
+
+                <th>Name</th>
+
+                <th>Type</th>
+
+                <th width="180">Actions</th>
+
             </tr>
+
         </thead>
 
-        <tbody id="categoryTable"> </tbody>
-        @*For: Category Names: The names of the new categories made by the user*@
-        @*For: Actions: Icons of the Delete and Edit functions to allow the user Delete and or edit a category*@
+        <tbody id="categoryTable">
+        </tbody>
+
     </table>
-    <a asp-controller="Dashboard"
-       asp-action="Index" class="btn btn-primary">Go to Dashboard</a>
+
 </div>
+
 
 @section Scripts {
 
     <script>
+
         const token = localStorage.getItem("token");
 
-        fetch("/api/Category", {  headers: { "Authorization": "Bearer " + token }
-        })
-            .then(response => response.json())
+        loadCategories();
 
-            .then(data => {
+        function loadCategories() {
 
-                let rows = "";
+            fetch("/api/Category", {
 
-                data.forEach(category => {
-                    rows += `
-
-                    <tr>
-                        <td> ${category.name} </td>
-                        <td> ${category.type} </td>
-                        <td>
-                            <button class="btn btn-warning btn-sm"> Edit  </button>
-                            <button class="btn btn-danger btn-sm">  Delete  </button>
-                        </td> 
-                     </tr>  `;
-                });
-
-                document.getElementById("categoryTable").innerHTML = rows;
+                headers: {
+                    Authorization: "Bearer " + token
+                }
 
             })
 
-            .catch(error => {
-                console.log(error);
-            });
+                .then(response => response.json())
+
+                .then(categories => {
+
+                    let rows = "";
+
+                    categories.forEach(category => {
+
+                        rows += `
+
+        <tr>
+
+        <td>${category.categoryID}</td>
+
+        <td>${category.name}</td>
+
+        <td>${category.type}</td>
+
+        <td>
+
+        <a href="/CategoryPage/Edit/${category.categoryID}"
+        class="btn btn-warning btn-sm">
+
+        <i class="bi bi-pencil-square"></i>
+
+        </a>
+
+        <button
+        class="btn btn-danger btn-sm"
+        onclick="deleteCategory(${category.categoryID})">
+
+        <i class="bi bi-trash"></i>
+
+        </button>
+
+        </td>
+
+        </tr>
+
+        `;
+
+                    });
+
+                    document.getElementById("categoryTable").innerHTML = rows;
+
+                });
+
+        }
+
+
+
+        function deleteCategory(id) {
+
+            if (!confirm("Delete this category?"))
+                return;
+
+            fetch("/api/Category/" + id, {
+
+                method: "DELETE",
+
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+
+            })
+
+                .then(() => {
+
+                    loadCategories();
+
+                });
+
+        }
+
     </script>
+
 }

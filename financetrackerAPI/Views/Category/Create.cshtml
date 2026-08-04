@@ -1,57 +1,214 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-
-
-    Idea for Create file
-
-
-    User clicks on the create Icon. Which is nside the actions part of the category page
-    User then goes to a new page where the user is asked for the name of the category
-    User can click on either clear or complete
-    If user clicks on clear, all text is removed
-    If user clicks complete, new category created
-*@
-@{
-}
-
-   
-@{
+﻿@{
     ViewData["Title"] = "Create Category";
 }
 
 
-<div class="container py-5">
-    <div class="card shadow-lg p-5 mx-auto" style="max-width: 1100px;">
-        <div class="card-header"><h2 class="mb-4 text-center display-2">Create Category</h2></div>
-        <form>
-            <div class=" mb-3">
-                <div class="mb-4">
-                    <label for="categoryName" class="form-label  fs-3">Category Name</label>
-                    <input type="text" class="form-control" id="categoryName" placeholder="Type Name">
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow p-4">
+
+
+                <h2 class="mb-4">
+
+                    <i class="bi bi-plus-circle-fill me-2"></i>
+
+                    Create Category
+
+                </h2>
+
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Category Name
+
+                    </label>
+
+
+                    <input id="name"
+                           class="form-control"
+                           placeholder="Enter category name" />
+
                 </div>
+
+
+
+
+
                 <div class="mb-4">
-                    <label for="categoryType" class="form-label fs-3">Category Type</label>
-                    <input type="text" class="form-control" id="categoryType" placeholder="Insert type">  @*Could this be a dropdown menu where I need to pick already given types?*@
+
+                    <label class="form-label">
+
+                        Type
+
+                    </label>
+
+
+                    <select id="type"
+                            class="form-select">
+
+
+                        <option value="Income">
+                            Income
+                        </option>
+
+
+                        <option value="Expense">
+                            Expense
+                        </option>
+
+
+                    </select>
+
+
                 </div>
+
+
+
+
+
+                <div class="d-flex gap-2">
+
+
+                    <button class="btn btn-success"
+                            onclick="createCategory()">
+
+
+                        <i class="bi bi-check-circle me-1"></i>
+
+                        Save
+
+
+                    </button>
+
+
+
+
+
+                    <a asp-controller="CategoryPage"
+                       asp-action="Index"
+                       class="btn btn-secondary">
+
+
+                        <i class="bi bi-arrow-left-circle me-1"></i>
+
+                        Back
+
+
+                    </a>
+
+
+
+                </div>
+
+
             </div>
-            <div class="d-grid gap-2 mb-4">
-                <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                <button type="reset" class="btn btn-outline-warning">Clear</button>
-            </div>
-        </form>
-        <p class="text-center">
-            <a asp-controller="CategoryPage"
-               asp-action="Index">
-                <i class="bi bi-arrow-left-circle"></i> Back to Category
-            </a>
-        </p>
+
+
+        </div>
+
+
     </div>
 
 
+</div>
+
+
+
+
+
+@section Scripts {
+
+
     <script>
-        /* When the user clicks Submit:
-                A new Category is added to the list of Categories
-                User is taken back to the Categories Page to see their newly added Category on the Category list
-        */
+
+
+        async function createCategory() {
+
+
+            const token = localStorage.getItem("token");
+
+
+            const name = document.getElementById("name").value;
+
+            const type = document.getElementById("type").value;
+
+
+
+
+            const response = await fetch("/api/Category", {
+
+
+                method: "POST",
+
+
+                headers: {
+
+
+                    "Content-Type": "application/json",
+
+                    "Authorization": "Bearer " + token
+
+
+                },
+
+
+                body: JSON.stringify({
+
+
+                    name: name,
+
+                    type: type
+
+
+                })
+
+
+            });
+
+
+
+
+            console.log("Status:", response.status);
+
+
+
+
+
+            if (response.ok) {
+
+
+                window.location.href = "/CategoryPage";
+
+
+            }
+
+
+            else {
+
+
+                const error = await response.text();
+
+
+                console.log(error);
+
+
+            }
+
+
+
+        }
+
+
+
     </script>
+
+
+}

@@ -12,5 +12,17 @@ namespace financetrackerAPI.Controllers
         }
 
 
+        public IActionResult Create()
+        {
+            return View("~/Views/Transaction/Create.cshtml");
+        }
+
+
+        public IActionResult Edit(int id)
+        {
+            ViewBag.TransactionID = id;
+
+            return View("~/Views/Transaction/Edit.cshtml");
+        }
     }
 }

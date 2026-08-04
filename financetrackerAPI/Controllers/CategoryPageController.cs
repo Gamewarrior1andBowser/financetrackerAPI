@@ -15,14 +15,11 @@ namespace financetrackerAPI.Controllers
             return View("~/Views/Category/Create.cshtml");
         }
 
-        public IActionResult Edit()
+        public IActionResult Edit(int id)
         {
+            ViewBag.CategoryID = id;
+
             return View("~/Views/Category/Edit.cshtml");
         }
-
-        //public IActionResult Details()
-        //{
-        //    return View("~/Views/Category/Details.cshtml");
-        //}
     }
 }
