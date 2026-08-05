@@ -331,7 +331,7 @@
     <div class="row mt-5">
 
 
-        <div class="col-md-6">
+        <div class="col-md-4">
 
 
             <div class="card shadow border-0 p-4">
@@ -384,7 +384,16 @@
 
                 </p>
 
+                <p>
 
+                    Usage:
+
+                    <strong class="text-warning"
+                            id="budgetPercentage">
+                        0%
+                    </strong>
+
+                </p>
             </div>
 
 
@@ -545,6 +554,10 @@
 
             document.getElementById("budgetRemaining").innerHTML =
                 "$" + data.budget.remaining;
+
+           document.getElementById("budgetPercentage").innerHTML =
+    data.budget.usagePercentage + "%";
+
 
 
 
