@@ -55,7 +55,7 @@ public class CategoryController : ControllerBase
 
         var category = _context.Categories
             .FirstOrDefault(c =>
-                c.CategoryID == id &&
+                c.categoryID == id &&
                 c.userID == userID);
 
         if (category == null)
@@ -75,7 +75,7 @@ public class CategoryController : ControllerBase
 
         var category = _context.Categories
             .FirstOrDefault(c =>
-                c.CategoryID == id &&
+                c.categoryID == id &&
                 c.userID == userID);
 
         if (category == null)
@@ -100,7 +100,7 @@ public class CategoryController : ControllerBase
 
         var category = _context.Categories
             .FirstOrDefault(c =>
-                c.CategoryID == id &&
+                c.categoryID == id &&
                 c.userID == userID);
 
         if (category == null)
