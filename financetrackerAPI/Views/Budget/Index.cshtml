@@ -2,7 +2,7 @@
 
 <div class="container">
     <h1 class="mb-4"> Budgets </h1>
-        <a asp-controller="BudgetPage" asp-action="Create" class="btn btn-primary">Create Budget</a> 
+        <a asp-controller="BudgetPage" asp-action="Create" class="btn btn-primary">Create Budget</a> @*Add spacing here *@
     <a asp-controller="BudgetPage" asp-action="Edit" class="btn btn-primary">Edit Budget</a> 
     <table class="table table-bordered">
         <thead class="table-primary">
@@ -46,3 +46,8 @@
     </script>
     <script src="~/js/authGuard.js"></script>
 }
+
+
+
+@*Budget index shows all the budgets made*@
+@*Clicking on one of the budgets leads to a budget summary of the category assigned to it, and its current budget limit, along with the date created*@
