@@ -48,6 +48,8 @@
         <tbody id="categoryTable">
         </tbody>
 
+
+
     </table>
 
 </div>
@@ -79,38 +81,57 @@
 
                     categories.forEach(category => {
 
-                        rows += `
+        //                 rows += `
 
-        <tr>
+        // <tr>
 
-        <td>${category.categoryID}</td>
+        // <td>${category.categoryID}</td>
 
-        <td>${category.name}</td>
+        // <td>${category.name}</td>
 
-        <td>${category.type}</td>
+        // <td>${category.type}</td>
 
-        <td>
+        // <td>
 
-        <a href="/CategoryPage/Edit/${category.categoryID}"
-        class="btn btn-warning btn-sm">
+        // <a href="/CategoryPage/Edit/${category.categoryID}"
+        // class="btn btn-warning btn-sm">
 
-        <i class="bi bi-pencil-square"></i>
+        // <i class="bi bi-pencil-square"></i>
 
-        </a>
+        // </a>
 
-        <button
-        class="btn btn-danger btn-sm"
-        onclick="deleteCategory(${category.categoryID})">
+        // <button
+        // class="btn btn-danger btn-sm"
+        // onclick="deleteCategory(${category.categoryID})">
 
-        <i class="bi bi-trash"></i>
+        // <i class="bi bi-trash"></i>
 
-        </button>
+        // </button>
 
-        </td>
+        // </td>
 
-        </tr>
+        // </tr>
 
-        `;
+        // `;
+
+        rows += `
+<tr>
+<td>${category.categoryID}</td>
+<td>${category.name}</td>
+<td>${category.type}</td>
+<td>
+<a href="/CategoryPage/Edit/${category.categoryID}" class="btn btn-warning btn-sm">
+<i class="bi bi-pencil-square"></i>
+</a>
+<a href="/CategoryPage/Budget/${category.categoryID}" class="btn btn-info btn-sm">
+<i class="bi bi-piggy-bank-fill"></i>
+</a>
+<button class="btn btn-danger btn-sm" onclick="deleteCategory(${category.categoryID})">
+<i class="bi bi-trash"></i>
+</button>
+</td>
+</tr>
+`;
 
                     });
 

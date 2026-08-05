@@ -16,16 +16,16 @@
         </div>
 
         <p class="mt-4 text-muted">
-            Start tracking your finances, manage budgets, and monitor your spending easily.
-        </p>
-
+    Start tracking your finances, manage budgets, and monitor your spending easily.
+</p>
+      
     </div>
 
     <div class="row mt-5">
         <div class="col-md-4 mb-4">
             <div class="card shadow border-0 h-100">
                 <div class="card-body text-center">
-
+                  
                     <i class="bi bi-cash-stack text-success"
                        style="font-size:50px;">
                     </i>
@@ -54,85 +54,27 @@
                 </div>
             </div>
         </div>
-    </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
 
-    @* @await RenderSectionAsync("Scripts", required: false) 
-
-</body>
-</html> *@
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - Finance Tracker</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    @* <style>
-            main {
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            }
-
-            .home-card {
-                background: #fff;
-                border-radius: 1rem;
-                padding: 3rem 2.5rem;
-                box-shadow: 0 1rem 3rem rgba(0,0,0,0.2);
-                text-align: center;
-                max-width: 420px;
-                width: 100%;
-            }
-
-            .home-card h1 {
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-            }
-
-            .home-card p {
-                color: #6c757d;
-                margin-bottom: 2rem;
-            }
-
-            .btn-lg {
-                padding: 0.75rem 1rem;
-            }
-    </style> *@
-</head>
-<body class="">
-    <div class="container bg-primary text-white">
-        <header>
-            <!-- As a heading -->
-            <nav class="navbar bg-body-tertiary">
-                @* <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Financial Tracker</span>
-        </div> *@
-                <h2 class="pb-2 mb-4 border-bottom border-dark">Financial Tracker</h2>@*Make this bigger and blend it with the main body*@
-            </nav>
-        </header>
+                    <i class="bi bi-wallet-fill text-warning"
+                       style="font-size:50px;">
+                    </i>
 
 
-        <main>
-            <div class="home-card">
-                <h4>Welcome</h4>
-                <p>Please log in to your account or create a new one to get started.</p>
+                    <h4 class="mt-3"> Set Budgets </h4>
 
-                <div class="d-grid gap-3">
-                    <a asp-controller="AuthPage"
-                       asp-action="Login" class="btn btn-primary btn-lg">Login</a>
-                    <a asp-controller="AuthPage"
-                       asp-action="Register" class="btn btn-outline-primary btn-lg">Register</a>
+                    <p> Create budgets and control your monthly spending limits. </p>
                 </div>
-            </div>
-        </main>
+           </div>
+        </div>
     </div>
-</body>
-</html>
+
+    <div class="text-center mt-5 mb-5">
+        <h3>  <i class="bi bi-bar-chart-fill me-2"></i> Take control of your financial future </h3>
+
+        <p class="text-muted"> Simple tracking, better planning, smarter decisions. </p>
+    </div>
+</div>
