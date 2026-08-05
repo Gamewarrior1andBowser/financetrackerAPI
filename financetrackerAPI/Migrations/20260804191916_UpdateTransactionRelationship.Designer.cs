@@ -49,11 +49,11 @@ namespace financetrackerAPI.Migrations
 
             modelBuilder.Entity("financetrackerAPI.Models.Category", b =>
                 {
-                    b.Property<int>("CategoryID")
+                    b.Property<int>("categoryID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("categoryID"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -66,24 +66,24 @@ namespace financetrackerAPI.Migrations
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoryID");
+                    b.HasKey("categoryID");
 
                     b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
                 {
-                    b.Property<int>("TransactionID")
+                    b.Property<int>("transactionID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionID"));
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("CategoryID")
+                    b.Property<int>("categoryID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -92,9 +92,9 @@ namespace financetrackerAPI.Migrations
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("TransactionID");
+                    b.HasKey("transactionID");
 
-                    b.HasIndex("CategoryID");
+                    b.HasIndex("categoryID");
 
                     b.ToTable("Transactions");
                 });
@@ -127,7 +127,7 @@ namespace financetrackerAPI.Migrations
                 {
                     b.HasOne("financetrackerAPI.Models.Category", "Category")
                         .WithMany("Transactions")
-                        .HasForeignKey("CategoryID")
+                        .HasForeignKey("categoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

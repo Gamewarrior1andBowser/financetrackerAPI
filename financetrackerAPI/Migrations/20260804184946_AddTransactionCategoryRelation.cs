@@ -11,16 +11,16 @@ namespace financetrackerAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_CategoryID",
+                name: "IX_Transactions_categoryID",
                 table: "Transactions",
-                column: "CategoryID");
+                column: "categoryID");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Transactions_Categories_CategoryID",
+                name: "FK_Transactions_Categories_categoryID",
                 table: "Transactions",
-                column: "CategoryID",
+                column: "categoryID",
                 principalTable: "Categories",
-                principalColumn: "CategoryID",
+                principalColumn: "categoryID",
                 onDelete: ReferentialAction.Cascade);
         }
 
@@ -28,11 +28,11 @@ namespace financetrackerAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Transactions_Categories_CategoryID",
+                name: "FK_Transactions_Categories_categoryID",
                 table: "Transactions");
 
             migrationBuilder.DropIndex(
-                name: "IX_Transactions_CategoryID",
+                name: "IX_Transactions_categoryID",
                 table: "Transactions");
         }
     }

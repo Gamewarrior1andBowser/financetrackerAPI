@@ -67,7 +67,7 @@ namespace financetrackerAPI.Migrations
                 name: "Transactions",
                 columns: table => new
                 {
-                    transactionsID = table.Column<int>(type: "int", nullable: false)
+                    transactionID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     userID = table.Column<int>(type: "int", nullable: false),
@@ -76,7 +76,7 @@ namespace financetrackerAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.transactionsID);
+                    table.PrimaryKey("PK_Transactions", x => x.transactionID);
                     table.ForeignKey(
                         name: "FK_Transactions_Categories_categoryID",
                         column: x => x.categoryID,

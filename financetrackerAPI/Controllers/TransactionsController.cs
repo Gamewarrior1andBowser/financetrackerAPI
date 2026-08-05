@@ -59,7 +59,7 @@ public class TransactionsController : ControllerBase
             .Where(t => t.userID == userID)
             .Select(t => new
             {
-                t.TransactionID,
+                t.transactionID,
 
                 t.Amount,
 
@@ -95,17 +95,17 @@ public class TransactionsController : ControllerBase
         var transaction = _context.Transactions
             .Include(t => t.Category)
             .Where(t =>
-                t.TransactionID == id &&
+                t.transactionID == id &&
                 t.userID == userID)
             .Select(t => new
             {
-                t.TransactionID,
+                t.transactionID,
 
                 t.Amount,
 
                 t.Date,
 
-                t.CategoryID,
+                t.categoryID,
 
 
                 CategoryName = t.Category.Name
@@ -143,7 +143,7 @@ public class TransactionsController : ControllerBase
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
-                t.transactionsID == id &&
+                t.transactionID == id &&
                 t.userID == userID);
 
 
@@ -187,7 +187,7 @@ public class TransactionsController : ControllerBase
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
-                t.transactionsID == id &&
+                t.transactionID == id &&
                 t.userID == userID);
 
 

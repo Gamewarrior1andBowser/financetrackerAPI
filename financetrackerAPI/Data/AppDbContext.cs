@@ -35,7 +35,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Transaction>()
             .HasOne(t => t.Category)
             .WithMany(c => c.Transactions)
-            .HasForeignKey(t => t.CategoryID)
+            .HasForeignKey(t => t.categoryID)
             .OnDelete(DeleteBehavior.Cascade);
 
 
