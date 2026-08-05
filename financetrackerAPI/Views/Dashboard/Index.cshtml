@@ -1,12 +1,10 @@
-﻿@{ ViewData["Title"] = "Dashboard"; }
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
 
 <div class="auth-page">
 
-    <h1 class="mb-4"> Finance Dashboard </h1> 
-    <br />
-    <br />
-    <br />
-
+    <h1 class="mb-4"> Finance Dashboard </h1>
 
     @*Insert navbar here
         Navbar has:
@@ -18,84 +16,73 @@
                     Sign Out
                 }
     *@
-    
-    
+
     <hr class="dropdown-divider">
 
-    <h4> Account Overview</h4>
-
-    @*Three Cards*@
-    @*Budget Card: Shows latest budget being used*@
-    @*Category Card: Shows category most used*@
-    @*Transaction Card: Shows 3 or 4 transactions*@
-    <div class="row">
-  <div class="col-sm-4 mb-3 mb-sm-0">
-    <div class="card">
-        <div class="card-header"><h6>Budget</h6></div>
-      <div class="card-body">
-        <h5 id="budgetName"></h5>
-        <p id="budgetAmount"></p>
-        <a asp-controller="BudgetPage"
-                   asp-action="Index" class="btn btn-primary">Go to Budget</a>
-      </div>
+    @*Top summary: Income vs Expense totals*@
+    <div class="row mb-4">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0">Total Income</h6>
+                </div>
+                <div class="card-body">
+                    <h3 id="totalIncome" class="text-success">$0.00</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h6 class="mb-0">Total Expenses</h6>
+                </div>
+                <div class="card-body">
+                    <h3 id="totalExpense" class="text-danger">$0.00</h3>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="card">
-        <div class="card-header"><h6>Category</h6></div>
-      <div class="card-body">
-        <h5 id="categoryName"></h5>
-        <p id="categoryAmount"></p>
+
+    <h4>Account Overview</h4>
+
+    @*Budget + Transactions quick links*@
+    <div class="row mb-4">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <div class="card">
+                <div class="card-header"><h6>Budget</h6></div>
+                <div class="card-body">
+                    <h5 id="budgetName"></h5>
+                    <p id="budgetAmount"></p>
+                    <a asp-controller="BudgetPage"
+                       asp-action="Index" class="btn btn-primary">Go to Budget</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header"><h6>Transactions</h6></div>
+                <div class="card-body">
+                    <h5 id="recentTransactions"></h5>
+                    <a asp-controller="TransactionPage"
+                       asp-action="Index" class="btn btn-primary">Go to Transactions</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="dropdown-divider">
+
+    @*Category overview grid — one small card per category*@
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Categories</h4>
         <a asp-controller="CategoryPage"
-                   asp-action="Index" class="btn btn-primary">Go to Category</a>
-      </div>
+           asp-action="Index" class="btn btn-outline-primary btn-sm">Manage Categories</a>
     </div>
-  </div>
-    <div class="col-sm-4">
-    <div class="card">
-        <div class="card-header"><h6>Transactions</h6></div>
-      <div class="card-body">
-        <h5 id="recentTransactions"></h5>
-        <a asp-controller="TransactionPage"
-                   asp-action="Index" class="btn btn-primary">Go to Transactions</a>
-      </div>
+
+    <div id="categoryOverview" class="row">
+        @*Category cards get injected here by JS*@
     </div>
-  </div>
-</div>
 
-    @* <div class="row">
-
-        <div class="col-md-4">
-            <div class="card shadow p-3">
-                <h5 class="card-title">Budget</h5>
-                <h2 id="budgetName"> </h2>
-                <h3 id="budgetAmount"> </h3>
-                <a asp-controller="Budget"
-                   asp-action="Index" class="btn btn-primary">More</a>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow p-3">
-                <h5 class="card-title">Category</h5>
-                <h2 id="categoryName">  Shows most used category </h2>
-                <h3 id="categoryAmount">Shows how much spent on category</h3>
-                <a asp-controller="Category"
-                   asp-action="Index" class="btn btn-primary">More</a>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow p-3">
-                <h5 class="card-title">Transaction</h5>
-                <h2 id="recentTransactions"> Shows 3 recent transactions </h2>
-                <a asp-controller="Transaction"
-                   asp-action="Index" class="btn btn-primary">More</a>
-            </div>
-        </div>
-
-        Report coming soon
-    </div> *@
 </div>
 
 @section Scripts {
@@ -118,7 +105,7 @@
             return false;
         }
 
-        // ✅ Budget
+        // Budget
         fetch("/api/Budget", {
             headers: {
                 "Authorization": "Bearer " + token
@@ -135,46 +122,89 @@
                 document.getElementById("budgetAmount").innerHTML = "$" + budget.amount;
             });
 
-        // ✅ Category
-        fetch("/api/Category", {
-            headers: {
-                "Authorization": "Bearer " + token
-            }
-        })
-            .then(response => {
-                if (handleAuthError(response)) return;
-                return response.json();
+        //  Categories + Transactions combined, to build income/expense totals
+        // and a per-category summary
+        Promise.all([
+            fetch("/api/Category", {
+                headers: { "Authorization": "Bearer " + token }
+            }).then(res => {
+                if (handleAuthError(res)) return null;
+                return res.json();
+            }),
+            fetch("/api/Transactions", {
+                headers: { "Authorization": "Bearer " + token }
+            }).then(res => {
+                if (handleAuthError(res)) return null;
+                return res.json();
             })
-            .then(category => {
-                if (!category) return;
+        ]).then(([categories, transactions]) => {
 
-                document.getElementById("categoryName").innerHTML = category.categoryName;
-                document.getElementById("categoryAmount").innerHTML = "$" + category.totalSpent;
+            if (!categories || !transactions) return;
+
+            // --- Recent transactions preview ---
+            let recentHtml = "";
+            transactions.slice(0, 4).forEach(t => {
+                recentHtml += `<p>${t.description} - $${t.amount}</p>`;
+            });
+            document.getElementById("recentTransactions").innerHTML = recentHtml;
+
+            // --- Income / Expense totals ---
+            let totalIncome = 0;
+            let totalExpense = 0;
+
+            transactions.forEach(t => {
+                if (t.type === "Income") {
+                    totalIncome += t.amount;
+                } else if (t.type === "Expense") {
+                    totalExpense += t.amount;
+                }
             });
 
-        // ✅ Transactions
-        fetch("/api/Transactions", {
-            headers: {
-                "Authorization": "Bearer " + token
-            }
-        })
-            .then(response => {
-                if (handleAuthError(response)) return;
-                return response.json();
-            })
-            .then(transactions => {
-                if (!transactions) return;
+            document.getElementById("totalIncome").innerText = "$" + totalIncome.toFixed(2);
+            document.getElementById("totalExpense").innerText = "$" + totalExpense.toFixed(2);
 
-                let html = "";
+            // --- Per-category totals ---
+            // Assumes each transaction has a categoryID linking it to a category
+            const categoryTotals = {};
 
-                transactions.forEach(transaction => {
-                    html += `<p>${transaction.description} - $${transaction.amount}</p>`;
-                });
-
-                document.getElementById("recentTransactions").innerHTML = html;
+            categories.forEach(c => {
+                categoryTotals[c.categoryID] = {
+                    name: c.name,
+                    type: c.type,
+                    total: 0
+                };
             });
+
+            transactions.forEach(t => {
+                if (categoryTotals[t.categoryID]) {
+                    categoryTotals[t.categoryID].total += t.amount;
+                }
+            });
+
+            // --- Render category cards ---
+            const container = document.getElementById("categoryOverview");
+            let categoryHtml = "";
+
+            Object.values(categoryTotals).forEach(cat => {
+                const badgeClass = cat.type === "Income" ? "bg-success" : "bg-danger";
+
+                categoryHtml += `
+                            <div class="col-sm-4 col-md-3 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <h6 class="card-title mb-1">${cat.name}</h6>
+                                            <span class="badge ${badgeClass}">${cat.type}</span>
+                                        </div>
+                                        <p class="card-text mb-0">$${cat.total.toFixed(2)}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+            });
+
+            container.innerHTML = categoryHtml || "<p>No categories yet.</p>";
+        });
 
     </script>
 }
-}
-

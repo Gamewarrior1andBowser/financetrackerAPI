@@ -20,7 +20,7 @@ namespace financetrackerAPI.Controllers
 
         public IActionResult Edit(int id)
         {
-            ViewBag.transactionID = id;
+            ViewBag.transactionsID = id;
 
             return View("~/Views/Transaction/Edit.cshtml");
         }
@@ -28,7 +28,7 @@ namespace financetrackerAPI.Controllers
 
         public IActionResult Details(int id)
         {
-            ViewBag.transactionID = id;
+            ViewBag.transactionsID = id;
 
             return View("~/Views/Transaction/Details.cshtml");
         }
