@@ -10,7 +10,7 @@ CREATE TABLE Users (
 );
 
 CREATE TABLE Transactions (
-	transactionsID INT IDENTITY(1,1) PRIMARY KEY,
+	transactionID INT IDENTITY(1,1) PRIMARY KEY,
 	amount int NOT NULL,
 	[date] [date] NOT NULL,
 	userID int NOT NULL,

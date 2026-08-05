@@ -31,7 +31,7 @@ namespace financetrackerAPI.Controllers
 
         public IActionResult Details(int id)
         {
-            ViewBag.CategoryID = id;
+            ViewBag.categoryID = id;
 
             return View("~/Views/Category/Details.cshtml");
         }

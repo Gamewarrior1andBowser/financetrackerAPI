@@ -76,11 +76,11 @@ namespace financetrackerAPI.Migrations
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
                 {
-                    b.Property<int>("transactionsID")
+                    b.Property<int>("transactionID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionID"));
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(10, 2)
@@ -95,11 +95,11 @@ namespace financetrackerAPI.Migrations
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("transactionsID");
+                    b.HasKey("transactionID");
 
                     b.HasIndex("categoryID");
 
-                    b.HasIndex("CategoryID");
+                    b.HasIndex("categoryID");
 
                     b.ToTable("Transactions");
                 });
@@ -132,7 +132,7 @@ namespace financetrackerAPI.Migrations
                 {
                     b.HasOne("financetrackerAPI.Models.Category", "Category")
                         .WithMany("Transactions")
-                        .HasForeignKey("CategoryID")
+                        .HasForeignKey("categoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
