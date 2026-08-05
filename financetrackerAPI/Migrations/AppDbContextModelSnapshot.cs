@@ -34,6 +34,10 @@ namespace financetrackerAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Limit")
+                        .HasColumnType("int")
+                        .HasColumnName("limits");
+
+                    b.Property<int>("categoryID")
                         .HasColumnType("int");
 
                     b.Property<int>("userID")
@@ -41,7 +45,9 @@ namespace financetrackerAPI.Migrations
 
                     b.HasKey("budgetID");
 
-                    b.ToTable("Budgets");
+                    b.HasIndex("categoryID");
+
+                    b.ToTable("Budget");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Category", b =>
@@ -70,25 +76,27 @@ namespace financetrackerAPI.Migrations
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
                 {
-                    b.Property<int>("transactionID")
+                    b.Property<int>("transactionsID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("categoryID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("categoryID")
+                        .HasColumnType("int");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("transactionID");
+                    b.HasKey("transactionsID");
+
+                    b.HasIndex("categoryID");
 
                     b.ToTable("Transactions");
                 });
@@ -115,6 +123,28 @@ namespace financetrackerAPI.Migrations
                     b.HasKey("userID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>
+                {
+                    b.HasOne("financetrackerAPI.Models.Category", "categories")
+                        .WithMany()
+                        .HasForeignKey("categoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("categories");
+                });
+
+            modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
+                {
+                    b.HasOne("financetrackerAPI.Models.Category", "category")
+                        .WithMany()
+                        .HasForeignKey("categoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("category");
                 });
 #pragma warning restore 612, 618
         }
