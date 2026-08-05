@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using financetrackerAPI.Data;
 
@@ -11,9 +12,11 @@ using financetrackerAPI.Data;
 namespace financetrackerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260804191916_UpdateTransactionRelationship")]
+    partial class UpdateTransactionRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,39 +27,33 @@ namespace financetrackerAPI.Migrations
 
             modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>
                 {
-                    b.Property<int>("budgetID")
+                    b.Property<int>("BudgetID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("budgetID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BudgetID"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Limit")
-                        .HasColumnType("int")
-                        .HasColumnName("limits");
-
-                    b.Property<int>("categoryID")
                         .HasColumnType("int");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("budgetID");
+                    b.HasKey("BudgetID");
 
-                    b.HasIndex("categoryID");
-
-                    b.ToTable("Budget");
+                    b.ToTable("Budgets");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Category", b =>
                 {
-                    b.Property<int>("categoryID")
+                    b.Property<int>("CategoryID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("categoryID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -69,35 +66,33 @@ namespace financetrackerAPI.Migrations
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("categoryID");
+                    b.HasKey("CategoryID");
 
                     b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
                 {
-                    b.Property<int>("transactionsID")
+                    b.Property<int>("TransactionID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionID"));
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("categoryID")
-                        .HasColumnType("int");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("transactionsID");
-
-                    b.HasIndex("categoryID");
+                    b.HasKey("TransactionID");
 
                     b.HasIndex("CategoryID");
 

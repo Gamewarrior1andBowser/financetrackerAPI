@@ -2,9 +2,12 @@
     ViewData["Title"] = "Reports";
 }
 
+
 <div class="container">
 
+
     <div class="text-center mb-5">
+
 
         <h1 class="fw-bold text-black">
 
@@ -14,21 +17,28 @@
 
         </h1>
 
+
         <p class="text-black">
 
             Track your income, expenses, and spending patterns.
 
         </p>
 
+
     </div>
+
+
 
 
 
     <div class="row g-4">
 
+
         <div class="col-md-6">
 
+
             <div class="card shadow p-4">
+
 
                 <h5 class="card-title">
 
@@ -38,17 +48,25 @@
 
                 </h5>
 
+
+
                 <canvas id="incomeExpenseChart"></canvas>
 
+
             </div>
+
 
         </div>
 
 
 
+
+
         <div class="col-md-6">
 
+
             <div class="card shadow p-4">
+
 
                 <h5 class="card-title">
 
@@ -58,130 +76,168 @@
 
                 </h5>
 
+
+
                 <canvas id="categoryChart"></canvas>
+
 
             </div>
 
+
         </div>
 
+
     </div>
+
 
 </div>
 
 
+
+
+
 @section Scripts {
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        const incomeExpenseChart =
-            document.getElementById("incomeExpenseChart");
 
-        new Chart(incomeExpenseChart, {
 
-            type: "bar",
+<script>
 
-            data: {
 
-                labels: [
+async function loadReports()
+{
 
+
+    const response = await fetch("/Reports/GetReportData");
+
+
+    const data = await response.json();
+
+
+
+
+
+    new Chart(
+        document.getElementById("incomeExpenseChart"),
+        {
+
+            type:"bar",
+
+
+            data:
+            {
+
+                labels:
+                [
                     "Income",
-
                     "Expenses"
-
                 ],
 
-                datasets: [{
 
-                    label: "Amount ($)",
+                datasets:
+                [
+                    {
 
-                    data: [
+                        label:"Amount ($)",
 
-                        0,
 
-                        0
+                        data:
+                        [
+                            data.income,
+                            data.expenses
+                        ],
 
-                    ],
 
-                    borderWidth: 2
+                        borderWidth:2
 
-                }]
+                    }
+                ]
 
             },
 
-            options: {
 
-                responsive: true,
+            options:
+            {
 
-                animation: {
-
-                    duration: 1500
-
-                }
+                responsive:true
 
             }
+
 
         });
 
 
 
 
-        const categoryChart =
-            document.getElementById("categoryChart");
 
-        new Chart(categoryChart, {
 
-            type: "doughnut",
 
-            data: {
+    const categoryNames =
+        data.categories.map(x => x.category);
 
-                labels: [
 
-                    "Food",
 
-                    "Transport",
+    const categoryAmounts =
+        data.categories.map(x => x.amount);
 
-                    "Bills",
 
-                    "Other"
 
-                ],
 
-                datasets: [{
 
-                    data: [
 
-                        10,
 
-                        30,
+    new Chart(
+        document.getElementById("categoryChart"),
+        {
 
-                        70,
+            type:"doughnut",
 
-                        80
 
-                    ],
+            data:
+            {
 
-                    borderWidth: 2
+                labels:categoryNames,
 
-                }]
+
+                datasets:
+                [
+                    {
+
+                        data:categoryAmounts,
+
+
+                        borderWidth:2
+
+                    }
+                ]
 
             },
 
-            options: {
 
-                responsive: true,
+            options:
+            {
 
-                animation: {
-
-                    duration: 1500
-
-                }
+                responsive:true
 
             }
 
+
         });
 
-    </script>
+
+
+}
+
+
+
+
+loadReports();
+
+
+
+</script>
+
 
 }
