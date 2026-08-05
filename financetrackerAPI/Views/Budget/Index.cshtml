@@ -2,17 +2,20 @@
 
 <div class="container">
     <h1 class="mb-4"> Budgets </h1>
-
+        <a asp-controller="BudgetPage" asp-action="Create" class="btn btn-primary">Create Budget</a> 
+    <a asp-controller="BudgetPage" asp-action="Edit" class="btn btn-primary">Edit Budget</a> 
     <table class="table table-bordered">
         <thead class="table-primary">
             <tr>
-                <th> Date </th>
+                <th> Date </th> @*Change this to "Name" or "Budget Name"*@
                 <th>Limit </th>
             </tr>
         </thead>
         <tbody id="budgetTable">
         </tbody>
     </table>
+    <a asp-controller="Dashboard"
+       asp-action="Index" class="btn btn-primary">Go to Dashboard</a>
 </div>
 
 @section Scripts {
@@ -41,4 +44,5 @@
                 console.log(error);
             });
     </script>
+    <script src="~/js/authGuard.js"></script>
 }

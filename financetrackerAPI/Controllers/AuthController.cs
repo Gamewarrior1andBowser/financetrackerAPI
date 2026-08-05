@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace financetrackerAPI.Controllers;
@@ -12,6 +14,7 @@ namespace financetrackerAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -28,32 +31,42 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(User user)
     {
-        var existingUser = _context.Users
-            .FirstOrDefault(u => u.email == user.email);
+        if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+        {
+            return BadRequest("Email and password are required");
+        }
 
+        user.email = user.email.ToLower().Trim();
+
+        User? existingUser = await _context.Users
+            .FirstOrDefaultAsync(u => u.email == user.email);
 
         if (existingUser != null)
         {
-            return BadRequest("Email already exists");
+            return BadRequest("An account with this email already exists");
         }
 
-        user.userID = _context.Users.Count();
-
-        user.password =
-            BCrypt.Net.BCrypt.HashPassword(user.password);
-
+        user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
 
         user.creationTime = DateTime.Now;
-        
 
         _context.Users.Add(user);
 
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            return BadRequest("Unable to create account. Please try again later");
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unexpected error occurred");
+        }
 
-
-        return Ok("Registered");
+        return Ok("Registration successful");
     }
-
 
 
     [HttpPost("login")]

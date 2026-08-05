@@ -24,33 +24,39 @@ namespace financetrackerAPI.Migrations
 
             modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>
                 {
-                    b.Property<int>("BudgetID")
+                    b.Property<int>("budgetID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BudgetID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("budgetID"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Limit")
+                        .HasColumnType("int")
+                        .HasColumnName("limits");
+
+                    b.Property<int>("categoryID")
                         .HasColumnType("int");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("BudgetID");
+                    b.HasKey("budgetID");
 
-                    b.ToTable("Budgets");
+                    b.HasIndex("categoryID");
+
+                    b.ToTable("Budget");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Category", b =>
                 {
-                    b.Property<int>("CategoryID")
+                    b.Property<int>("categoryID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("categoryID"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -63,33 +69,35 @@ namespace financetrackerAPI.Migrations
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoryID");
+                    b.HasKey("categoryID");
 
                     b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
                 {
-                    b.Property<int>("TransactionID")
+                    b.Property<int>("transactionsID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("CategoryID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("categoryID")
+                        .HasColumnType("int");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("TransactionID");
+                    b.HasKey("transactionsID");
+
+                    b.HasIndex("categoryID");
 
                     b.HasIndex("CategoryID");
 

@@ -104,7 +104,7 @@ public class CategoryController : ControllerBase
 
         var category = _context.Categories
             .FirstOrDefault(c =>
-                c.CategoryID == id &&
+                c.categoryID == id &&
                 c.userID == userID);
 
 
@@ -144,7 +144,7 @@ public class CategoryController : ControllerBase
 
         var category = _context.Categories
             .FirstOrDefault(c =>
-                c.CategoryID == id &&
+                c.categoryID == id &&
                 c.userID == userID);
 
 
@@ -194,7 +194,7 @@ public class CategoryController : ControllerBase
 
         var category = _context.Categories
             .FirstOrDefault(c =>
-                c.CategoryID == id &&
+                c.categoryID == id &&
                 c.userID == userID);
 
 

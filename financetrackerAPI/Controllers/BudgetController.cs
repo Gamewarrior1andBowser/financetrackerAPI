@@ -3,10 +3,14 @@ using financetrackerAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace financetrackerAPI.Controllers;
+
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+
 public class BudgetController : ControllerBase {
     private readonly AppDbContext _context;
 
@@ -15,7 +19,7 @@ public class BudgetController : ControllerBase {
     }
 
     // Create Budget
-    [Authorize]
+    
     [HttpPost]
     public async Task<IActionResult> Create(Budget budget) {
         var userID = int.Parse(User.FindFirst("id").Value);
@@ -30,7 +34,7 @@ public class BudgetController : ControllerBase {
     }
 
     // Get All User Budgets
-    [Authorize]
+    
     [HttpGet]
     public IActionResult GetAll() {
         var userID = int.Parse(User.FindFirst("id").Value);
@@ -43,14 +47,14 @@ public class BudgetController : ControllerBase {
     }
 
     // Get Single Budget
-    [Authorize]
+
     [HttpGet("{id}")]
     public IActionResult GetById(int id) {
         var userID = int.Parse(User.FindFirst("id").Value);
 
         var budget = _context.Budgets
             .FirstOrDefault(t =>
-                t.BudgetID == id &&
+                t.budgetID == id &&
                 t.userID == userID);
 
 
@@ -63,7 +67,7 @@ public class BudgetController : ControllerBase {
     }
 
     // Update Budget
-    [Authorize]
+   
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, Budget updatedBudget) {
         var userID = int.Parse(User.FindFirst("id").Value);
@@ -71,7 +75,7 @@ public class BudgetController : ControllerBase {
 
         var budget = _context.Budgets
             .FirstOrDefault(t =>
-                t.BudgetID == id &&
+                t.budgetID == id &&
                 t.userID == userID);
 
 
@@ -82,7 +86,7 @@ public class BudgetController : ControllerBase {
 
         budget.Limit = updatedBudget.Limit;
 
-        budget.BudgetID = updatedBudget.BudgetID;
+        budget.budgetID = updatedBudget.budgetID;
 
         budget.Date = updatedBudget.Date;
 
@@ -94,7 +98,7 @@ public class BudgetController : ControllerBase {
     }
 
     // Delete Budget
-    [Authorize]
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id) {
         var userID = int.Parse(User.FindFirst("id").Value);
@@ -102,7 +106,7 @@ public class BudgetController : ControllerBase {
 
         var budget = _context.Budgets
             .FirstOrDefault(t =>
-                t.BudgetID == id &&
+                t.budgetID == id &&
                 t.userID == userID);
 
 

@@ -8,6 +8,7 @@ namespace financetrackerAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class TransactionsController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -21,7 +22,7 @@ public class TransactionsController : ControllerBase
 
 
     // Create Transaction
-    [Authorize]
+ 
     [HttpPost]
     public async Task<IActionResult> Create(Transaction transaction)
     {
@@ -45,7 +46,7 @@ public class TransactionsController : ControllerBase
 
 
     // Get All User Transactions
-    [Authorize]
+   
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -64,7 +65,7 @@ public class TransactionsController : ControllerBase
 
                 t.Date,
 
-                t.CategoryID,
+                t.categoryID,
 
 
                 CategoryName = t.Category.Name
@@ -83,7 +84,7 @@ public class TransactionsController : ControllerBase
 
 
     // Get Single Transaction
-    [Authorize]
+   
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
@@ -132,7 +133,7 @@ public class TransactionsController : ControllerBase
 
 
     // Update Transaction
-    [Authorize]
+
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, Transaction updatedTransaction)
     {
@@ -142,7 +143,7 @@ public class TransactionsController : ControllerBase
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
-                t.TransactionID == id &&
+                t.transactionsID == id &&
                 t.userID == userID);
 
 
@@ -156,7 +157,7 @@ public class TransactionsController : ControllerBase
 
         transaction.Amount = updatedTransaction.Amount;
 
-        transaction.CategoryID = updatedTransaction.CategoryID;
+        transaction.categoryID = updatedTransaction.categoryID;
 
         transaction.Date = updatedTransaction.Date;
 
@@ -176,7 +177,7 @@ public class TransactionsController : ControllerBase
 
 
     // Delete Transaction
-    [Authorize]
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -186,7 +187,7 @@ public class TransactionsController : ControllerBase
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
-                t.TransactionID == id &&
+                t.transactionsID == id &&
                 t.userID == userID);
 
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace financetrackerAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace financetrackerAPI.Controllers
 
         public IActionResult Edit(int id)
         {
-            ViewBag.CategoryID = id;
+            ViewBag.categoryID = id;
 
             return View("~/Views/Category/Edit.cshtml");
         }
