@@ -1,8 +1,164 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow p-4">
+
+                <h2 class="mb-4 text-danger">
+
+                    <i class="bi bi-trash-fill me-2"></i>
+
+                    Delete Category
+
+                </h2>
+
+                <p class="mb-4">
+                    Are you sure you want to delete this category? This action cannot be undone.
+                </p>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Category Name
+
+                    </label>
+
+                    <input id="name"
+                           class="form-control"
+                           disabled />
+
+                </div>
 
 
-    This would just be like the pop up for the delete action
-*@
-@{
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Type
+
+                    </label>
+
+                    <select id="type"
+                            class="form-select"
+                            disabled>
+
+                        <option value="Income">
+                            Income
+                        </option>
+
+                        <option value="Expense">
+                            Expense
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="d-flex gap-2">
+
+                    <button class="btn btn-danger"
+                            onclick="deleteCategory()">
+
+                        <i class="bi bi-trash me-1"></i>
+
+                        Delete
+
+                    </button>
+
+
+                    <a asp-controller="CategoryPage"
+                       asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-arrow-left-circle me-1"></i>
+
+                        Back
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        const token = localStorage.getItem("token");
+
+        const id = @ViewBag.catagoryID;
+
+
+
+        loadCategory();
+
+
+
+        async function loadCategory() {
+
+            const response = await fetch("/api/Category/" + id, {
+
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+
+            });
+
+            const category = await response.json();
+
+            document.getElementById("name").value = category.name;
+
+            document.getElementById("type").value = category.type;
+
+        }
+
+
+
+        async function deleteCategory() {
+
+            const response = await fetch("/api/Category/" + id, {
+
+                method: "DELETE",
+
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+
+            });
+
+
+            if (response.ok) {
+
+                window.location.href = "/CategoryPage";
+
+            }
+            else {
+
+                const error = await response.text();
+
+                console.log(error);
+
+                alert("Unable to delete category.");
+
+            }
+
+        }
+
+    </script>
+
 }
