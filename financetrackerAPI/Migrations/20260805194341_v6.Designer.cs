@@ -12,8 +12,8 @@ using financetrackerAPI.Data;
 namespace financetrackerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260805191012_AddUsernameToUsers")]
-    partial class AddUsernameToUsers
+    [Migration("20260805194341_v6")]
+    partial class v6
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
