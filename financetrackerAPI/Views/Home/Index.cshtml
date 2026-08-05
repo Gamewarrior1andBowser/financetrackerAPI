@@ -2,137 +2,605 @@
     ViewData["Title"] = "Home";
 }
 
+
 <div class="container">
+
+
+    <!-- Hero Section -->
+
     <div class="row align-items-center py-5">
+
+
         <div class="col-md-6">
+
+
             <h1 class="display-4 fw-bold text-primary">
+
                 <i class="bi bi-wallet2 me-2"></i>
+
                 Finance Tracker
+
             </h1>
 
+
             <p class="lead mt-3">
+
                 Manage your income, expenses, budgets, and financial goals easily with one simple platform.
+
             </p>
+
+
+            <p class="mt-4 text-muted">
+
+                Explore how Finance Tracker helps users organize their money,
+                analyze spending habits, and make better financial decisions.
+
+            </p>
+
+
         </div>
 
-        <p class="mt-4 text-muted">
-            Start tracking your finances, manage budgets, and monitor your spending easily.
-        </p>
+
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow border-0 p-4">
+
+
+                <h3 class="fw-bold">
+
+                    Why use Finance Tracker?
+
+                </h3>
+
+
+                <p>
+
+                    Track transactions, organize categories, manage budgets,
+                    and understand your financial habits through detailed reports.
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
 
     </div>
 
+
+
+
+
+    <!-- Features -->
+
+
     <div class="row mt-5">
+
+
         <div class="col-md-4 mb-4">
+
+
             <div class="card shadow border-0 h-100">
+
+
                 <div class="card-body text-center">
+
 
                     <i class="bi bi-cash-stack text-success"
                        style="font-size:50px;">
                     </i>
 
-                    <h4 class="mt-3"> Track Transactions </h4>
 
-                    <p> Record and monitor your income and expenses to understand your spending habits. </p>
+                    <h4 class="mt-3">
+
+                        Track Transactions
+
+                    </h4>
+
+
+                    <p>
+
+                        Record and monitor income and expenses.
+
+                    </p>
+
 
                 </div>
+
+
             </div>
+
+
         </div>
 
+
+
+
+
         <div class="col-md-4 mb-4">
+
+
             <div class="card shadow border-0 h-100">
+
+
                 <div class="card-body text-center">
+
 
                     <i class="bi bi-tags-fill text-primary"
                        style="font-size:50px;">
                     </i>
 
-                    <h4 class="mt-3">  Manage Categories </h4>
+
+                    <h4 class="mt-3">
+
+                        Manage Categories
+
+                    </h4>
 
 
+                    <p>
 
-                    <p> Organize transactions into categories for better financial tracking. </p>
+                        Organize financial activities into meaningful categories.
+
+                    </p>
+
+
                 </div>
+
+
             </div>
+
+
         </div>
-    </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    @* @await RenderSectionAsync("Scripts", required: false) 
-
-</body>
-</html> *@
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - Finance Tracker</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    @* <style>
-            main {
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            }
-
-            .home-card {
-                background: #fff;
-                border-radius: 1rem;
-                padding: 3rem 2.5rem;
-                box-shadow: 0 1rem 3rem rgba(0,0,0,0.2);
-                text-align: center;
-                max-width: 420px;
-                width: 100%;
-            }
-
-            .home-card h1 {
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-            }
-
-            .home-card p {
-                color: #6c757d;
-                margin-bottom: 2rem;
-            }
-
-            .btn-lg {
-                padding: 0.75rem 1rem;
-            }
-    </style> *@
-</head>
-<body class="">
-    <div class="container bg-primary text-white">
-        <header>
-            <!-- As a heading -->
-            <nav class="navbar bg-body-tertiary">
-                @* <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Financial Tracker</span>
-        </div> *@
-                <h2 class="pb-2 mb-4 border-bottom border-dark">Financial Tracker</h2>@*Make this bigger and blend it with the main body*@
-            </nav>
-        </header>
 
 
-        <main>
-            <div class="home-card">
-                <h4>Welcome</h4>
-                <p>Please log in to your account or create a new one to get started.</p>
 
-                <div class="d-grid gap-3">
-                    <a asp-controller="AuthPage"
-                       asp-action="Login" class="btn btn-primary btn-lg">Login</a>
-                    <a asp-controller="AuthPage"
-                       asp-action="Register" class="btn btn-outline-primary btn-lg">Register</a>
+        <div class="col-md-4 mb-4">
+
+
+            <div class="card shadow border-0 h-100">
+
+
+                <div class="card-body text-center">
+
+
+                    <i class="bi bi-bar-chart-fill text-warning"
+                       style="font-size:50px;">
+                    </i>
+
+
+                    <h4 class="mt-3">
+
+                        Financial Reports
+
+                    </h4>
+
+
+                    <p>
+
+                        Analyze spending patterns and financial progress.
+
+                    </p>
+
+
                 </div>
+
+
             </div>
-        </main>
+
+
+        </div>
+
+
     </div>
-</body>
-</html>
+
+
+
+
+
+    <!-- Demo Preview -->
+
+
+    <div class="mt-5">
+
+
+        <h2 class="text-center fw-bold mb-4">
+
+            Finance Tracker Preview
+
+        </h2>
+
+
+        <p class="text-center text-muted">
+
+            This is an example of how your dashboard will look after creating an account.
+
+        </p>
+
+
+    </div>
+
+
+
+
+
+    <!-- Summary Cards -->
+
+
+    <div class="row g-4 mt-3">
+
+
+        <div class="col-md-4">
+
+
+            <div class="card shadow border-0 text-center p-4">
+
+
+                <h5>
+
+                    Total Income
+
+                </h5>
+
+
+                <h2 class="text-success"
+                    id="income">
+
+                    $0
+
+                </h2>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <div class="col-md-4">
+
+
+            <div class="card shadow border-0 text-center p-4">
+
+
+                <h5>
+
+                    Total Expenses
+
+                </h5>
+
+
+                <h2 class="text-danger"
+                    id="expenses">
+
+                    $0
+
+                </h2>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <div class="col-md-4">
+
+
+            <div class="card shadow border-0 text-center p-4">
+
+
+                <h5>
+
+                    Remaining Balance
+
+                </h5>
+
+
+                <h2 class="text-primary"
+                    id="balance">
+
+                    $0
+
+                </h2>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <!-- Budget and Savings Preview -->
+
+
+    <div class="row mt-5">
+
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow border-0 p-4">
+
+
+                <h3>
+
+                    <i class="bi bi-wallet2 me-2"></i>
+
+                    Budget Preview
+
+                </h3>
+
+
+                <hr />
+
+
+                <p>
+
+                    Monthly Budget:
+
+                    <strong id="budgetLimit">
+                        $0
+                    </strong>
+
+                </p>
+
+
+
+                <p>
+
+                    Amount Used:
+
+                    <strong id="budgetUsed">
+                        $0
+                    </strong>
+
+                </p>
+
+
+
+                <p>
+
+                    Remaining:
+
+                    <strong class="text-success"
+                            id="budgetRemaining">
+                        $0
+                    </strong>
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-0 p-4">
+
+                <h3>
+
+                    <i class="bi bi-piggy-bank-fill me-2"></i>
+
+                    Savings Goal
+
+                </h3>
+
+                <hr />
+
+
+                <p>
+                    Goal Amount:
+
+                    <strong id="savingGoal">
+                        $0
+                    </strong>
+                </p>
+
+
+                <p>
+                    Current Savings:
+
+                    <strong class="text-primary"
+                            id="savingCurrent">
+                        $0
+                    </strong>
+                </p>
+
+
+                <p>
+                    Remaining:
+
+                    <strong class="text-danger"
+                            id="savingRemaining">
+                        $0
+                    </strong>
+                </p>
+
+
+                <p>
+                    Progress:
+
+                    <strong class="text-success"
+                            id="savingProgress">
+                        0%
+                    </strong>
+                </p>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- Demo Transactions -->
+
+
+    <div class="card shadow border-0 mt-5 p-4">
+
+
+        <h3>
+
+            Recent Transactions Preview
+
+        </h3>
+
+
+        <table class="table table-hover mt-3">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Category</th>
+
+                    <th>Type</th>
+
+                    <th>Amount</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="demoTransactions">
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+@section Scripts {
+
+
+    <script>
+
+
+        async function loadDemoData() {
+
+
+            const response = await fetch("/data/demo-data.json");
+
+
+            const data = await response.json();
+
+
+
+            document.getElementById("income").innerHTML =
+                "$" + data.income;
+
+
+
+            document.getElementById("expenses").innerHTML =
+                "$" + data.expenses;
+
+
+
+            document.getElementById("balance").innerHTML =
+                "$" + data.balance;
+
+            document.getElementById("budgetLimit").innerHTML =
+                "$" + data.budget.monthlyLimit;
+
+
+            document.getElementById("budgetUsed").innerHTML =
+                "$" + data.budget.used;
+
+
+            document.getElementById("budgetRemaining").innerHTML =
+                "$" + data.budget.remaining;
+
+
+
+            document.getElementById("savingGoal").innerHTML =
+                "$" + data.savingsGoal.goal;
+
+
+            document.getElementById("savingCurrent").innerHTML =
+                "$" + data.savingsGoal.current;
+
+            document.getElementById("savingRemaining").innerHTML =
+                "$" + data.savingsGoal.remaining;
+
+
+            document.getElementById("savingProgress").innerHTML =
+                data.savingsGoal.progress + "%";
+
+            let rows = "";
+
+
+
+            data.transactions.forEach(transaction => {
+
+
+                rows += `
+
+                <tr>
+
+                    <td>${transaction.date}</td>
+
+                    <td>${transaction.category}</td>
+
+                    <td>${transaction.type}</td>
+
+                    <td>$${transaction.amount}</td>
+
+                </tr>
+
+                `;
+
+
+            });
+
+
+
+            document.getElementById("demoTransactions").innerHTML = rows;
+
+
+        }
+
+
+
+        loadDemoData();
+
+
+    </script>
+
+
+}
