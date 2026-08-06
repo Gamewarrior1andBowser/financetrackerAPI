@@ -13,7 +13,7 @@
             </i>
 
             <h2 class="mt-3">
-               Create Account
+                Create Account
             </h2>
 
             <p class="text-muted">
@@ -32,7 +32,7 @@
                    placeholder="Enter your email" />
         </div>
 
-        <div class="mb-4">
+        <div class="mb-3">
             <label class="form-label">
                 <i class="bi bi-lock-fill me-2"></i>
                 Password
@@ -40,9 +40,26 @@
             <input id="password"
                    type="password"
                    class="form-control"
-                   placeholder="Create your password" />
+                   placeholder="Create your password"
+                   oninput="checkPasswordMatch()" />
+        </div>
 
-       </div>
+        <div class="mb-4 position-relative">
+            <label class="form-label">
+                <i class="bi bi-lock-fill me-2"></i>
+                Confirm Password
+            </label>
+            <input id="confirmPassword"
+                   type="password"
+                   class="form-control"
+                   placeholder="Re-enter your password"
+                   oninput="checkPasswordMatch()" />
+
+            <div id="passwordMismatch" class="password-popup">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                Passwords do not match
+            </div>
+        </div>
 
         <button class="btn w-100"
                 onclick="register()">
@@ -58,10 +75,10 @@
             <a asp-controller="AuthPage"
                asp-action="Login">
 
-               <i class="bi bi-box-arrow-in-right"></i>
-               Login here
+                <i class="bi bi-box-arrow-in-right"></i>
+                Login here
 
-           </a>
+            </a>
         </p>
 
         <p class="text-center">
@@ -75,30 +92,49 @@
     </div>
 </div>
 
-
-@*Add a confirm password input box, and what is inside must match with what is above*@
-@*Add constraints: password must be 8 dgits *@
 @section Scripts {
 
-<script>
-async function register() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const response = await fetch("/api/Auth/register", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+    <script>
+        function checkPasswordMatch() {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const popup = document.getElementById("passwordMismatch");
 
-        body: JSON.stringify({
-            email,
-            password
-       })
-    });
-    if(response.ok){
-        window.location.href = "/AuthPage/Login";
-    }
-}
-</script>
+            // Only show the popup once the user has started typing in confirmPassword
+            // and the two values don't match yet. As soon as they type again, or it
+            // matches, the popup hides.
+            if (confirmPassword.length > 0 && password !== confirmPassword) {
+                popup.classList.add("show");
+            } else {
+                popup.classList.remove("show");
+            }
+        }
+
+        async function register() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (password !== confirmPassword) {
+                checkPasswordMatch();
+                return;
+            }
+
+            const response = await fetch("/api/Auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+            if (response.ok) {
+                window.location.href = "/AuthPage/Login";
+            }
+        }
+    </script>
 
 }
