@@ -31,9 +31,15 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(User user)
     {
-        if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+        if (string.IsNullOrWhiteSpace(user.email))
         {
-            return BadRequest("Email and password are required");
+            return BadRequest("Email is required");
+        }
+        else if (string.IsNullOrWhiteSpace(user.password)) {
+            return BadRequest("Password is required");
+        }
+        else if (string.IsNullOrWhiteSpace(user.username)) {
+            return BadRequest("Username is required");
         }
 
         user.email = user.email.ToLower().Trim();
