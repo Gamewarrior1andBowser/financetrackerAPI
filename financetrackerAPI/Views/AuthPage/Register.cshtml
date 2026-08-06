@@ -1,4 +1,4 @@
-﻿@{
+﻿@* @{
     ViewData["Title"] = "Register";
 }
 
@@ -76,8 +76,8 @@
 </div>
 
 
-@*Add a confirm password input box, and what is inside must match with what is above*@
-@*Add constraints: password must be 8 dgits *@
+@*Add a confirm password input box, and what is inside must match with what is above
+@*Add constraints: password must be 8 dgits
 @section Scripts {
 
 <script>
@@ -100,5 +100,150 @@ async function register() {
     }
 }
 </script>
+
+} *@
+
+
+
+
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="auth-page">
+
+    <div class="auth-card">
+
+        <div class="text-center mb-4">
+
+            <i class="bi bi-person-plus-fill"
+               style="font-size:70px; color:#f59e0b;">
+            </i>
+
+            <h2 class="mt-3">
+                Create Account
+            </h2>
+
+            <p class="text-muted">
+                Register to start managing your finances
+            </p>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-envelope-fill me-2"></i>
+                Email
+            </label>
+            <input id="email"
+                   type="email"
+                   class="form-control"
+                   placeholder="Enter your email" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-lock-fill me-2"></i>
+                Password
+            </label>
+            <input id="password"
+                   type="password"
+                   class="form-control"
+                   placeholder="Create your password"
+                   oninput="checkPasswordMatch()" />
+        </div>
+
+        <div class="mb-4 position-relative">
+            <label class="form-label">
+                <i class="bi bi-lock-fill me-2"></i>
+                Confirm Password
+            </label>
+            <input id="confirmPassword"
+                   type="password"
+                   class="form-control"
+                   placeholder="Re-enter your password"
+                   oninput="checkPasswordMatch()" />
+
+            <div id="passwordMismatch" class="password-popup">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                Passwords do not match
+            </div>
+        </div>
+
+        <button class="btn w-100"
+                onclick="register()">
+            <i class="bi bi-person-check-fill me-2"></i>
+            Register
+        </button>
+
+        <hr class="my-4">
+
+        <p class="text-center">
+            Already have an account?
+
+            <a asp-controller="AuthPage"
+               asp-action="Login">
+
+                <i class="bi bi-box-arrow-in-right"></i>
+                Login here
+
+            </a>
+        </p>
+
+        <p class="text-center">
+            <a asp-controller="Home"
+               asp-action="Index">
+                <i class="bi bi-arrow-left-circle"></i>
+
+                Back to Home
+            </a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        function checkPasswordMatch() {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const popup = document.getElementById("passwordMismatch");
+
+            // Only show the popup once the user has started typing in confirmPassword
+            // and the two values don't match yet. As soon as they type again, or it
+            // matches, the popup hides.
+            if (confirmPassword.length > 0 && password !== confirmPassword) {
+                popup.classList.add("show");
+            } else {
+                popup.classList.remove("show");
+            }
+        }
+
+        async function register() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (password !== confirmPassword) {
+                checkPasswordMatch();
+                return;
+            }
+
+            const response = await fetch("/api/Auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+            if (response.ok) {
+                window.location.href = "/AuthPage/Login";
+            }
+        }
+    </script>
 
 }

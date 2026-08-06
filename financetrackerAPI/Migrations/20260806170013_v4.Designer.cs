@@ -12,8 +12,8 @@ using financetrackerAPI.Data;
 namespace financetrackerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260805191012_AddUsernameToUsers")]
-    partial class AddUsernameToUsers
+    [Migration("20260806170013_v4")]
+    partial class v4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,10 +112,6 @@ namespace financetrackerAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userID"));
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("creationTime")
                         .HasColumnType("datetime2");
