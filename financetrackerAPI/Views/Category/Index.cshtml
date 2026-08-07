@@ -5,174 +5,135 @@
 
 <div class="container">
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">
+            <i class="bi bi-tags-fill me-2"></i>
+            Categories
+        </h1>
 
-        <div class="col-md-6">
+        <a asp-controller="CategoryPage" asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i>
+            Add Category
+        </a>
+    </div>
 
-            <div class="card shadow border-0 p-4">
-
-
-                <h2 class="mb-4 fw-bold">
-
-                    <i class="bi bi-tags-fill me-2"></i>
-                    Create Category
-
-                </h2>
-
-
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Category Name
-                    </label>
-
-
-                    <input id="name"
-                           class="form-control"
-                           placeholder="Enter category name" />
-
-                </div>
-
-
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Type
-                    </label>
-
-
-                    <select id="type"
-                            class="form-select">
-
-
-                        <option value="Income">
-                            Income
-                        </option>
-
-
-                        <option value="Expense">
-                            Expense
-                        </option>
-
-
-                    </select>
-
-                </div>
-
-
-
-                <button class="btn btn-success"
-                        onclick="createCategory()">
-
-                    <i class="bi bi-check-circle me-1"></i>
-                    Save
-
-                </button>
-
-
-                <a asp-controller="CategoryPage"
-                   asp-action="Index"
-                   class="btn btn-secondary ms-2">
-
-                    Back
-
-                </a>
-
-
-
-            </div>
-
+    <div class="card shadow p-4">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryTable"></tbody>
+            </table>
         </div>
-
     </div>
 
 </div>
 
 
-
+<div id="deleteOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:2000; align-items:center; justify-content:center;">
+    <div class="card shadow p-4" style="max-width:420px;">
+        <h4 class="mb-3">
+            <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+            Delete Category
+        </h4>
+        <p>
+            Are you sure you want to delete <strong id="deleteCategoryName"></strong>?
+            This will also permanently delete its budget and every transaction linked to it.
+        </p>
+        <div class="d-flex gap-2 justify-content-end">
+            <button class="btn btn-secondary" onclick="closeDeletePopup()">Cancel</button>
+            <button class="btn btn-danger" onclick="confirmDelete()">
+                <i class="bi bi-trash-fill me-1"></i>
+                Confirm Delete
+            </button>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
+<script>
 
+const token = localStorage.getItem("token");
+let categoryToDelete = null;
 
-    <script>
+loadCategories();
 
+async function loadCategories() {
 
-        async function createCategory() {
+    const response = await fetch("/api/Category", {
+        headers: { "Authorization": "Bearer " + token }
+    });
 
-            const token = localStorage.getItem("token");
+    if (!response.ok) {
+        alert("Unable to load categories");
+        return;
+    }
 
+    const categories = await response.json();
+    let rows = "";
 
-            if (!token) {
-                alert("Login expired. Please login again.");
-                return;
-            }
+    if (categories.length === 0) {
+        rows = `<tr><td colspan="3" class="text-center text-muted">No categories yet. Create one to get started.</td></tr>`;
+    }
 
+    categories.forEach(category => {
+        const badgeClass = category.type.toLowerCase() === "income" ? "bg-success" : "bg-danger";
 
+        rows += `
+        <tr>
+            <td>${category.name}</td>
+            <td><span class="badge ${badgeClass}">${category.type}</span></td>
+            <td>
+                <a href="/CategoryPage/Details/${category.categoryID}" class="btn btn-info btn-sm me-1">
+                    <i class="bi bi-eye-fill"></i>
+                </a>
+                <a href="/CategoryPage/Edit/${category.categoryID}" class="btn btn-warning btn-sm me-1">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+                <button class="btn btn-danger btn-sm" onclick="openDeletePopup(${category.categoryID}, '${category.name.replace(/'/g, "\\'")}')">
+                    <i class="bi bi-trash-fill"></i>
+                </button>
+            </td>
+        </tr>
+        `;
+    });
 
-            const category =
-            {
-                name: document.getElementById("name").value,
+    document.getElementById("categoryTable").innerHTML = rows;
+}
 
-                type: document.getElementById("type").value
-            };
+function openDeletePopup(id, name) {
+    categoryToDelete = id;
+    document.getElementById("deleteCategoryName").innerText = name;
+    document.getElementById("deleteOverlay").style.display = "flex";
+}
 
+function closeDeletePopup() {
+    categoryToDelete = null;
+    document.getElementById("deleteOverlay").style.display = "none";
+}
 
+async function confirmDelete() {
 
-            try {
+    if (!categoryToDelete) return;
 
-                const response = await fetch("/api/Category",
-                    {
+    const response = await fetch("/api/Category/" + categoryToDelete, {
+        method: "DELETE",
+        headers: { "Authorization": "Bearer " + token }
+    });
 
-                        method: "POST",
+    closeDeletePopup();
 
+    if (response.ok) {
+        loadCategories();
+    } else {
+        alert("Unable to delete category");
+    }
+}
 
-                        headers:
-                        {
-                            "Content-Type": "application/json",
-
-                            "Authorization": "Bearer " + token
-                        },
-
-
-                        body: JSON.stringify(category)
-
-                    });
-
-
-
-                if (response.ok) {
-
-                    window.location.href = "/CategoryPage";
-
-                }
-                else {
-
-                    const error = await response.text();
-
-                    alert(error);
-
-                }
-
-
-            }
-            catch (error) {
-
-                alert("API Error: " + error.message);
-
-                console.log(error);
-
-            }
-
-
-        }
-
-
-    </script>
-
-
-    <script src="~/js/authGuard.js"></script>
-
-
+</script>
 }

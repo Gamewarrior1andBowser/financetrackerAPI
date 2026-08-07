@@ -5,11 +5,9 @@ namespace financetrackerAPI.Models
     public class Transaction
     {
         [Key]
-        public int TransactionID { get; set; }
+        public int transactionsID { get; set; }
 
         public decimal Amount { get; set; }
-
-        public string Type { get; set; } = string.Empty;
 
         public int userID { get; set; }
 

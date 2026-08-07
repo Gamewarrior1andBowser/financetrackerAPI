@@ -1,169 +1,107 @@
 ﻿@{
     ViewData["Title"] = "Edit Category";
+    var categoryID = ViewData["categoryID"];
 }
 
 <div class="container">
-
     <div class="row justify-content-center">
-
         <div class="col-md-6">
-
             <div class="card shadow p-4">
 
                 <h2 class="mb-4">
-
                     <i class="bi bi-pencil-square me-2"></i>
-
                     Edit Category
-
                 </h2>
 
                 <div class="mb-3">
-
-                    <label class="form-label">
-
-                        Category Name
-
-                    </label>
-
-                    <input id="name"
-                           class="form-control" />
-
+                    <label class="form-label">Category Name</label>
+                    <input id="name" type="text" class="form-control" />
                 </div>
-
 
                 <div class="mb-4">
-
-                    <label class="form-label">
-
-                        Type
-
-                    </label>
-
-                    <select id="type"
-                            class="form-select">
-
-                        <option value="Income">
-                            Income
-                        </option>
-
-                        <option value="Expense">
-                            Expense
-                        </option>
-
+                    <label class="form-label">Type</label>
+                    <select id="type" class="form-select">
+                        <option value="Expense">Expense</option>
+                        <option value="Income">Income</option>
                     </select>
-
                 </div>
 
+                <div id="editError" class="alert alert-danger" style="display:none;"></div>
 
                 <div class="d-flex gap-2">
-
-                    <button class="btn btn-primary"
-                            onclick="updateCategory()">
-
-                        <i class="bi bi-save"></i>
-
-                        Update
-
+                    <button class="btn btn-success" onclick="saveCategory()">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Save Changes
                     </button>
 
-
-                    <a asp-controller="CategoryPage"
-                       asp-action="Index"
-                       class="btn btn-secondary">
-
-                        <i class="bi bi-arrow-left-circle"></i>
-
-                        Back
-
+                    <a asp-controller="CategoryPage" asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle me-1"></i>
+                        Cancel
                     </a>
-
                 </div>
 
             </div>
-
         </div>
-
     </div>
-
 </div>
 
-
 @section Scripts {
+<script>
 
-    <script>
+const token = localStorage.getItem("token");
+const categoryID = @categoryID;
 
-        const token = localStorage.getItem("token");
+loadCategory();
 
-        const id = @ViewBag.categoryID;
+async function loadCategory() {
 
+    const response = await fetch("/api/Category/" + categoryID, {
+        headers: { "Authorization": "Bearer " + token }
+    });
 
+    if (!response.ok) {
+        alert("Unable to load category");
+        window.location.href = "/CategoryPage";
+        return;
+    }
 
-        loadCategory();
+    const category = await response.json();
 
+    document.getElementById("name").value = category.name;
+    document.getElementById("type").value = category.type;
+}
 
+async function saveCategory() {
 
-        async function loadCategory() {
+    const name = document.getElementById("name").value.trim();
+    const type = document.getElementById("type").value;
 
-            const response = await fetch("/api/Category/" + id, {
+    if (!name) {
+        const box = document.getElementById("editError");
+        box.innerText = "Please enter a category name.";
+        box.style.display = "block";
+        return;
+    }
 
-                headers: {
-                    Authorization: "Bearer " + token
-                }
+    const updatedCategory = { name: name, type: type };
 
-            });
+    const response = await fetch("/api/Category/" + categoryID, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(updatedCategory)
+    });
 
-            const category = await response.json();
+    if (response.ok) {
+        window.location.href = "/CategoryPage";
+    } else {
+        const box = document.getElementById("editError");
+        box.innerText = "Unable to save changes.";
+        box.style.display = "block";
+    }
+}
 
-            document.getElementById("name").value = category.name;
-
-            document.getElementById("type").value = category.type;
-
-        }
-
-
-
-
-        async function updateCategory() {
-
-            const response = await fetch("/api/Category/" + id, {
-
-                method: "PUT",
-
-                headers: {
-
-                    "Content-Type": "application/json",
-
-                    Authorization: "Bearer " + token
-
-                },
-
-                body: JSON.stringify({
-
-                    categoryID: id,
-
-                    name: document.getElementById("name").value,
-
-                    type: document.getElementById("type").value
-
-                })
-
-            });
-
-
-            if (response.ok) {
-
-                window.location.href = "/CategoryPage";
-
-            }
-            else {
-
-                alert("Unable to update category.");
-
-            }
-
-        }
-
-    </script>
-
+</script>
 }
