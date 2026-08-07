@@ -6,40 +6,97 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow p-4">
+
+
+            <div class="card shadow border-0 p-4">
 
                 <h2 class="mb-4">
                     <i class="bi bi-receipt me-2"></i>
                     Transaction Details
                 </h2>
 
-                <div id="loadError" class="alert alert-danger" style="display:none;"></div>
+                <h2 class="fw-bold mb-4">
 
-                <dl class="row" id="detailsBody" style="display:none;">
-                    <dt class="col-sm-4">Date</dt>
-                    <dd class="col-sm-8" id="txDate"></dd>
+                    <i class="bi bi-eye-fill me-2"></i>
 
-                    <dt class="col-sm-4">Category</dt>
-                    <dd class="col-sm-8" id="txCategory"></dd>
+                    Transaction Details
+
+                </h2>
+
+
+
 
                     <dt class="col-sm-4">Amount</dt>
                     <dd class="col-sm-8" id="txAmount"></dd>
 
-                    <dt class="col-sm-4">% of Budget</dt>
-                    <dd class="col-sm-8" id="txPercent"></dd>
-                </dl>
+                <input type="hidden" id="transactionID" value="@ViewBag.transactionsID" />
 
-                <div class="d-flex gap-2" id="actionsRow" style="display:none;">
-                    <a asp-controller="TransactionPage" asp-action="Index" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left-circle me-1"></i>
-                        Back
-                    </a>
+
+
+
+
+                <div class="mb-3">
+
+                    <strong>Date:</strong>
+
+                    <span id="date"></span>
 
                     <button class="btn btn-danger" onclick="openDeletePopup()">
                         <i class="bi bi-trash-fill me-1"></i>
                         Delete Transaction
                     </button>
                 </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <strong>Category:</strong>
+
+                    <span id="category"></span>
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <strong>Amount:</strong>
+
+                    <span id="amount"></span>
+
+                </div>
+
+
+
+
+
+                <div class="mb-4">
+
+                    <strong>Type:</strong>
+
+                    <span id="type"></span>
+
+                </div>
+
+
+
+
+
+                <a asp-controller="TransactionPage"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left-circle me-1"></i>
+
+                    Back
+
+                </a>
+
 
             </div>
         </div>
@@ -64,13 +121,28 @@
     </div>
 </div>
 
+
+
 @section Scripts {
 <script>
 
 const token = localStorage.getItem("token");
 const transactionID = @transactionID;
 
+<script>
+
+
+const token = localStorage.getItem("token");
+
+
+const id = document.getElementById("transactionID").value;
+
+
+
 loadDetails();
+
+
+
 
 async function loadDetails() {
 
@@ -78,47 +150,74 @@ async function loadDetails() {
         headers: { "Authorization": "Bearer " + token }
     });
 
-    if (!txRes.ok) {
-        document.getElementById("loadError").innerText = "Unable to load transaction.";
-        document.getElementById("loadError").style.display = "block";
-        return;
-    }
+async function loadDetails()
+{
 
     const transaction = await txRes.json();
 
-    const budgetsRes = await fetch("/api/Budget", {
-        headers: { "Authorization": "Bearer " + token }
+    const response = await fetch("/api/Transactions/" + id,
+    {
+
+        headers:
+        {
+
+            "Authorization":"Bearer " + token
+
+        }
+
     });
-    const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
-    const budget = budgets.find(b => b.categoryID === transaction.categoryID);
 
-    const percent = budget && budget.limit > 0
-        ? Math.round((transaction.amount / budget.limit) * 100)
-        : null;
 
-    document.getElementById("txDate").innerText = transaction.date.substring(0, 10);
-    document.getElementById("txCategory").innerText = transaction.categoryName ?? "No Category";
-    document.getElementById("txAmount").innerText = "$" + transaction.amount.toFixed(2);
-    document.getElementById("txPercent").innerText = percent !== null ? percent + "%" : "No budget found";
+
+
+    if(!response.ok)
+    {
+        return;
+    }
+
+
+
+
+    const transaction = await response.json();
+
+
+
+
+
+    document.getElementById("date").innerText =
+        transaction.date.substring(0,10);
+
 
     document.getElementById("detailsBody").style.display = "flex";
     document.getElementById("actionsRow").style.display = "flex";
 }
 
-function openDeletePopup() {
-    document.getElementById("deleteOverlay").style.display = "flex";
+
+    document.getElementById("category").innerText =
+        transaction.categoryName ?? "No Category";
+
+
+
+
+    document.getElementById("amount").innerText =
+        "$" + transaction.amount;
+
+
+
+
+    document.getElementById("type").innerText =
+        transaction.type ?? "Not Available";
+
+
 }
 
-function closeDeletePopup() {
-    document.getElementById("deleteOverlay").style.display = "none";
-}
+
+
+</script>
 
 async function confirmDelete() {
 
-    const response = await fetch("/api/Transactions/" + transactionID, {
-        method: "DELETE",
-        headers: { "Authorization": "Bearer " + token }
-    });
+<script src="~/js/authGuard.js"></script>
 
     if (response.ok) {
         window.location.href = "/TransactionPage";

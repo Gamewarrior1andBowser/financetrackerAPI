@@ -1,0 +1,23 @@
+﻿[
+  {
+    "transactionID": 1,
+    "amount": 2500.00,
+    "type": "Income",
+    "categoryName": "Salary",
+    "date": "2026-08-01"
+  },
+  {
+    "transactionID": 2,
+    "amount": 85.50,
+    "type": "Expense",
+    "categoryName": "Groceries",
+    "date": "2026-08-03"
+  },
+  {
+    "transactionID": 3,
+    "amount": 45.00,
+    "type": "Expense",
+    "categoryName": "Transportation",
+    "date": "2026-08-05"
+  }
+]
