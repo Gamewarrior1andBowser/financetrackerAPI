@@ -4,9 +4,27 @@ namespace financetrackerAPI.Controllers
 {
     public class DemoController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Transactions()
         {
-            return View("~/Views/Demo/Index.cshtml");
+            return View();
+        }
+
+
+        public IActionResult Categories()
+        {
+            return View();
+        }
+
+
+        public IActionResult Budget()
+        {
+            return View();
+        }
+
+
+        public IActionResult Reports()
+        {
+            return View();
         }
     }
 }
