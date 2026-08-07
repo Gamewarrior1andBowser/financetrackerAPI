@@ -85,8 +85,7 @@ function hideBudgetPopup() {
     document.getElementById("budgetPopup").style.display = "none";
 }
 
-// Fetches the budget limit and amount already spent for a category,
-// optionally excluding one transaction (used when editing).
+
 async function getBudgetStatus(categoryID, excludeTransactionID) {
 
     const [budgetsRes, transactionsRes] = await Promise.all([

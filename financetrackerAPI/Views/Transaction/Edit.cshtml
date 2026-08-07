@@ -151,8 +151,6 @@ async function saveTransaction() {
         return;
     }
 
-    // Exclude this transaction's own current amount from the "already spent" total,
-    // since we're replacing it, not adding on top of it.
     const status = await getBudgetStatus(categoryID, transactionID);
 
     if (status.hasBudget && amount > status.remaining) {
