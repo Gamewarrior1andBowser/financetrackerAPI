@@ -2,21 +2,203 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="auth-page">
-    <div class="auth-card">
-        <div class="text-center mb-4">
-            <i class="bi bi-person-circle"
-               style="font-size:70px; color:#f59e0b;">
-            </i>
-            <h2 class="mt-3">
 
-                Welcome Back
-            </h2>
-            <p class="text-muted">
 
-                Login to manage your finances
+<div class="row justify-content-center">
+
+
+    <div class="col-md-5">
+
+
+        <div class="card shadow border-0 p-4">
+
+
+
+            <div class="text-center mb-4">
+
+
+
+                <i class="bi bi-box-arrow-in-right"
+                   style="font-size:70px; color:#f59e0b;">
+                </i>
+
+
+
+
+
+                <h2 class="mt-3 fw-bold">
+
+                    Welcome Back
+
+                </h2>
+
+
+
+
+
+                <p class="text-muted">
+
+                    Login to manage your finances
+
+                </p>
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            <div class="mb-3">
+
+
+                <label class="form-label">
+
+
+                    <i class="bi bi-envelope-fill me-2"></i>
+
+                    Email
+
+
+                </label>
+
+
+
+
+
+                <input id="email"
+                       type="email"
+                       class="form-control"
+                       placeholder="Enter your email" />
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            <div class="mb-4">
+
+
+                <label class="form-label">
+
+
+                    <i class="bi bi-lock-fill me-2"></i>
+
+                    Password
+
+
+                </label>
+
+
+
+
+
+                <input id="password"
+                       type="password"
+                       class="form-control"
+                       placeholder="Enter your password" />
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            <button class="btn btn-warning w-100"
+                    onclick="login()">
+
+
+
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                Login
+
+
+
+            </button>
+
+
+
+
+
+
+
+
+
+            <hr class="my-4">
+
+
+
+
+
+
+
+            <p class="text-center">
+
+
+                New user?
+
+
+
+                <a asp-controller="AuthPage"
+                   asp-action="Register">
+
+
+                    <i class="bi bi-person-plus-fill"></i>
+
+                    Register here
+
+
+
+                </a>
+
+
+
             </p>
-       </div>
+
+
+
+
+
+
+
+
+
+            <p class="text-center">
+
+
+                <a asp-controller="Home"
+                   asp-action="Index">
+
+
+
+                    <i class="bi bi-arrow-left-circle"></i>
+
+                    Back to Home
+
+
+
+                </a>
+
+
+
+            </p>
 
        <div class="mb-3">
             <label class="form-label">
@@ -36,54 +218,24 @@
             <label class="form-label">
                 <i class="bi bi-envelope-fill me-2"></i>
 
-                Email
 
-            </label>
 
-            <input id="email"
-                   type="email"
-                   class="form-control"
-                   placeholder="Enter your email" />
+
         </div>
 
-        <div class="mb-4">
-            <label class="form-label">
-                <i class="bi bi-lock-fill me-2"></i>
-                Password
-            </label>
-            <input id="password"
-                   type="password"
-                   class="form-control"
-                   placeholder="Enter your password" />
-        </div>
-    <button class="btn w-100"
-                onclick="login()">
 
-            <i class="bi bi-box-arrow-in-right me-2"></i>
-            Login
-        </button>
-
-        <hr class="my-4">
-    <p class="text-center">
-            New user?
-     <a asp-controller="AuthPage"
-               asp-action="Register">
-                <i class="bi bi-person-plus-fill"></i>
-                Register here
-            </a>
-        </p>
-
-        <p class="text-center">
-           <a asp-controller="Home"
-               asp-action="Index">
-                <i class="bi bi-arrow-left-circle"></i>
-                Back to Home
-            </a>
-        </p>
     </div>
+
+
 </div>
 
+
+
+
+
 @section Scripts {
+
+
     <script>
     async function login() {
         const email = document.getElementById("email").value;
@@ -105,9 +257,10 @@
         if(response.ok){
             localStorage.setItem("token", data.token);
             window.location.href = "/Dashboard";
+
+
         }
 
-    }
 
     </script>
     <script>
@@ -133,13 +286,8 @@
             return;
         }
 
-        const data = await response.json();
+
+    <script src="~/js/authGuard.js"></script>
 
 
-  
-        localStorage.setItem("token", data.token);
-
-        window.location.href = "/BudgetPage/Index";
-    }
-    </script>
 }
