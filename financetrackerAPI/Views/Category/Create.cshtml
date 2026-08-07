@@ -15,18 +15,10 @@
 
                 <div class="mb-3">
                     <label class="form-label">Type</label>
-                    <select id="type" class="form-select" onchange="updateLimitLabel()">
+                    <select id="type" class="form-select">
                         <option value="Expense">Expense</option>
                         <option value="Income">Income</option>
                     </select>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label" id="limitLabel">Monthly Spending Limit</label>
-                    <input id="limit" type="number" min="1" step="0.01" class="form-control" placeholder="Enter budget limit" />
-                    <small class="text-muted" id="limitHint">
-                        This sets the budget for this category. It cannot be changed later — only new transactions will be checked against it.
-                    </small>
                 </div>
 
                 <div id="createError" class="alert alert-danger" style="display:none;"></div>
@@ -54,20 +46,6 @@
 
         const token = localStorage.getItem("token");
 
-        function updateLimitLabel() {
-            const type = document.getElementById("type").value;
-            const label = document.getElementById("limitLabel");
-            const hint = document.getElementById("limitHint");
-
-            if (type === "Income") {
-                label.innerText = "Monthly Income Goal";
-                hint.innerText = "This sets the target for this income category. It cannot be changed later.";
-            } else {
-                label.innerText = "Monthly Spending Limit";
-                hint.innerText = "This sets the budget for this category. It cannot be changed later — only new transactions will be checked against it.";
-            }
-        }
-
         function showError(message) {
             const box = document.getElementById("createError");
             box.innerText = message;
@@ -78,15 +56,9 @@
 
             const name = document.getElementById("name").value.trim();
             const type = document.getElementById("type").value;
-            const limit = Number(document.getElementById("limit").value);
 
             if (!name) {
                 showError("Please enter a category name.");
-                return;
-            }
-
-            if (!limit || limit <= 0) {
-                showError("Please enter a budget limit greater than 0.");
                 return;
             }
 
@@ -108,27 +80,8 @@
 
             const createdCategory = await categoryResponse.json();
 
-            const budget = {
-                categoryID: createdCategory.categoryID,
-                limit: limit,
-                date: new Date().toISOString()
-            };
-
-            const budgetResponse = await fetch("/api/Budget", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + token
-                },
-                body: JSON.stringify(budget)
-            });
-
-            if (!budgetResponse.ok) {
-                showError("Category was created, but the budget could not be saved. Please contact support.");
-                return;
-            }
-
             window.location.href = "/CategoryPage";
+            return;
         }
 
     </script>
