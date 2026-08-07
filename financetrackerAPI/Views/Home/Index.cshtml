@@ -384,6 +384,17 @@ ViewData["Title"] = "Home";
 
                 </p>
 
+                
+                <p>
+
+                    Percentage:
+
+                    <strong class="text-success"
+                            id="budgetPercentage">
+                        $0
+                    </strong>
+
+                </p>
 
             </div>
 
@@ -434,7 +445,24 @@ ViewData["Title"] = "Home";
                     </strong>
 
                 </p>
+                <p>
+                    Remaining:
 
+                    <strong class="text-danger"
+                            id="savingRemaining">
+                        $0
+                    </strong>
+                </p>
+
+
+                <p>
+                    Progress:
+
+                    <strong class="text-success"
+                            id="savingProgress">
+                        0%
+                    </strong>
+                </p>
 
             </div>
 
@@ -535,7 +563,8 @@ ViewData["Title"] = "Home";
             document.getElementById("budgetRemaining").innerHTML =
                 "$" + data.budget.remaining;
 
-
+                  document.getElementById("budgetPercentage").innerHTML =
+                 + data.budget.usagePercentage + "%";
 
             document.getElementById("savingGoal").innerHTML =
                 "$" + data.savingsGoal.goal;
@@ -543,6 +572,12 @@ ViewData["Title"] = "Home";
 
             document.getElementById("savingCurrent").innerHTML =
                 "$" + data.savingsGoal.current;
+
+                 document.getElementById("savingRemaining").innerHTML =
+                "$" + data.savingsGoal.remaining;
+
+                 document.getElementById("savingProgress").innerHTML =
+                "$" + data.savingsGoal.progress;
 
             let rows = "";
 
