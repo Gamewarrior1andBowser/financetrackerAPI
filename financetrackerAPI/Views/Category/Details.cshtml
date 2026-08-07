@@ -1,0 +1,183 @@
+@{
+    ViewData["Title"] = "Category Details";
+    var categoryID = ViewData["categoryID"];
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow p-4">
+
+                <h2 class="mb-4">
+                    <i class="bi bi-tag-fill me-2"></i>
+                    <span id="catName">Category Details</span>
+                </h2>
+
+                <div id="loadError" class="alert alert-danger" style="display:none;"></div>
+
+                <div id="detailsBody" style="display:none;">
+
+                    <dl class="row">
+                        <dt class="col-sm-4">Created</dt>
+                        <dd class="col-sm-8" id="createdDate"></dd>
+
+                        <dt class="col-sm-4">Type</dt>
+                        <dd class="col-sm-8"><span id="catType" class="badge"></span></dd>
+
+                        <dt class="col-sm-4">Total Transactions</dt>
+                        <dd class="col-sm-8" id="txCount"></dd>
+
+                        <dt class="col-sm-4">Total Spent</dt>
+                        <dd class="col-sm-8" id="txTotal"></dd>
+
+                        <dt class="col-sm-4">Budget Limit</dt>
+                        <dd class="col-sm-8" id="budgetLimit"></dd>
+                    </dl>
+
+                    <label class="form-label fw-bold">Budget Used</label>
+                    <div class="progress mb-2" style="height: 26px;">
+                        <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%;">0%</div>
+                    </div>
+
+                    <div id="budgetWarning" class="alert" style="display:none;"></div>
+
+                    <hr class="my-4" />
+
+                    <div class="d-flex gap-2">
+                        <a asp-controller="CategoryPage" asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left-circle me-1"></i>
+                            Back to Categories
+                        </a>
+
+                        <button class="btn btn-danger" onclick="openDeletePopup()">
+                            <i class="bi bi-trash-fill me-1"></i>
+                            Delete Category
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete confirmation popup -->
+<div id="deleteOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:2000; align-items:center; justify-content:center;">
+    <div class="card shadow p-4" style="max-width:420px;">
+        <h4 class="mb-3">
+            <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+            Delete Category
+        </h4>
+        <p>
+            Are you sure you want to delete <strong id="deleteCategoryName"></strong>?
+            This will also permanently delete its budget and every transaction linked to it.
+        </p>
+        <div class="d-flex gap-2 justify-content-end">
+            <button class="btn btn-secondary" onclick="closeDeletePopup()">Cancel</button>
+            <button class="btn btn-danger" onclick="confirmDelete()">
+                <i class="bi bi-trash-fill me-1"></i>
+                Confirm Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+
+const token = localStorage.getItem("token");
+const categoryID = @categoryID;
+let categoryName = "";
+
+loadDetails();
+
+async function loadDetails() {
+
+    const [categoryRes, budgetsRes, transactionsRes] = await Promise.all([
+        fetch("/api/Category/" + categoryID, { headers: { "Authorization": "Bearer " + token } }),
+        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
+        fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } })
+    ]);
+
+    if (!categoryRes.ok) {
+        document.getElementById("loadError").innerText = "Unable to load category.";
+        document.getElementById("loadError").style.display = "block";
+        return;
+    }
+
+    const category = await categoryRes.json();
+    const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
+    const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
+
+    const budget = budgets.find(b => b.categoryID === categoryID);
+    const categoryTransactions = transactions.filter(t => t.categoryID === categoryID);
+
+    const totalSpent = categoryTransactions.reduce((sum, t) => sum + t.amount, 0);
+    const limit = budget ? budget.limit : 0;
+    const percent = limit > 0 ? Math.round((totalSpent / limit) * 100) : 0;
+
+    categoryName = category.name;
+
+    document.getElementById("catName").innerText = category.name;
+    document.getElementById("deleteCategoryName").innerText = category.name;
+
+    // Category has no CreatedDate field, so the linked budget's date
+    // (set at creation time) is used as the best available proxy.
+    document.getElementById("createdDate").innerText = budget
+        ? new Date(budget.date).toLocaleDateString()
+        : "Unknown";
+
+    const typeBadge = document.getElementById("catType");
+    typeBadge.innerText = category.type;
+    typeBadge.className = "badge " + (category.type.toLowerCase() === "income" ? "bg-success" : "bg-danger");
+
+    document.getElementById("txCount").innerText = categoryTransactions.length;
+    document.getElementById("txTotal").innerText = "$" + totalSpent.toFixed(2);
+    document.getElementById("budgetLimit").innerText = budget ? "$" + limit.toFixed(2) : "No budget found";
+
+    const bar = document.getElementById("progressBar");
+    const barWidth = Math.min(percent, 100);
+    bar.style.width = barWidth + "%";
+    bar.innerText = percent + "%";
+    bar.className = "progress-bar " + (percent >= 80 ? "bg-danger" : percent >= 50 ? "bg-warning" : "bg-success");
+
+    const warningBox = document.getElementById("budgetWarning");
+    if (percent >= 80) {
+        warningBox.className = "alert alert-danger";
+        warningBox.innerText = "You've used 80% or more of this category's budget. Consider creating a new category for future transactions.";
+        warningBox.style.display = "block";
+    } else if (percent >= 50) {
+        warningBox.className = "alert alert-warning";
+        warningBox.innerText = "You've used over half of this category's budget. Keep an eye on it, or consider creating a new category soon.";
+        warningBox.style.display = "block";
+    }
+
+    document.getElementById("detailsBody").style.display = "block";
+}
+
+function openDeletePopup() {
+    document.getElementById("deleteOverlay").style.display = "flex";
+}
+
+function closeDeletePopup() {
+    document.getElementById("deleteOverlay").style.display = "none";
+}
+
+async function confirmDelete() {
+
+    const response = await fetch("/api/Category/" + categoryID, {
+        method: "DELETE",
+        headers: { "Authorization": "Bearer " + token }
+    });
+
+    if (response.ok) {
+        window.location.href = "/CategoryPage";
+    } else {
+        closeDeletePopup();
+        alert("Unable to delete category");
+    }
+}
+
+</script>
+}

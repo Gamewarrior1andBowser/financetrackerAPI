@@ -1,5 +1,75 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
+    ViewData["Title"] = "Budget Details";
+    var budgetID = ViewData["budgetID"];
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow p-4">
+
+                <h2 class="mb-4">
+                    <i class="bi bi-piggy-bank-fill me-2"></i>
+                    Budget Details
+                </h2>
+
+                <div id="loadError" class="alert alert-danger" style="display:none;"></div>
+
+                <dl class="row" id="detailsBody" style="display:none;">
+                    <dt class="col-sm-4">Category</dt>
+                    <dd class="col-sm-8" id="catName"></dd>
+
+                    <dt class="col-sm-4">Limit</dt>
+                    <dd class="col-sm-8" id="budgetLimit"></dd>
+
+                    <dt class="col-sm-4">Date Set</dt>
+                    <dd class="col-sm-8" id="budgetDate"></dd>
+                </dl>
+
+                <a asp-controller="BudgetPage" asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left-circle me-1"></i>
+                    Back to Budgets
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+
+const token = localStorage.getItem("token");
+const budgetID = @budgetID;
+
+loadDetails();
+
+async function loadDetails() {
+
+    const budgetRes = await fetch("/api/Budget/" + budgetID, {
+        headers: { "Authorization": "Bearer " + token }
+    });
+
+    if (!budgetRes.ok) {
+        document.getElementById("loadError").innerText = "Unable to load budget.";
+        document.getElementById("loadError").style.display = "block";
+        return;
+    }
+
+    const budget = await budgetRes.json();
+
+    const categoryRes = await fetch("/api/Category/" + budget.categoryID, {
+        headers: { "Authorization": "Bearer " + token }
+    });
+
+    const categoryName = categoryRes.ok ? (await categoryRes.json()).name : "Unknown category";
+
+    document.getElementById("catName").innerText = categoryName;
+    document.getElementById("budgetLimit").innerText = "$" + budget.limit.toFixed(2);
+    document.getElementById("budgetDate").innerText = new Date(budget.date).toLocaleDateString();
+
+    document.getElementById("detailsBody").style.display = "flex";
+}
+
+</script>
 }
