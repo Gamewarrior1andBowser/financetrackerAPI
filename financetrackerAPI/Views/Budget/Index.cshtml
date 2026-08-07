@@ -2,79 +2,165 @@
     ViewData["Title"] = "Budgets";
 }
 
-<div class="container">
 
-    <h1 class="fw-bold mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h1 class="fw-bold">
         <i class="bi bi-piggy-bank-fill me-2"></i>
         Budgets
     </h1>
 
-    <div class="card shadow p-4">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Limit</th>
-                        <th>Date Set</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="budgetTable"></tbody>
-            </table>
-        </div>
-    </div>
+
+    <a asp-controller="BudgetPage"
+       asp-action="Create"
+       class="btn btn-success">
+
+        <i class="bi bi-plus-circle me-1"></i>
+        Add Budget
+
+    </a>
 
 </div>
 
+
+
+<div class="card shadow border-0 p-4">
+
+
+    <div class="table-responsive">
+
+
+        <table class="table table-hover">
+
+
+            <thead class="table-primary">
+
+
+                <tr>
+
+                    <th>Budget Name</th>
+
+                    <th>Limit</th>
+
+                    <th>Date Created</th>
+
+                    <th>Actions</th>
+
+
+                </tr>
+
+
+            </thead>
+
+
+            <tbody id="budgetTable">
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+</div>
+
+
+
 @section Scripts {
+
 <script>
 
-const token = localStorage.getItem("token");
+
+async function loadBudgets(){
+
+
+    const response = await fetch("/api/Budget");
+
+
+    if(response.ok){
+
+
+        const budgets = await response.json();
+
+
+        let rows = "";
+
+
+        budgets.forEach(budget => {
+
+
+            rows += `
+
+            <tr>
+
+                <td>${budget.name}</td>
+
+
+                <td>
+                    $${budget.limit}
+                </td>
+
+
+                <td>
+                    ${budget.date}
+                </td>
+
+
+                <td>
+
+
+                    <a href="/BudgetPage/Details/${budget.budgetID}"
+                       class="btn btn-info btn-sm">
+
+                       <i class="bi bi-eye"></i>
+
+                    </a>
+
+
+
+                    <a href="/BudgetPage/Edit/${budget.budgetID}"
+                       class="btn btn-warning btn-sm">
+
+                       <i class="bi bi-pencil"></i>
+
+                    </a>
+
+
+
+                    <a href="/BudgetPage/Delete/${budget.budgetID}"
+                       class="btn btn-danger btn-sm">
+
+                       <i class="bi bi-trash"></i>
+
+                    </a>
+
+
+                </td>
+
+
+            </tr>
+
+            `;
+
+
+        });
+
+
+        document.getElementById("budgetTable").innerHTML = rows;
+
+
+    }
+
+
+}
+
 
 loadBudgets();
 
-async function loadBudgets() {
-
-    const [budgetsRes, categoriesRes] = await Promise.all([
-        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
-        fetch("/api/Category", { headers: { "Authorization": "Bearer " + token } })
-    ]);
-
-    if (!budgetsRes.ok) {
-        alert("Unable to load budgets");
-        return;
-    }
-
-    const budgets = await budgetsRes.json();
-    const categories = categoriesRes.ok ? await categoriesRes.json() : [];
-
-    let rows = "";
-
-    if (budgets.length === 0) {
-        rows = `<tr><td colspan="4" class="text-center text-muted">No budgets yet. Create a category to add one.</td></tr>`;
-    }
-
-    budgets.forEach(budget => {
-        const category = categories.find(c => c.categoryID === budget.categoryID);
-        const categoryName = category ? category.name : "Unknown category";
-
-        rows += `
-        <tr>
-            <td>${categoryName}</td>
-            <td>$${budget.limit.toFixed(2)}</td>
-            <td>${budget.date.substring(0, 10)}</td>
-            <td>
-                <a href="/BudgetPage/Details/${budget.budgetID}" class="btn btn-info btn-sm">
-                    <i class="bi bi-eye-fill"></i>
-                </a>
-            </td>
-        </tr>
-        `;
-    });
-
-    document.getElementById("budgetTable").innerHTML = rows;
-}
 
 </script>
+
 }

@@ -1,5 +1,178 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Edit Budget";
+    var budgetID = ViewData["budgetID"];
+}
+
+
+
+<h1 class="fw-bold mb-4">
+
+<i class="bi bi-pencil-square me-2"></i>
+
+Edit Budget
+
+</h1>
+
+
+
+<div class="card shadow border-0 p-4">
+
+
+<form id="editBudgetForm">
+
+
+<div class="mb-3">
+
+
+<label class="form-label">
+
+Budget Name
+
+</label>
+
+
+<input id="budgetName"
+       class="form-control"
+       placeholder="Enter budget name">
+
+
+</div>
+
+
+
+<div class="mb-3">
+
+
+<label class="form-label">
+
+Budget Limit
+
+</label>
+
+
+<input id="budgetLimit"
+       type="number"
+       class="form-control"
+       placeholder="Enter limit">
+
+
+</div>
+
+
+
+<button class="btn btn-warning w-100">
+
+<i class="bi bi-save me-2"></i>
+
+Update Budget
+
+</button>
+
+
+
+</form>
+
+
+</div>
+
+
+
+<a asp-controller="BudgetPage"
+   asp-action="Index"
+   class="btn btn-secondary mt-3">
+
+
+<i class="bi bi-arrow-left-circle"></i>
+
+Back
+
+
+</a>
+
+
+
+@section Scripts {
+
+
+<script>
+
+
+const id = @budgetID;
+
+
+
+async function loadBudget(){
+
+
+const response = await fetch(`/api/Budget/${id}`);
+
+
+const budget = await response.json();
+
+
+document.getElementById("budgetName").value = budget.name;
+
+document.getElementById("budgetLimit").value = budget.limit;
+
+
+}
+
+
+
+loadBudget();
+
+
+
+document.getElementById("editBudgetForm")
+.addEventListener("submit", async e=>{
+
+
+e.preventDefault();
+
+
+
+await fetch(`/api/Budget/${id}`,
+{
+
+
+method:"PUT",
+
+
+headers:
+{
+
+"Content-Type":"application/json"
+
+},
+
+
+body:JSON.stringify({
+
+name:
+document.getElementById("budgetName").value,
+
+
+limit:
+Number(document.getElementById("budgetLimit").value),
+
+
+date:new Date()
+
+})
+
+
+});
+
+
+
+window.location.href="/BudgetPage";
+
+
+});
+
+
+
+</script>
+
+
 }

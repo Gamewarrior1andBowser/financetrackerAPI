@@ -4,19 +4,38 @@ namespace financetrackerAPI.Controllers;
 
 public class BudgetPageController : Controller
 {
-    // GET /BudgetPage
     public IActionResult Index()
     {
         return View("~/Views/Budget/Index.cshtml");
-
     }
 
-    // GET /BudgetPage/Details/{id}
+
+    public IActionResult Create()
+    {
+        return View("~/Views/Budget/Create.cshtml");
+    }
+
+
     public IActionResult Details(int id)
     {
         ViewData["budgetID"] = id;
-        return View("~/Views/Budget/Details.cshtml");
 
+        return View("~/Views/Budget/Details.cshtml");
+    }
+
+
+    public IActionResult Edit(int id)
+    {
+        ViewData["budgetID"] = id;
+
+        return View("~/Views/Budget/Edit.cshtml");
+    }
+
+
+    public IActionResult Delete(int id)
+    {
+        ViewData["budgetID"] = id;
+
+        return View("~/Views/Budget/Delete.cshtml");
     }
 }
-

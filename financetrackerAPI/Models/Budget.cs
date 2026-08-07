@@ -14,10 +14,5 @@ namespace financetrackerAPI.Models
         public decimal Limit { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
-
-
-        public int categoryID { get; set; }
-
-        public Category? Category { get; set; }
     }
 }
