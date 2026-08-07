@@ -1,45 +1,56 @@
-﻿@{
-    ViewData["Title"] = "Create Category";
-}
+﻿@section Scripts {
+
+    <script>
+
+        async function createCategory() {
+            try {
+                const token = localStorage.getItem("token");
+
+                const name = document.getElementById("name").value;
+                const type = document.getElementById("type").value;
 
 
-<div class="container">
-
-    <div class="row justify-content-center">
-
-        <div class="col-md-6">
-
-            <div class="card shadow p-4">
-
-                <h2 class="mb-4">
-                    <i class="bi bi-plus-circle-fill me-2"></i>
-                    Create Category
-                </h2>
+                const category =
+                {
+                    name: name,
+                    type: type
+                };
 
 
-                <div class="mb-3">
+                const response = await fetch("/api/Category",
+                    {
+                        method: "POST",
 
-                    <label class="form-label">
-                        Category Name
-                    </label>
+                        headers:
+                        {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + token
+                        },
 
-                    <input id="name"
-                           class="form-control"
-                           placeholder="Enter category name" />
-
-                </div>
+                        body: JSON.stringify(category)
+                    });
 
 
 
-                <div class="mb-4">
+                if (response.ok) {
+                    window.location.href = "/CategoryPage";
+                }
+                else {
+                    const error = await response.text();
 
-                    <label class="form-label">
-                        Type
-                    </label>
+                    alert("API Error: " + error);
+                }
+
+            }
+            catch (error) {
+                alert("JavaScript Error: " + error);
+            }
+        }
 
 
-                    <select id="type"
-                            class="form-select">
+    </script>
+
+    <script src="~/js/authGuard.js"></script>
 
                         <option value="Income">
                             Income

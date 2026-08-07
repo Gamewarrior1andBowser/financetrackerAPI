@@ -22,11 +22,23 @@ public class TransactionsController : ControllerBase
 
 
     // Create Transaction
- 
+
     [HttpPost]
     public async Task<IActionResult> Create(Transaction transaction)
     {
         var userID = int.Parse(User.FindFirst("id").Value);
+
+
+        var categoryExists = await _context.Categories
+            .AnyAsync(c =>
+                c.categoryID == transaction.categoryID &&
+                c.userID == userID);
+
+
+        if (!categoryExists)
+        {
+            return BadRequest("Invalid category");
+        }
 
 
         transaction.userID = userID;
@@ -45,8 +57,10 @@ public class TransactionsController : ControllerBase
 
 
 
+
+
     // Get All User Transactions
-   
+
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -59,16 +73,20 @@ public class TransactionsController : ControllerBase
             .Where(t => t.userID == userID)
             .Select(t => new
             {
-                t.transactionsID,
+                t.TransactionID,
 
                 t.Amount,
+
+                t.Type,
 
                 t.Date,
 
                 t.categoryID,
 
 
-                CategoryName = t.Category.Name
+                CategoryName = t.Category != null
+                    ? t.Category.Name
+                    : "No Category"
 
             })
             .ToList();
@@ -83,8 +101,10 @@ public class TransactionsController : ControllerBase
 
 
 
+
+
     // Get Single Transaction
-   
+
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
@@ -95,20 +115,24 @@ public class TransactionsController : ControllerBase
         var transaction = _context.Transactions
             .Include(t => t.Category)
             .Where(t =>
-                t.transactionsID == id &&
+                t.TransactionID == id &&
                 t.userID == userID)
             .Select(t => new
             {
-                t.transactionsID,
+                t.TransactionID,
 
                 t.Amount,
+
+                t.Type,
 
                 t.Date,
 
                 t.categoryID,
 
 
-                CategoryName = t.Category.Name
+                CategoryName = t.Category != null
+                    ? t.Category.Name
+                    : "No Category"
 
             })
             .FirstOrDefault();
@@ -132,6 +156,8 @@ public class TransactionsController : ControllerBase
 
 
 
+
+
     // Update Transaction
 
     [HttpPut("{id}")]
@@ -143,7 +169,7 @@ public class TransactionsController : ControllerBase
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
-                t.transactionsID == id &&
+                t.TransactionID == id &&
                 t.userID == userID);
 
 
@@ -156,6 +182,8 @@ public class TransactionsController : ControllerBase
 
 
         transaction.Amount = updatedTransaction.Amount;
+
+        transaction.Type = updatedTransaction.Type;
 
         transaction.categoryID = updatedTransaction.categoryID;
 
@@ -176,6 +204,8 @@ public class TransactionsController : ControllerBase
 
 
 
+
+
     // Delete Transaction
 
     [HttpDelete("{id}")]
@@ -187,7 +217,7 @@ public class TransactionsController : ControllerBase
 
         var transaction = _context.Transactions
             .FirstOrDefault(t =>
-                t.transactionsID == id &&
+                t.TransactionID == id &&
                 t.userID == userID);
 
 
