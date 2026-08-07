@@ -22,11 +22,23 @@ public class TransactionsController : ControllerBase
 
 
     // Create Transaction
- 
+
     [HttpPost]
     public async Task<IActionResult> Create(Transaction transaction)
     {
         var userID = int.Parse(User.FindFirst("id").Value);
+
+
+        var categoryExists = await _context.Categories
+            .AnyAsync(c =>
+                c.categoryID == transaction.categoryID &&
+                c.userID == userID);
+
+
+        if (!categoryExists)
+        {
+            return BadRequest("Invalid category");
+        }
 
 
         transaction.userID = userID;
@@ -45,8 +57,10 @@ public class TransactionsController : ControllerBase
 
 
 
+
+
     // Get All User Transactions
-   
+
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -68,7 +82,9 @@ public class TransactionsController : ControllerBase
                 t.categoryID,
 
 
-                CategoryName = t.Category.Name
+                CategoryName = t.Category != null
+                    ? t.Category.Name
+                    : "No Category"
 
             })
             .ToList();
@@ -83,8 +99,10 @@ public class TransactionsController : ControllerBase
 
 
 
+
+
     // Get Single Transaction
-   
+
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
@@ -108,7 +126,9 @@ public class TransactionsController : ControllerBase
                 t.categoryID,
 
 
-                CategoryName = t.Category.Name
+                CategoryName = t.Category != null
+                    ? t.Category.Name
+                    : "No Category"
 
             })
             .FirstOrDefault();
@@ -125,6 +145,8 @@ public class TransactionsController : ControllerBase
 
         return Ok(transaction);
     }
+
+
 
 
 
@@ -169,6 +191,8 @@ public class TransactionsController : ControllerBase
 
         return Ok(transaction);
     }
+
+
 
 
 
