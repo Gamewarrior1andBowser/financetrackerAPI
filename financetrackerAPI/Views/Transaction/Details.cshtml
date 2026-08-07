@@ -1,19 +1,19 @@
 ﻿@{
     ViewData["Title"] = "Transaction Details";
+    var transactionID = ViewData["transactionID"];
 }
 
-
 <div class="container">
-
-
     <div class="row justify-content-center">
-
-
         <div class="col-md-6">
 
 
             <div class="card shadow border-0 p-4">
 
+                <h2 class="mb-4">
+                    <i class="bi bi-receipt me-2"></i>
+                    Transaction Details
+                </h2>
 
                 <h2 class="fw-bold mb-4">
 
@@ -26,6 +26,8 @@
 
 
 
+                    <dt class="col-sm-4">Amount</dt>
+                    <dd class="col-sm-8" id="txAmount"></dd>
 
                 <input type="hidden" id="transactionID" value="@ViewBag.transactionsID" />
 
@@ -39,6 +41,10 @@
 
                     <span id="date"></span>
 
+                    <button class="btn btn-danger" onclick="openDeletePopup()">
+                        <i class="bi bi-trash-fill me-1"></i>
+                        Delete Transaction
+                    </button>
                 </div>
 
 
@@ -93,24 +99,35 @@
 
 
             </div>
-
-
         </div>
-
-
     </div>
+</div>
 
 
+<div id="deleteOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:2000; align-items:center; justify-content:center;">
+    <div class="card shadow p-4" style="max-width:420px;">
+        <h4 class="mb-3">
+            <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+            Delete Transaction
+        </h4>
+        <p>Are you sure you want to delete this transaction? This cannot be undone.</p>
+        <div class="d-flex gap-2 justify-content-end">
+            <button class="btn btn-secondary" onclick="closeDeletePopup()">Cancel</button>
+            <button class="btn btn-danger" onclick="confirmDelete()">
+                <i class="bi bi-trash-fill me-1"></i>
+                Confirm Delete
+            </button>
+        </div>
+    </div>
 </div>
 
 
 
-
-
-
-
 @section Scripts {
+<script>
 
+const token = localStorage.getItem("token");
+const transactionID = @transactionID;
 
 <script>
 
@@ -127,11 +144,16 @@ loadDetails();
 
 
 
+async function loadDetails() {
 
+    const txRes = await fetch("/api/Transactions/" + transactionID, {
+        headers: { "Authorization": "Bearer " + token }
+    });
 
 async function loadDetails()
 {
 
+    const transaction = await txRes.json();
 
     const response = await fetch("/api/Transactions/" + id,
     {
@@ -166,6 +188,9 @@ async function loadDetails()
         transaction.date.substring(0,10);
 
 
+    document.getElementById("detailsBody").style.display = "flex";
+    document.getElementById("actionsRow").style.display = "flex";
+}
 
 
     document.getElementById("category").innerText =
@@ -190,8 +215,17 @@ async function loadDetails()
 
 </script>
 
+async function confirmDelete() {
 
 <script src="~/js/authGuard.js"></script>
 
+    if (response.ok) {
+        window.location.href = "/TransactionPage";
+    } else {
+        closeDeletePopup();
+        alert("Unable to delete transaction");
+    }
+}
 
+</script>
 }

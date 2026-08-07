@@ -1,36 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
-namespace financetrackerAPI.Controllers
+namespace financetrackerAPI.Controllers;
+
+public class TransactionPageController : Controller
 {
-    
-    public class TransactionPageController : Controller
+    // GET /TransactionPage
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View("~/Views/Transaction/Index.cshtml");
-        }
+        return View("~/Views/Transaction/Index.cshtml");
 
+    }
 
-        public IActionResult Create()
-        {
-            return View("~/Views/Transaction/Create.cshtml");
-        }
+    // GET /TransactionPage/Create
+    public IActionResult Create()
+    {
+        return View("~/Views/Transaction/Create.cshtml");
 
+    }
 
-        public IActionResult Edit(int id)
-        {
-            ViewBag.transactionsID = id;
+    // GET /TransactionPage/Edit/{id}
+    public IActionResult Edit(int id)
+    {
+        ViewData["transactionID"] = id;
+        return View("~/Views/Transaction/Edit.cshtml");
 
-            return View("~/Views/Transaction/Edit.cshtml");
-        }
+    }
 
-
-        public IActionResult Details(int id)
-        {
-            ViewBag.transactionsID = id;
-
-            return View("~/Views/Transaction/Details.cshtml");
-        }
+    // GET /TransactionPage/Details/{id}
+    public IActionResult Details(int id)
+    {
+        ViewData["transactionID"] = id;
+        return View("~/Views/Transaction/Details.cshtml");
     }
 }

@@ -31,9 +31,15 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(User user)
     {
-        if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+        if (string.IsNullOrWhiteSpace(user.email))
         {
-            return BadRequest("Email and password are required");
+            return BadRequest("Email is required");
+        }
+        else if (string.IsNullOrWhiteSpace(user.password)) {
+            return BadRequest("Password is required");
+        }
+        else if (string.IsNullOrWhiteSpace(user.username)) {
+            return BadRequest("Username is required");
         }
 
         user.email = user.email.ToLower().Trim();
@@ -109,34 +115,27 @@ public class AuthController : ControllerBase
     private string GenerateToken(User user)
     {
         var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(
-                _config["Jwt:Key"]
-            ));
-
+            Encoding.UTF8.GetBytes(_config["Jwt:Key"])
+        );
 
         var credentials = new SigningCredentials(
             key,
             SecurityAlgorithms.HmacSha256
         );
 
-
         var claims = new[]
         {
-            new Claim(
-                "id",
-                user.userID.ToString()
-            )
-        };
-
+        new Claim(ClaimTypes.NameIdentifier, user.userID.ToString())
+    };
 
         var token = new JwtSecurityToken(
+            issuer: _config["Jwt:Issuer"],     
+            audience: _config["Jwt:Audience"],  
             claims: claims,
-            expires: DateTime.Now.AddHours(2),
+            expires: DateTime.Now.AddHours(1),
             signingCredentials: credentials
         );
 
-
-        return new JwtSecurityTokenHandler()
-            .WriteToken(token);
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

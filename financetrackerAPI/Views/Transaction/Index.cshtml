@@ -75,7 +75,6 @@
 
     </div>
 
-
 </div>
 
 
@@ -83,13 +82,9 @@
 
 
 @section Scripts {
-
-
     <script>
 
-
         const token = localStorage.getItem("token");
-
 
         loadTransactions();
 
@@ -119,7 +114,6 @@
                 document.getElementById("transactionTable").innerHTML = "";
 
                 return;
-
             }
 
 
@@ -127,17 +121,14 @@
 
 
             const transactions = await response.json();
-
-
-
             let rows = "";
 
-
+            if (transactions.length === 0) {
+                rows = `<tr><td colspan="5" class="text-center text-muted">No transactions yet.</td></tr>`;
+            }
 
 
             transactions.forEach(transaction => {
-
-
                 rows += `
 
 
@@ -225,8 +216,6 @@
 
 
             document.getElementById("transactionTable").innerHTML = rows;
-
-
         }
 
 
@@ -260,12 +249,8 @@
 
 
             if (response.ok) {
-
                 loadTransactions();
-
             }
-
-
         }
 
 

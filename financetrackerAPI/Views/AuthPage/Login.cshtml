@@ -200,6 +200,23 @@
 
             </p>
 
+       <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-envelope-fill me-2"></i>
+
+                Username
+
+            </label>
+
+            <input id="username"
+                   type="text"
+                   class="form-control"
+                   placeholder="Enter your name" />
+        </div>
+       
+       <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-envelope-fill me-2"></i>
 
 
 
@@ -220,70 +237,25 @@
 
 
     <script>
+    async function login() {
+        const email = document.getElementById("email").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const response = await fetch("/api/Auth/login", {
+            method: "POST",
+            headers: {
 
-
-        async function login() {
-
-
-            const email =
-                document.getElementById("email").value;
-
-
-            const password =
-                document.getElementById("password").value;
-
-
-
-
-
-            const response = await fetch("/api/Auth/login",
-                {
-
-                    method: "POST",
-
-
-                    headers:
-                    {
-                        "Content-Type": "application/json"
-                    },
-
-
-                    body: JSON.stringify(
-                        {
-                            email,
-                            password
-                        })
-
-
-                });
-
-
-
-
-
-            if (!response.ok) {
-                return;
-            }
-
-
-
-
-
-            const data = await response.json();
-
-
-
-
-
-            localStorage.setItem(
-                "token",
-                data.token
-            );
-
-
-
-
-
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email,
+                username,
+                password
+            })
+        });
+        const data = await response.json();
+        if(response.ok){
+            localStorage.setItem("token", data.token);
             window.location.href = "/Dashboard";
 
 
@@ -291,6 +263,28 @@
 
 
     </script>
+    <script>
+    async function loginUser() {
+        const email = document.getElementById("email").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const response = await fetch("/api/Auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                username: username,
+                password: password
+            })
+        });
+
+        if (!response.ok) {
+            alert("Invalid login");
+            return;
+        }
 
 
     <script src="~/js/authGuard.js"></script>

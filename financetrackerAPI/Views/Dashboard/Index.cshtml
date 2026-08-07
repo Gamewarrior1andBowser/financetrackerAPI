@@ -2,209 +2,205 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="auth-page">
+<div class="container">
 
-    <h1 class="mb-4"> Finance Dashboard </h1>
+    <h1 class="fw-bold mb-4">
+        <i class="bi bi-speedometer2 me-2"></i>
+        Dashboard
+    </h1>
 
-    @*Insert navbar here
-        Navbar has:
-
-            Title{Financial Tracker (for now)}
-
-            Links{
-                    Home,
-                    Sign Out
-                }
-    *@
-
-    <hr class="dropdown-divider">
-
-    @*Top summary: Income vs Expense totals*@
-    <div class="row mb-4">
-        <div class="col-sm-6 mb-3 mb-sm-0">
-            <div class="card border-success">
-                <div class="card-header bg-success text-white">
-                    <h6 class="mb-0">Total Income</h6>
+   
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card shadow h-100">
+                <div class="card-header bg-success text-white fw-bold">
+                    <i class="bi bi-arrow-up-circle-fill me-1"></i>
+                    Income
                 </div>
-                <div class="card-body">
-                    <h3 id="totalIncome" class="text-success">$0.00</h3>
+                <div class="card-body text-center">
+                    <h2 class="fw-bold mb-0" id="incomeTotal">$0.00</h2>
+                    <small class="text-muted">Total from income categories</small>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="card border-danger">
-                <div class="card-header bg-danger text-white">
-                    <h6 class="mb-0">Total Expenses</h6>
+
+        <div class="col-md-6">
+            <div class="card shadow h-100">
+                <div class="card-header bg-danger text-white fw-bold">
+                    <i class="bi bi-arrow-down-circle-fill me-1"></i>
+                    Expenses
                 </div>
-                <div class="card-body">
-                    <h3 id="totalExpense" class="text-danger">$0.00</h3>
+                <div class="card-body text-center">
+                    <h2 class="fw-bold mb-0" id="expenseTotal">$0.00</h2>
+                    <small class="text-muted">Total from expense categories</small>
                 </div>
             </div>
         </div>
     </div>
 
-    <h4>Account Overview</h4>
 
-    @*Budget + Transactions quick links*@
-    <div class="row mb-4">
-        <div class="col-sm-6 mb-3 mb-sm-0">
-            <div class="card">
-                <div class="card-header"><h6>Budget</h6></div>
-                <div class="card-body">
-                    <h5 id="budgetName"></h5>
-                    <p id="budgetAmount"></p>
-                    <a asp-controller="BudgetPage"
-                       asp-action="Index" class="btn btn-primary">Go to Budget</a>
+    <div class="row g-4">
+
+        <div class="col-md-4 d-flex">
+            <div class="card shadow p-3 flex-fill">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-star-fill me-1"></i>
+                    Most Used Category
+                </h5>
+                <div id="mostUsedCategory">
+                    <p class="text-muted mb-0">No transactions yet.</p>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-header"><h6>Transactions</h6></div>
-                <div class="card-body">
-                    <h5 id="recentTransactions"></h5>
-                    <a asp-controller="TransactionPage"
-                       asp-action="Index" class="btn btn-primary">Go to Transactions</a>
-                </div>
+
+        <div class="col-md-4 d-flex">
+            <div class="card shadow p-3 flex-fill">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                    Budgets Almost Full
+                </h5>
+                <ul class="list-group list-group-flush" id="almostFullList">
+                    <li class="list-group-item text-muted">No budgets are close to their limit.</li>
+                </ul>
             </div>
         </div>
-    </div>
 
-    <hr class="dropdown-divider">
+        <div class="col-md-4 d-flex">
+            <div class="card shadow p-3 flex-fill">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-clock-history me-1"></i>
+                    Recent Transactions
+                </h5>
+                <ul class="list-group list-group-flush" id="recentTransactionsList">
+                    <li class="list-group-item text-muted">No transactions yet.</li>
+                </ul>
+            </div>
+        </div>
 
-    @*Category overview grid — one small card per category*@
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="mb-0">Categories</h4>
-        <a asp-controller="CategoryPage"
-           asp-action="Index" class="btn btn-outline-primary btn-sm">Manage Categories</a>
-    </div>
-
-    <div id="categoryOverview" class="row">
-        @*Category cards get injected here by JS*@
     </div>
 
 </div>
 
 @section Scripts {
+<script>
 
-    <script src="~/js/authGuard.js"></script>
+const token = localStorage.getItem("token");
 
-    <script>
-        const token = localStorage.getItem("token");
+loadDashboard();
 
-        if (!token) {
-            window.location.href = "/AuthPage/Login";
+async function loadDashboard() {
+
+    const [categoriesRes, transactionsRes, budgetsRes] = await Promise.all([
+        fetch("/api/Category", { headers: { "Authorization": "Bearer " + token } }),
+        fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } }),
+        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } })
+    ]);
+
+    const categories = categoriesRes.ok ? await categoriesRes.json() : [];
+    const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
+    const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
+
+    const categoryById = {};
+    categories.forEach(c => categoryById[c.categoryID] = c);
+
+    renderHero(transactions, categoryById);
+    renderMostUsedCategory(transactions, categoryById);
+    renderAlmostFullBudgets(budgets, transactions, categoryById);
+    renderRecentTransactions(transactions);
+}
+
+function renderHero(transactions, categoryById) {
+
+    let income = 0;
+    let expense = 0;
+
+    transactions.forEach(t => {
+        const category = categoryById[t.categoryID];
+        if (!category) return;
+
+        if (category.type.toLowerCase() === "income") {
+            income += t.amount;
+        } else {
+            expense += t.amount;
         }
+    });
 
-        function handleAuthError(response) {
-            if (response.status === 401) {
-                localStorage.removeItem("token");
-                window.location.href = "/AuthPage/Login";
-                return true;
-            }
-            return false;
+    document.getElementById("incomeTotal").innerText = "$" + income.toFixed(2);
+    document.getElementById("expenseTotal").innerText = "$" + expense.toFixed(2);
+}
+
+function renderMostUsedCategory(transactions, categoryById) {
+
+    if (transactions.length === 0) return;
+
+    const counts = {};
+    transactions.forEach(t => {
+        counts[t.categoryID] = (counts[t.categoryID] || 0) + 1;
+    });
+
+    let topCategoryID = null;
+    let topCount = 0;
+
+    Object.keys(counts).forEach(id => {
+        if (counts[id] > topCount) {
+            topCount = counts[id];
+            topCategoryID = Number(id);
         }
+    });
 
-        // Budget
-        fetch("/api/Budget", {
-            headers: {
-                "Authorization": "Bearer " + token
-            }
+    const category = categoryById[topCategoryID];
+    const name = category ? category.name : "Unknown category";
+
+    document.getElementById("mostUsedCategory").innerHTML = `
+        <h4 class="fw-bold">${name}</h4>
+        <p class="text-muted mb-0">${topCount} transaction${topCount === 1 ? "" : "s"}</p>
+    `;
+}
+
+function renderAlmostFullBudgets(budgets, transactions, categoryById) {
+
+    const spentByCategory = {};
+    transactions.forEach(t => {
+        spentByCategory[t.categoryID] = (spentByCategory[t.categoryID] || 0) + t.amount;
+    });
+
+    const almostFull = budgets
+        .map(b => {
+            const spent = spentByCategory[b.categoryID] || 0;
+            const percent = b.limit > 0 ? Math.round((spent / b.limit) * 100) : 0;
+            const category = categoryById[b.categoryID];
+            return { name: category ? category.name : "Unknown category", percent: percent };
         })
-            .then(response => {
-                if (handleAuthError(response)) return;
-                return response.json();
-            })
-            .then(budget => {
-                if (!budget) return;
+        .filter(b => b.percent >= 80)
+        .sort((a, b) => b.percent - a.percent);
 
-                document.getElementById("budgetName").innerHTML = budget.budgetName;
-                document.getElementById("budgetAmount").innerHTML = "$" + budget.amount;
-            });
+    if (almostFull.length === 0) return;
 
-        //  Categories + Transactions combined, to build income/expense totals
-        // and a per-category summary
-        Promise.all([
-            fetch("/api/Category", {
-                headers: { "Authorization": "Bearer " + token }
-            }).then(res => {
-                if (handleAuthError(res)) return null;
-                return res.json();
-            }),
-            fetch("/api/Transactions", {
-                headers: { "Authorization": "Bearer " + token }
-            }).then(res => {
-                if (handleAuthError(res)) return null;
-                return res.json();
-            })
-        ]).then(([categories, transactions]) => {
+    const list = document.getElementById("almostFullList");
+    list.innerHTML = almostFull.map(b => `
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            ${b.name}
+            <span class="badge bg-danger rounded-pill">${b.percent}%</span>
+        </li>
+    `).join("");
+}
 
-            if (!categories || !transactions) return;
+function renderRecentTransactions(transactions) {
 
-            // --- Recent transactions preview ---
-            let recentHtml = "";
-            transactions.slice(0, 4).forEach(t => {
-                recentHtml += `<p>${t.description} - $${t.amount}</p>`;
-            });
-            document.getElementById("recentTransactions").innerHTML = recentHtml;
+    if (transactions.length === 0) return;
 
-            // --- Income / Expense totals ---
-            let totalIncome = 0;
-            let totalExpense = 0;
+    const recent = [...transactions]
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 5);
 
-            transactions.forEach(t => {
-                if (t.type === "Income") {
-                    totalIncome += t.amount;
-                } else if (t.type === "Expense") {
-                    totalExpense += t.amount;
-                }
-            });
+    const list = document.getElementById("recentTransactionsList");
+    list.innerHTML = recent.map(t => `
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>${t.categoryName ?? "No Category"}</span>
+            <span class="fw-bold">$${t.amount.toFixed(2)}</span>
+        </li>
+    `).join("");
+}
 
-            document.getElementById("totalIncome").innerText = "$" + totalIncome.toFixed(2);
-            document.getElementById("totalExpense").innerText = "$" + totalExpense.toFixed(2);
-
-            // --- Per-category totals ---
-            // Assumes each transaction has a categoryID linking it to a category
-            const categoryTotals = {};
-
-            categories.forEach(c => {
-                categoryTotals[c.categoryID] = {
-                    name: c.name,
-                    type: c.type,
-                    total: 0
-                };
-            });
-
-            transactions.forEach(t => {
-                if (categoryTotals[t.categoryID]) {
-                    categoryTotals[t.categoryID].total += t.amount;
-                }
-            });
-
-            // --- Render category cards ---
-            const container = document.getElementById("categoryOverview");
-            let categoryHtml = "";
-
-            Object.values(categoryTotals).forEach(cat => {
-                const badgeClass = cat.type === "Income" ? "bg-success" : "bg-danger";
-
-                categoryHtml += `
-                            <div class="col-sm-4 col-md-3 mb-3">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <h6 class="card-title mb-1">${cat.name}</h6>
-                                            <span class="badge ${badgeClass}">${cat.type}</span>
-                                        </div>
-                                        <p class="card-text mb-0">$${cat.total.toFixed(2)}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-            });
-
-            container.innerHTML = categoryHtml || "<p>No categories yet.</p>";
-        });
-
-    </script>
+</script>
 }

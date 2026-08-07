@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Edit Transaction";
+    var transactionID = ViewData["transactionID"];
 }
-
 
 <div class="container">
 
@@ -18,9 +18,7 @@
                 <h2 class="mb-4 fw-bold">
 
                     <i class="bi bi-pencil-square me-2"></i>
-
                     Edit Transaction
-
                 </h2>
 
 
@@ -119,9 +117,7 @@
 
                 </div>
 
-
-
-
+                <div id="budgetPopup" class="alert alert-danger" style="display:none;"></div>
 
 
 
@@ -159,14 +155,8 @@
 
 
             </div>
-
-
         </div>
-
-
     </div>
-
-
 </div>
 
 
@@ -176,7 +166,10 @@
 
 
 @section Scripts {
+<script>
 
+const token = localStorage.getItem("token");
+const transactionID = @transactionID;
 
     <script>
 
@@ -304,11 +297,24 @@
 
                 `;
 
+    if (categories.length === 0) {
+        dropdown.innerHTML = `<option value="">No categories available</option>`;
+        return;
+    }
 
-            });
+    let options = "";
+    categories.forEach(category => {
+        options += `<option value="${category.categoryID}">${category.name}</option>`;
+    });
 
+    dropdown.innerHTML = options;
+}
 
+async function loadTransaction() {
 
+    const response = await fetch("/api/Transactions/" + transactionID, {
+        headers: { "Authorization": "Bearer " + token }
+    });
 
             document.getElementById("categoryID").innerHTML = options;
 
@@ -316,9 +322,18 @@
         }
 
 
+function hideBudgetPopup() {
+    document.getElementById("budgetPopup").style.display = "none";
+}
 
 
+    const [budgetsRes, transactionsRes] = await Promise.all([
+        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
+        fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } })
+    ]);
 
+    const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
+    const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
 
 
 
@@ -392,10 +407,65 @@
 
         }
 
+    const spent = transactions
+        .filter(t => t.categoryID === categoryID && t.transactionsID !== excludeTransactionID)
+        .reduce((sum, t) => sum + t.amount, 0);
 
+    if (!budget) {
+        return { hasBudget: false, limit: 0, spent: spent, remaining: null };
+    }
 
-    </script>
+    return { hasBudget: true, limit: budget.limit, spent: spent, remaining: budget.limit - spent };
+}
 
+async function saveTransaction() {
+
+    hideBudgetPopup();
+
+    const categoryID = Number(document.getElementById("categoryID").value);
+    const amount = Number(document.getElementById("amount").value);
+
+    if (!categoryID) {
+        showBudgetPopup("Please select a category.");
+        return;
+    }
+
+    if (!amount || amount <= 0) {
+        showBudgetPopup("Please enter an amount greater than 0.");
+        return;
+    }
+
+    const status = await getBudgetStatus(categoryID, transactionID);
+
+    if (status.hasBudget && amount > status.remaining) {
+        showBudgetPopup(
+            "This value is more than what's allowed for this category's budget. " +
+            "Please enter an amount less than or equal to $" + Math.max(status.remaining, 0).toFixed(2) + "."
+        );
+        return;
+    }
+
+    const updatedTransaction = {
+        amount: amount,
+        categoryID: categoryID,
+        date: document.getElementById("date").value
+    };
+
+    const response = await fetch("/api/Transactions/" + transactionID, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(updatedTransaction)
+    });
+
+    if (response.ok) {
+        window.location.href = "/TransactionPage";
+    } else {
+        showBudgetPopup("Unable to save changes.");
+    }
+}
 
     <script src="~/js/authGuard.js"></script>
 

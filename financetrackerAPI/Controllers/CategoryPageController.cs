@@ -1,40 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
-namespace financetrackerAPI.Controllers
+namespace financetrackerAPI.Controllers;
+
+public class CategoryPageController : Controller
 {
-    public class CategoryPageController : Controller
+    // GET /CategoryPage
+    public IActionResult Index()
     {
+        return View("~/Views/Category/Index.cshtml");
+    }
 
-        public IActionResult Index()
-        {
-            return View("~/Views/Category/Index.cshtml");
-        }
+    // GET /CategoryPage/Create
+    public IActionResult Create()
+    {
+        return View("~/Views/Category/Create.cshtml");
+    }
 
+    // GET /CategoryPage/Edit/{id}
+    public IActionResult Edit(int id)
+    {
+        ViewData["categoryID"] = id;
+        return View("~/Views/Category/Edit.cshtml");
+    }
 
-
-        public IActionResult Create()
-        {
-            return View("~/Views/Category/Create.cshtml");
-        }
-
-
-
-        public IActionResult Edit(int id)
-        {
-            ViewBag.categoryID = id;
-
-            return View("~/Views/Category/Edit.cshtml");
-        }
-
-
-
-        public IActionResult Details(int id)
-        {
-            ViewBag.categoryID = id;
-
-            return View("~/Views/Category/Details.cshtml");
-        }
-
+    // GET /CategoryPage/Details/{id}
+    public IActionResult Details(int id)
+    {
+        ViewData["categoryID"] = id;
+        return View("~/Views/Category/Details.cshtml");
     }
 }

@@ -2,7 +2,6 @@
     ViewData["Title"] = "Create Transaction";
 }
 
-
 <div class="container">
 
 
@@ -10,6 +9,7 @@
 
 
         <div class="col-md-6">
+            <div class="card shadow p-4">
 
 
             <div class="card shadow border-0 p-4">
@@ -18,9 +18,7 @@
                 <h2 class="mb-4 fw-bold">
 
                     <i class="bi bi-plus-circle-fill me-2"></i>
-
                     Add Transaction
-
                 </h2>
 
 
@@ -106,21 +104,11 @@
 
 
                 <div class="mb-4">
-
-                    <label class="form-label">
-                        Date
-                    </label>
-
-
-                    <input id="date"
-                           type="date"
-                           class="form-control" />
-
-
+                    <label class="form-label">Date</label>
+                    <input id="date" type="date" class="form-control" />
                 </div>
 
-
-
+                <div id="budgetPopup" class="alert alert-danger" style="display:none;"></div>
 
 
 
@@ -133,7 +121,6 @@
 
 
                         <i class="bi bi-check-circle me-1"></i>
-
                         Save
 
 
@@ -148,13 +135,10 @@
 
 
                         <i class="bi bi-arrow-left-circle me-1"></i>
-
                         Back
 
 
                     </a>
-
-
                 </div>
 
 
@@ -177,7 +161,9 @@
 
 
 @section Scripts {
+<script>
 
+const token = localStorage.getItem("token");
 
     <script>
 
@@ -208,7 +194,13 @@
 
                 });
 
+    const categories = await response.json();
+    const dropdown = document.getElementById("categoryID");
 
+    if (categories.length === 0) {
+        dropdown.innerHTML = `<option value="">No categories available</option>`;
+        return;
+    }
 
 
             if (!response.ok) {
@@ -250,18 +242,37 @@
             });
 
 
+    dropdown.innerHTML = options;
+}
 
 
             document.getElementById("categoryID").innerHTML = options;
 
+function hideBudgetPopup() {
+    document.getElementById("budgetPopup").style.display = "none";
+}
 
         }
 
+async function getBudgetStatus(categoryID, excludeTransactionID) {
 
+    const [budgetsRes, transactionsRes] = await Promise.all([
+        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
+        fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } })
+    ]);
 
+    const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
+    const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
 
+    const budget = budgets.find(b => b.categoryID === categoryID);
 
+    const spent = transactions
+        .filter(t => t.categoryID === categoryID && t.transactionsID !== excludeTransactionID)
+        .reduce((sum, t) => sum + t.amount, 0);
 
+    if (!budget) {
+        return { hasBudget: false, limit: 0, spent: spent, remaining: null };
+    }
 
 
 
@@ -341,5 +352,55 @@
 
     <script src="~/js/authGuard.js"></script>
 
+async function createTransaction() {
 
+    hideBudgetPopup();
+
+    const categoryID = Number(document.getElementById("categoryID").value);
+    const amount = Number(document.getElementById("amount").value);
+
+    if (!categoryID) {
+        showBudgetPopup("Please create a category first.");
+        return;
+    }
+
+    if (!amount || amount <= 0) {
+        showBudgetPopup("Please enter an amount greater than 0.");
+        return;
+    }
+
+    const status = await getBudgetStatus(categoryID, null);
+
+    if (status.hasBudget && amount > status.remaining) {
+        showBudgetPopup(
+            "This transaction cannot go through because it would put this category over its budget. " +
+            "Please enter an amount less than or equal to $" + Math.max(status.remaining, 0).toFixed(2) + "."
+        );
+        return;
+    }
+
+    const transaction = {
+        amount: amount,
+        categoryID: categoryID,
+        date: document.getElementById("date").value
+    };
+
+    const response = await fetch("/api/Transactions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(transaction)
+    });
+
+    if (response.ok) {
+        window.location.href = "/TransactionPage";
+    } else {
+        const error = await response.text();
+        showBudgetPopup(error || "Unable to create transaction.");
+    }
+}
+
+</script>
 }

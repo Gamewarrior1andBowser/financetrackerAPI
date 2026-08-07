@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-using Microsoft.AspNetCore.Authorization;
-namespace financetrackerAPI.Controllers
-{
+namespace financetrackerAPI.Controllers;
 
-    
-    public class DashboardController : Controller
+public class DashboardController : Controller
+{
+    // GET /DashboardPage
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
 }

@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Budget Summary";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow p-4" id="budgetCard">
+                <h2 id="budgetName" class="mb-4"></h2>
+                <p><strong>Created:</strong> <span id="budgetDate"></span></p>
+                <p><strong>Limit:</strong> <span id="budgetLimit"></span></p>
+                <a asp-controller="CategoryPage" asp-action="Index" class="btn btn-secondary mt-3">
+                    <i class="bi bi-arrow-left-circle me-1"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const categoryId = @ViewData["CategoryId"];
+        const token = localStorage.getItem("token");
+
+        async function loadBudgetSummary() {
+            // Get category (for the name)
+            const catResponse = await fetch(`/api/Category/${categoryId}`, {
+                headers: { Authorization: "Bearer " + token }
+            });
+            const category = await catResponse.json();
+
+            // GetAll is the only option since there's no get-by-category endpoint
+            const budgetResponse = await fetch("/api/Budget", {
+                headers: { Authorization: "Bearer " + token }
+            });
+            const budgets = await budgetResponse.json();
+
+            const budget = budgets.find(b => b.categoryID == categoryId);
+
+            if (!budget) {
+                document.getElementById("budgetCard").innerHTML =
+                    "<p>No budget found for this category.</p>";
+                return;
+            }
+
+            document.getElementById("budgetName").textContent = category.name + " Budget";
+            document.getElementById("budgetDate").textContent = new Date(budget.date).toLocaleDateString();
+            document.getElementById("budgetLimit").textContent = budget.limit;
+        }
+
+        loadBudgetSummary();
+    </script>
+}
