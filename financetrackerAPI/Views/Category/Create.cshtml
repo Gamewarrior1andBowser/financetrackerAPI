@@ -1,54 +1,55 @@
 ﻿@section Scripts {
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow p-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow p-4">
 
-                <h2 class="mb-4">
-                    <i class="bi bi-plus-circle-fill me-2"></i>
-                    Add Category
-                </h2>
+                    <h2 class="mb-4">
+                        <i class="bi bi-plus-circle-fill me-2"></i>
+                        Add Category
+                    </h2>
 
-                <div class="mb-3">
-                    <label class="form-label">Category Name</label>
-                    <input id="name" type="text" class="form-control" placeholder="e.g. Groceries" />
+                    <div class="mb-3">
+                        <label class="form-label">Category Name</label>
+                        <input id="name" type="text" class="form-control" placeholder="e.g. Groceries" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        <select id="type" class="form-select" onchange="updateLimitLabel()">
+                            <option value="Expense">Expense</option>
+                            <option value="Income">Income</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" id="limitLabel">Monthly Spending Limit</label>
+                        <input id="limit" type="number" min="1" step="0.01" class="form-control" placeholder="Enter budget limit" />
+                        <small class="text-muted" id="limitHint">
+                            This sets the budget for this category. It cannot be changed later — only new transactions will be checked against it.
+                        </small>
+                    </div>
+
+                    <div id="createError" class="alert alert-danger" style="display:none;"></div>
+
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-success" onclick="createCategory()">
+                            <i class="bi bi-check-circle me-1"></i>
+                            Save
+                        </button>
+
+                        <a asp-controller="CategoryPage" asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left-circle me-1"></i>
+                            Back
+                        </a>
+                    </div>
+
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Type</label>
-                    <select id="type" class="form-select" onchange="updateLimitLabel()">
-                        <option value="Expense">Expense</option>
-                        <option value="Income">Income</option>
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label" id="limitLabel">Monthly Spending Limit</label>
-                    <input id="limit" type="number" min="1" step="0.01" class="form-control" placeholder="Enter budget limit" />
-                    <small class="text-muted" id="limitHint">
-                        This sets the budget for this category. It cannot be changed later — only new transactions will be checked against it.
-                    </small>
-                </div>
-
-                <div id="createError" class="alert alert-danger" style="display:none;"></div>
-
-                <div class="d-flex gap-2">
-                    <button class="btn btn-success" onclick="createCategory()">
-                        <i class="bi bi-check-circle me-1"></i>
-                        Save
-                    </button>
-
-                    <a asp-controller="CategoryPage" asp-action="Index" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left-circle me-1"></i>
-                        Back
-                    </a>
-                </div>
-
             </div>
         </div>
     </div>
-</div>
+}
 
 @section Scripts {
     <script>
