@@ -86,19 +86,17 @@
 @section Scripts {
     <script>
     async function login() {
-        const email = document.getElementById("email").value;
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-        const response = await fetch("/api/Auth/login", {
-            method: "POST",
-            headers: {
+            const usernameOrEmail = document.getElementById("usernameOrEmail").value;
+            const password = document.getElementById("password").value;
 
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email,
-                username,
-                password
+            const response = await fetch("/api/Auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    usernameOrEmail: usernameOrEmail,
+                    password: password
             })
         });
         const data = await response.json();
