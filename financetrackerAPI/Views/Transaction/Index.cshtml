@@ -2,265 +2,100 @@
     ViewData["Title"] = "Transactions";
 }
 
-
 <div class="container">
 
-
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <h1 class="fw-bold">
-
             <i class="bi bi-cash-stack me-2"></i>
-
             Transactions
-
         </h1>
 
-
-        <a asp-controller="TransactionPage"
-           asp-action="Create"
-           class="btn btn-success">
-
+        <a asp-controller="TransactionPage" asp-action="Create" class="btn btn-success">
             <i class="bi bi-plus-circle me-1"></i>
-
             Add Transaction
-
         </a>
-
-
     </div>
 
-
-
-    <div class="card shadow border-0 p-4">
-
-
-        <h3 class="mb-4">
-
-            Recent Transactions
-
-        </h3>
-
-
-
+    <div class="card shadow p-4">
         <div class="table-responsive">
-
-
             <table class="table table-hover">
-
-
-                <thead class="table-primary">
-
-
+                <thead>
                     <tr>
-
-                        <th>Date</th>
-
-                        <th>Category</th>
-
+                        <th>ID</th>
                         <th>Amount</th>
-
+                        <th>Category</th>
+                        <th>Date</th>
                         <th>Actions</th>
-
                     </tr>
-
-
                 </thead>
-
-
-
-                <tbody id="transactionTable">
-                </tbody>
-
-
+                <tbody id="transactionTable"></tbody>
             </table>
-
-
         </div>
-
-
     </div>
-
 
 </div>
 
-
-
-
 @section Scripts {
-
-
     <script>
-
 
         const token = localStorage.getItem("token");
 
-
         loadTransactions();
-
-
 
         async function loadTransactions() {
 
-
-            const response = await fetch("/api/Transactions",
-                {
-
-                    headers:
-                    {
-
-                        "Authorization": "Bearer " + token
-
-                    }
-
-                });
-
-
-
-            if (!response.ok) {
-
-                alert("Unable to load transactions");
-
-                return;
-
-            }
-
-
-
-            const transactions = await response.json();
-
-
-
-            let rows = "";
-
-
-
-            transactions.forEach(transaction => {
-
-
-                rows += `
-
-                <tr>
-
-
-                    <td>
-
-                        ${transaction.date.substring(0, 10)}
-
-                    </td>
-
-
-
-                    <td>
-
-                        ${transaction.categoryName ?? "No Category"}
-
-                    </td>
-
-
-
-                    <td class="text-danger fw-bold">
-
-                        $${transaction.amount}
-
-                    </td>
-
-
-
-                    <td>
-
-
-                        <a href="/TransactionPage/Details/${transaction.transactionsID}"
-                           class="btn btn-info btn-sm me-1">
-
-
-                            <i class="bi bi-eye"></i>
-
-
-                        </a>
-
-
-
-
-                        <a href="/TransactionPage/Edit/${transaction.transactionsID}"
-                           class="btn btn-warning btn-sm me-1">
-
-
-                            <i class="bi bi-pencil"></i>
-
-
-                        </a>
-
-
-
-
-                        <button class="btn btn-danger btn-sm"
-                                onclick="deleteTransaction(${transaction.transactionsID})">
-
-
-                            <i class="bi bi-trash"></i>
-
-
-                        </button>
-
-
-
-                    </td>
-
-
-                </tr>
-
-                `;
-
-
+            const response = await fetch("/api/Transactions", {
+                headers: { "Authorization": "Bearer " + token }
             });
 
+            if (!response.ok) {
+                alert("Unable to load transactions");
+                return;
+            }
 
+            const transactions = await response.json();
+            let rows = "";
+
+            if (transactions.length === 0) {
+                rows = `<tr><td colspan="5" class="text-center text-muted">No transactions yet.</td></tr>`;
+            }
+
+            transactions.forEach(transaction => {
+                rows += `
+                <tr>
+                    <td>${transaction.transactionsID}</td>
+                    <td>$${transaction.amount}</td>
+                    <td>${transaction.categoryName ?? "No Category"}</td>
+                    <td>${transaction.date.substring(0, 10)}</td>
+                    <td>
+                        <a href="/TransactionPage/Details/${transaction.transactionsID}" class="btn btn-info btn-sm me-1">
+                            <i class="bi bi-eye-fill"></i>
+                        </a>
+                        <a href="/TransactionPage/Edit/${transaction.transactionsID}" class="btn btn-warning btn-sm me-1">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTransaction(${transaction.transactionsID})">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            });
 
             document.getElementById("transactionTable").innerHTML = rows;
-
-
         }
-
-
-
-
 
         async function deleteTransaction(id) {
 
-
-            const response = await fetch("/api/Transactions/" + id,
-                {
-
-
-                    method: "DELETE",
-
-
-                    headers:
-                    {
-
-                        "Authorization": "Bearer " + token
-
-                    }
-
-
-                });
-
-
+            const response = await fetch("/api/Transactions/" + id, {
+                method: "DELETE",
+                headers: { "Authorization": "Bearer " + token }
+            });
 
             if (response.ok) {
-
                 loadTransactions();
-
             }
-
-
         }
 
-
     </script>
-
-
-    <script src="~/js/authGuard.js"></script>
-
 }

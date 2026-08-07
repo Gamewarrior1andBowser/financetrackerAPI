@@ -1,53 +1,80 @@
-﻿@{ ViewData["Title"] = "Budgets"; }
+﻿@{
+    ViewData["Title"] = "Budgets";
+}
 
 <div class="container">
-    <h1 class="mb-4"> Budgets </h1>
-        <a asp-controller="BudgetPage" asp-action="Create" class="btn btn-primary">Create Budget</a> @*Add spacing here *@
-    <a asp-controller="BudgetPage" asp-action="Edit" class="btn btn-primary">Edit Budget</a> 
-    <table class="table table-bordered">
-        <thead class="table-primary">
-            <tr>
-                <th> Date </th> @*Change this to "Name" or "Budget Name"*@
-                <th>Limit </th>
-            </tr>
-        </thead>
-        <tbody id="budgetTable">
-        </tbody>
-    </table>
-    <a asp-controller="Dashboard"
-       asp-action="Index" class="btn btn-primary">Go to Dashboard</a>
+
+    <h1 class="fw-bold mb-4">
+        <i class="bi bi-piggy-bank-fill me-2"></i>
+        Budgets
+    </h1>
+
+    <div class="card shadow p-4">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Limit</th>
+                        <th>Date Set</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="budgetTable"></tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 
 @section Scripts {
-    <script>
+<script>
 
-        const token = localStorage.getItem("token");
+const token = localStorage.getItem("token");
 
-        fetch("/api/Budget", {
-            headers: { "Authorization": "Bearer " + token }
-        })
+loadBudgets();
 
-            .then(response => response.json())
+async function loadBudgets() {
 
-            .then(data => {
-                let rows = "";
-                data.forEach(budget => { rows += `
-                <tr>
-                    <td>${budget.date}</td>
-                    <td>${budget.limit}</td>
-                </tr> `;
-                });
+    const [budgetsRes, categoriesRes] = await Promise.all([
+        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
+        fetch("/api/Category", { headers: { "Authorization": "Bearer " + token } })
+    ]);
 
-                document.getElementById("budgetTable").innerHTML = rows;
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    </script>
-    <script src="~/js/authGuard.js"></script>
+    if (!budgetsRes.ok) {
+        alert("Unable to load budgets");
+        return;
+    }
+
+    const budgets = await budgetsRes.json();
+    const categories = categoriesRes.ok ? await categoriesRes.json() : [];
+
+    let rows = "";
+
+    if (budgets.length === 0) {
+        rows = `<tr><td colspan="4" class="text-center text-muted">No budgets yet. Create a category to add one.</td></tr>`;
+    }
+
+    budgets.forEach(budget => {
+        const category = categories.find(c => c.categoryID === budget.categoryID);
+        const categoryName = category ? category.name : "Unknown category";
+
+        rows += `
+        <tr>
+            <td>${categoryName}</td>
+            <td>$${budget.limit.toFixed(2)}</td>
+            <td>${budget.date.substring(0, 10)}</td>
+            <td>
+                <a href="/BudgetPage/Details/${budget.budgetID}" class="btn btn-info btn-sm">
+                    <i class="bi bi-eye-fill"></i>
+                </a>
+            </td>
+        </tr>
+        `;
+    });
+
+    document.getElementById("budgetTable").innerHTML = rows;
 }
 
-
-
-@*Budget index shows all the budgets made*@
-@*Clicking on one of the budgets leads to a budget summary of the category assigned to it, and its current budget limit, along with the date created*@
+</script>
+}
