@@ -48,247 +48,248 @@
         }
 
 
-    </script>
+        </script>
 
-    <script src="~/js/authGuard.js"></script>
+        <script src="~/js/authGuard.js"></script>
 
-                        <option value="Income">
-                            Income
-                        </option>
+                            <option value="Income">
+                                Income
+                            </option>
 
-                        <option value="Expense">
-                            Expense
-                        </option>
+                            <option value="Expense">
+                                Expense
+                            </option>
 
-                    </select>
+                        </select>
+
+                    </div>
+
+
+    <div class="mb-4">
+        <label class="form-label" id="budgetLabel">Budget Limit</label>
+        <input id="budgetLimit" type="number" class="form-control" placeholder="Enter budget limit" />
+        <small class="form-text text-muted" id="budgetHelp"></small>
+    </div>
+
+                    <div class="d-flex gap-2">
+
+
+                        <button class="btn btn-success"
+                                onclick="createCategory()">
+
+                            <i class="bi bi-check-circle me-1"></i>
+                            Save
+
+                        </button>
+
+
+
+                        <a asp-controller="CategoryPage"
+                           asp-action="Index"
+                           class="btn btn-secondary">
+
+                            <i class="bi bi-arrow-left-circle me-1"></i>
+                            Back
+
+                        </a>
+
+
+                    </div>
+
 
                 </div>
-
-
-<div class="mb-4">
-    <label class="form-label" id="budgetLabel">Budget Limit</label>
-    <input id="budgetLimit" type="number" class="form-control" placeholder="Enter budget limit" />
-    <small class="form-text text-muted" id="budgetHelp"></small>
-</div>
-
-                <div class="d-flex gap-2">
-
-
-                    <button class="btn btn-success"
-                            onclick="createCategory()">
-
-                        <i class="bi bi-check-circle me-1"></i>
-                        Save
-
-                    </button>
-
-
-
-                    <a asp-controller="CategoryPage"
-                       asp-action="Index"
-                       class="btn btn-secondary">
-
-                        <i class="bi bi-arrow-left-circle me-1"></i>
-                        Back
-
-                    </a>
-
-
-                </div>
-
 
             </div>
 
         </div>
 
     </div>
-
-</div>
+}
 
 
 
 @section Scripts {
 
-<script>
+    <script>
 
-async function createCategory()
-{
-
-    const token = localStorage.getItem("token");
-
-
-    const category =
-    {
-        name: document.getElementById("name").value,
-        type: document.getElementById("type").value
-    };
-
-
-
-    const response = await fetch("/api/Category",
+    async function createCategory()
     {
 
-        method: "POST",
+        const token = localStorage.getItem("token");
 
-        headers:
+
+        const category =
         {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-
-
-        body: JSON.stringify(category)
-
-    });
+            name: document.getElementById("name").value,
+            : document.getElementById("type").value
+        };
 
 
 
-    if(response.ok)
-{
-    window.location.href = "/CategoryPage";
-}
-else
-{
-    const error = await response.text();
+        const response = await fetch("/api/Category",
+        {
 
-}
+            method: "POST",
 
-}
-
+            headers:
+            {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
 
 
+            body: JSON.stringify(category)
 
-
-
-
-// function updateBudgetLabel() {
-//     const type = document.getElementById("type").value;
-//     const help = document.getElementById("budgetHelp");
-//     if (type === "Income") {
-//         help.textContent = "Maximum number of transactions allowed for this category.";
-//     } else {
-//         help.textContent = "Maximum amount allowed (must be greater than 0).";
-//     }
-// }
-
-// async function createCategory() {
-//     const token = localStorage.getItem("token");
-//     const type = document.getElementById("type").value;
-//     const budgetLimit = parseInt(document.getElementById("budgetLimit").value);
-
-//     Client-side validation based on type
-//     if (type === "Expense" && budgetLimit <= 0) {
-//         alert("Budget limit must be greater than 0 for expense categories.");  Change the alert to a stuff that pops up below
-//         return;
-//     }
-//     if (type === "Income" && budgetLimit < 0) {
-//         alert("Transaction count limit cannot be negative.");    Change the alert to a stuff that pops up below
-//         return;
-//     }
-
-//     const category = {
-//         name: document.getElementById("name").value,
-//         type: type
-//     };
-
-//     const response = await fetch("/api/Category", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//             "Authorization": "Bearer " + token
-//         },
-//         body: JSON.stringify(category)
-//     });
-
-//     if (response.ok) {
-//         const createdCategory = await response.json(); needs categoryID back
-
-//         Now create the budget tied to this category
-//         const budget = {
-//             categoryID: createdCategory.categoryID,
-//             limit: budgetLimit,
-//             date: new Date().toISOString()
-//         };
-
-//         await fetch("/api/Budget", {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//                 "Authorization": "Bearer " + token
-//             },
-//             body: JSON.stringify(budget)
-//         });
-
-//         window.location.href = "/CategoryPage";
-//     } else {
-//         const error = await response.text();
-//         alert(error);
-//     }
-// }
+        });
 
 
 
-function updateBudgetLabel() {
-    const type = document.getElementById("type").value;
-    document.getElementById("budgetHelp").textContent =
-        type === "Income"
-            ? "Maximum number of transactions allowed for this category."
-            : "Maximum amount allowed (must be greater than 0).";
-}
-updateBudgetLabel();
-
-async function createCategory() {
-    const token = localStorage.getItem("token");
-    const type = document.getElementById("type").value;
-    const budgetLimit = parseInt(document.getElementById("budgetLimit").value);
-
-    // Client-side validation since BudgetController does none
-    if (type === "Expense" && budgetLimit <= 0) {
-        alert("Budget limit must be greater than 0 for expense categories.");
-        return;
-    }
-    if (type === "Income" && (isNaN(budgetLimit) || budgetLimit < 0)) {
-        alert("Transaction limit must be a valid number, 0 or greater.");
-        return;
-    }
-
-    const category = {
-        name: document.getElementById("name").value,
-        type: type
-    };
-
-    const catResponse = await fetch("/api/Category", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-        body: JSON.stringify(category)
-    });
-
-    if (!catResponse.ok) {
-        alert(await catResponse.text());
-        return;
-    }
-
-    const createdCategory = await catResponse.json();
-
-    const budget = {
-        categoryID: createdCategory.categoryID,
-        limit: budgetLimit,
-        date: new Date().toISOString()
-    };
-
-    const budgetResponse = await fetch("/api/Budget", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-        body: JSON.stringify(budget)
-    });
-
-    if (budgetResponse.ok) {
+        if(response.ok)
+    {
         window.location.href = "/CategoryPage";
-    } else {
-        alert("Category created, but budget failed: " + await budgetResponse.text());
     }
-}
-</script>
+    else
+    {
+        const error = await response.text();
+
+    }
+
+    }
+
+
+
+
+
+
+
+    // function updateBudgetLabel() {
+    //     const type = document.getElementById("type").value;
+    //     const help = document.getElementById("budgetHelp");
+    //     if (type === "Income") {
+    //         help.textContent = "Maximum number of transactions allowed for this category.";
+    //     } else {
+    //         help.textContent = "Maximum amount allowed (must be greater than 0).";
+    //     }
+    // }
+
+    // async function createCategory() {
+    //     const token = localStorage.getItem("token");
+    //     const type = document.getElementById("type").value;
+    //     const budgetLimit = parseInt(document.getElementById("budgetLimit").value);
+
+    //     Client-side validation based on type
+    //     if (type === "Expense" && budgetLimit <= 0) {
+    //         alert("Budget limit must be greater than 0 for expense categories.");  Change the alert to a stuff that pops up below
+    //         return;
+    //     }
+    //     if (type === "Income" && budgetLimit < 0) {
+    //         alert("Transaction count limit cannot be negative.");    Change the alert to a stuff that pops up below
+    //         return;
+    //     }
+
+    //     const category = {
+    //         name: document.getElementById("name").value,
+    //         type: type
+    //     };
+
+    //     const response = await fetch("/api/Category", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Authorization": "Bearer " + token
+    //         },
+    //         body: JSON.stringify(category)
+    //     });
+
+    //     if (response.ok) {
+    //         const createdCategory = await response.json(); needs categoryID back
+
+    //         Now create the budget tied to this category
+    //         const budget = {
+    //             categoryID: createdCategory.categoryID,
+    //             limit: budgetLimit,
+    //             date: new Date().toISOString()
+    //         };
+
+    //         await fetch("/api/Budget", {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "Authorization": "Bearer " + token
+    //             },
+    //             body: JSON.stringify(budget)
+    //         });
+
+    //         window.location.href = "/CategoryPage";
+    //     } else {
+    //         const error = await response.text();
+    //         alert(error);
+    //     }
+    // }
+
+
+
+    function updateBudgetLabel() {
+        const type = document.getElementById("type").value;
+        document.getElementById("budgetHelp").textContent =
+            type === "Income"
+                ? "Maximum number of transactions allowed for this category."
+                : "Maximum amount allowed (must be greater than 0).";
+    }
+    updateBudgetLabel();
+
+    async function createCategory() {
+        const token = localStorage.getItem("token");
+        const type = document.getElementById("type").value;
+        const budgetLimit = parseInt(document.getElementById("budgetLimit").value);
+
+        // Client-side validation since BudgetController does none
+        if (type === "Expense" && budgetLimit <= 0) {
+            alert("Budget limit must be greater than 0 for expense categories.");
+            return;
+        }
+        if (type === "Income" && (isNaN(budgetLimit) || budgetLimit < 0)) {
+            alert("Transaction limit must be a valid number, 0 or greater.");
+            return;
+        }
+
+        const category = {
+            name: document.getElementById("name").value,
+            type: type
+        };
+
+        const catResponse = await fetch("/api/Category", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+            body: JSON.stringify(category)
+        });
+
+        if (!catResponse.ok) {
+            alert(await catResponse.text());
+            return;
+        }
+
+        const createdCategory = await catResponse.json();
+
+        const budget = {
+            categoryID: createdCategory.categoryID,
+            limit: budgetLimit,
+            date: new Date().toISOString()
+        };
+
+        const budgetResponse = await fetch("/api/Budget", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+            body: JSON.stringify(budget)
+        });
+
+        if (budgetResponse.ok) {
+            window.location.href = "/CategoryPage";
+        } else {
+            alert("Category created, but budget failed: " + await budgetResponse.text());
+        }
+    }
+    </script>
 
 }
 
