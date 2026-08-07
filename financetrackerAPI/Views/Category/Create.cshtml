@@ -1,145 +1,55 @@
-﻿@{
-    ViewData["Title"] = "Create Category";
-}
+﻿@section Scripts {
+
+    <script>
+
+        async function createCategory() {
+            try {
+                const token = localStorage.getItem("token");
+
+                const name = document.getElementById("name").value;
+                const type = document.getElementById("type").value;
 
 
-<div class="container">
-
-    <div class="row justify-content-center">
-
-        <div class="col-md-6">
-
-            <div class="card shadow p-4">
-
-                <h2 class="mb-4">
-                    <i class="bi bi-plus-circle-fill me-2"></i>
-                    Create Category
-                </h2>
+                const category =
+                {
+                    name: name,
+                    type: type
+                };
 
 
-                <div class="mb-3">
+                const response = await fetch("/api/Category",
+                    {
+                        method: "POST",
 
-                    <label class="form-label">
-                        Category Name
-                    </label>
+                        headers:
+                        {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + token
+                        },
 
-                    <input id="name"
-                           class="form-control"
-                           placeholder="Enter category name" />
-
-                </div>
-
-
-
-                <div class="mb-4">
-
-                    <label class="form-label">
-                        Type
-                    </label>
-
-
-                    <select id="type"
-                            class="form-select">
-
-                        <option value="Income">
-                            Income
-                        </option>
-
-                        <option value="Expense">
-                            Expense
-                        </option>
-
-                    </select>
-
-                </div>
+                        body: JSON.stringify(category)
+                    });
 
 
 
+                if (response.ok) {
+                    window.location.href = "/CategoryPage";
+                }
+                else {
+                    const error = await response.text();
 
-                <div class="d-flex gap-2">
+                    alert("API Error: " + error);
+                }
 
-
-                    <button class="btn btn-success"
-                            onclick="createCategory()">
-
-                        <i class="bi bi-check-circle me-1"></i>
-                        Save
-
-                    </button>
-
-
-
-                    <a asp-controller="CategoryPage"
-                       asp-action="Index"
-                       class="btn btn-secondary">
-
-                        <i class="bi bi-arrow-left-circle me-1"></i>
-                        Back
-
-                    </a>
+            }
+            catch (error) {
+                alert("JavaScript Error: " + error);
+            }
+        }
 
 
-                </div>
+    </script>
 
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-@section Scripts {
-
-<script>
-
-async function createCategory()
-{
-
-    const token = localStorage.getItem("token");
-
-
-    const category =
-    {
-        name: document.getElementById("name").value,
-        type: document.getElementById("type").value
-    };
-
-
-
-    const response = await fetch("/api/Category",
-    {
-
-        method: "POST",
-
-        headers:
-        {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-
-
-        body: JSON.stringify(category)
-
-    });
-
-
-
-    if(response.ok)
-{
-    window.location.href = "/CategoryPage";
-}
-else
-{
-    const error = await response.text();
-
-}
-
-}
-
-</script>
+    <script src="~/js/authGuard.js"></script>
 
 }

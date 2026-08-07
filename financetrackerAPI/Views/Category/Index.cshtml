@@ -1,150 +1,178 @@
 ﻿@{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = "Create Category";
 }
+
 
 <div class="container">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="row justify-content-center">
 
-        <h1>
+        <div class="col-md-6">
 
-            <i class="bi bi-tags-fill me-2"></i>
+            <div class="card shadow border-0 p-4">
 
-            Categories
 
-        </h1>
+                <h2 class="mb-4 fw-bold">
 
-        <a asp-controller="CategoryPage"
-           asp-action="Create"
-           class="btn btn-success">
+                    <i class="bi bi-tags-fill me-2"></i>
+                    Create Category
 
-            <i class="bi bi-plus-circle"></i>
+                </h2>
 
-            Create Category
 
-        </a>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Category Name
+                    </label>
+
+
+                    <input id="name"
+                           class="form-control"
+                           placeholder="Enter category name" />
+
+                </div>
+
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Type
+                    </label>
+
+
+                    <select id="type"
+                            class="form-select">
+
+
+                        <option value="Income">
+                            Income
+                        </option>
+
+
+                        <option value="Expense">
+                            Expense
+                        </option>
+
+
+                    </select>
+
+                </div>
+
+
+
+                <button class="btn btn-success"
+                        onclick="createCategory()">
+
+                    <i class="bi bi-check-circle me-1"></i>
+                    Save
+
+                </button>
+
+
+                <a asp-controller="CategoryPage"
+                   asp-action="Index"
+                   class="btn btn-secondary ms-2">
+
+                    Back
+
+                </a>
+
+
+
+            </div>
+
+        </div>
 
     </div>
-
-
-    <table class="table table-hover table-bordered align-middle">
-
-        <thead class="table-light">
-
-            <tr>
-
-                <th>ID</th>
-
-                <th>Name</th>
-
-                <th>Type</th>
-
-                <th width="180">Actions</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody id="categoryTable">
-        </tbody>
-
-    </table>
 
 </div>
 
 
+
+
 @section Scripts {
+
 
     <script>
 
-        const token = localStorage.getItem("token");
 
-        loadCategories();
+        async function createCategory() {
 
-        function loadCategories() {
+            const token = localStorage.getItem("token");
 
-            fetch("/api/Category", {
 
-                headers: {
-                    Authorization: "Bearer " + token
-                }
+            if (!token) {
+                alert("Login expired. Please login again.");
+                return;
+            }
 
-            })
 
-                .then(response => response.json())
 
-                .then(categories => {
+            const category =
+            {
+                name: document.getElementById("name").value,
 
-                    let rows = "";
+                type: document.getElementById("type").value
+            };
 
-                    categories.forEach(category => {
 
-                        rows += `
 
-        <tr>
+            try {
 
-        <td>${category.categoryID}</td>
+                const response = await fetch("/api/Category",
+                    {
 
-        <td>${category.name}</td>
+                        method: "POST",
 
-        <td>${category.type}</td>
 
-        <td>
+                        headers:
+                        {
+                            "Content-Type": "application/json",
 
-        <a href="/CategoryPage/Edit/${category.categoryID}"
-        class="btn btn-warning btn-sm">
+                            "Authorization": "Bearer " + token
+                        },
 
-        <i class="bi bi-pencil-square"></i>
 
-        </a>
-
-        <button
-        class="btn btn-danger btn-sm"
-        onclick="deleteCategory(${category.categoryID})">
-
-        <i class="bi bi-trash"></i>
-
-        </button>
-
-        </td>
-
-        </tr>
-
-        `;
+                        body: JSON.stringify(category)
 
                     });
 
-                    document.getElementById("categoryTable").innerHTML = rows;
-
-                });
-
-        }
 
 
+                if (response.ok) {
 
-        function deleteCategory(id) {
+                    window.location.href = "/CategoryPage";
 
-            if (!confirm("Delete this category?"))
-                return;
+                }
+                else {
 
-            fetch("/api/Category/" + id, {
+                    const error = await response.text();
 
-                method: "DELETE",
+                    alert(error);
 
-                headers: {
-                    Authorization: "Bearer " + token
                 }
 
-            })
 
-                .then(() => {
+            }
+            catch (error) {
 
-                    loadCategories();
+                alert("API Error: " + error.message);
 
-                });
+                console.log(error);
+
+            }
+
 
         }
 
+
     </script>
+
+
+    <script src="~/js/authGuard.js"></script>
+
 
 }

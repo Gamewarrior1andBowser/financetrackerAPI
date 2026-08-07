@@ -76,11 +76,11 @@ namespace financetrackerAPI.Migrations
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
                 {
-                    b.Property<int>("transactionsID")
+                    b.Property<int>("TransactionID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionID"));
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(10, 2)
@@ -89,15 +89,17 @@ namespace financetrackerAPI.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("categoryID")
                         .HasColumnType("int");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("transactionsID");
-
-                    b.HasIndex("categoryID");
+                    b.HasKey("TransactionID");
 
                     b.HasIndex("categoryID");
 
@@ -126,6 +128,17 @@ namespace financetrackerAPI.Migrations
                     b.HasKey("userID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>
+                {
+                    b.HasOne("financetrackerAPI.Models.Category", "categories")
+                        .WithMany()
+                        .HasForeignKey("categoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("categories");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>

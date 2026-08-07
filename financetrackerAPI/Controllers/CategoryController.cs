@@ -2,11 +2,13 @@ using financetrackerAPI.Data;
 using financetrackerAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace financetrackerAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class CategoryController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -19,12 +21,10 @@ public class CategoryController : ControllerBase
 
 
 
-    // Create Category
-    [Authorize]
+    // CREATE CATEGORY
     [HttpPost]
     public async Task<IActionResult> Create(Category category)
     {
-
         var userClaim = User.FindFirst("id");
 
 
@@ -37,7 +37,23 @@ public class CategoryController : ControllerBase
         int userID = int.Parse(userClaim.Value);
 
 
+
+        if (string.IsNullOrEmpty(category.Name))
+        {
+            return BadRequest("Category name is required");
+        }
+
+
+
+        if (string.IsNullOrEmpty(category.Type))
+        {
+            return BadRequest("Category type is required");
+        }
+
+
+
         category.userID = userID;
+
 
 
         _context.Categories.Add(category);
@@ -46,18 +62,18 @@ public class CategoryController : ControllerBase
         await _context.SaveChangesAsync();
 
 
+
         return Ok(category);
     }
 
 
 
 
-    // Get All Categories
-    [Authorize]
-    [HttpGet]
-    public IActionResult GetAll()
-    {
 
+    // GET ALL USER CATEGORIES
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
         var userClaim = User.FindFirst("id");
 
 
@@ -71,9 +87,9 @@ public class CategoryController : ControllerBase
 
 
 
-        var categories = _context.Categories
+        var categories = await _context.Categories
             .Where(c => c.userID == userID)
-            .ToList();
+            .ToListAsync();
 
 
 
@@ -83,12 +99,11 @@ public class CategoryController : ControllerBase
 
 
 
-    // Get Category By ID
-    [Authorize]
-    [HttpGet("{id}")]
-    public IActionResult GetById(int id)
-    {
 
+    // GET SINGLE CATEGORY
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
         var userClaim = User.FindFirst("id");
 
 
@@ -102,8 +117,8 @@ public class CategoryController : ControllerBase
 
 
 
-        var category = _context.Categories
-            .FirstOrDefault(c =>
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c =>
                 c.categoryID == id &&
                 c.userID == userID);
 
@@ -123,12 +138,10 @@ public class CategoryController : ControllerBase
 
 
 
-    // Update Category
-    [Authorize]
+    // UPDATE CATEGORY
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, Category updatedCategory)
     {
-
         var userClaim = User.FindFirst("id");
 
 
@@ -142,8 +155,8 @@ public class CategoryController : ControllerBase
 
 
 
-        var category = _context.Categories
-            .FirstOrDefault(c =>
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c =>
                 c.categoryID == id &&
                 c.userID == userID);
 
@@ -173,12 +186,10 @@ public class CategoryController : ControllerBase
 
 
 
-    // Delete Category
-    [Authorize]
+    // DELETE CATEGORY
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-
         var userClaim = User.FindFirst("id");
 
 
@@ -192,8 +203,8 @@ public class CategoryController : ControllerBase
 
 
 
-        var category = _context.Categories
-            .FirstOrDefault(c =>
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c =>
                 c.categoryID == id &&
                 c.userID == userID);
 

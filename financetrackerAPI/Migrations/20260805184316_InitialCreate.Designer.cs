@@ -12,8 +12,8 @@ using financetrackerAPI.Data;
 namespace financetrackerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260804184946_AddTransactionCategoryRelation")]
-    partial class AddTransactionCategoryRelation
+    [Migration("20260805184316_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,24 +27,30 @@ namespace financetrackerAPI.Migrations
 
             modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>
                 {
-                    b.Property<int>("BudgetID")
+                    b.Property<int>("budgetID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BudgetID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("budgetID"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Limit")
+                        .HasColumnType("int")
+                        .HasColumnName("limits");
+
+                    b.Property<int>("categoryID")
                         .HasColumnType("int");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("BudgetID");
+                    b.HasKey("budgetID");
 
-                    b.ToTable("Budgets");
+                    b.HasIndex("categoryID");
+
+                    b.ToTable("Budget");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Category", b =>
@@ -73,25 +79,30 @@ namespace financetrackerAPI.Migrations
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
                 {
-                    b.Property<int>("transactionsID")
+                    b.Property<int>("TransactionID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionID"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("categoryID")
-                        .HasColumnType("int");
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("categoryID")
+                        .HasColumnType("int");
+
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
-                    b.HasKey("transactionsID");
+                    b.HasKey("TransactionID");
 
                     b.HasIndex("categoryID");
 
@@ -120,6 +131,17 @@ namespace financetrackerAPI.Migrations
                     b.HasKey("userID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>
+                {
+                    b.HasOne("financetrackerAPI.Models.Category", "categories")
+                        .WithMany()
+                        .HasForeignKey("categoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("categories");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
