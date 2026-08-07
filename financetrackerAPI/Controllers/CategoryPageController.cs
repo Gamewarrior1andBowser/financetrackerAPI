@@ -36,5 +36,11 @@ namespace financetrackerAPI.Controllers
             return View("~/Views/Category/Details.cshtml");
         }
 
-    }
+
+		public IActionResult Budget(int id)
+		{
+			ViewData["CategoryId"] = id;
+			return View();
+		}
+	}
 }

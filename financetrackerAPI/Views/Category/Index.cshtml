@@ -84,31 +84,57 @@
 
             </div>
 
-        </div>
+        //                 rows += `
 
-    </div>
+        // <tr>
 
-</div>
+        // <td>${category.categoryID}</td>
 
+        // <td>${category.name}</td>
 
+        // <td>${category.type}</td>
 
+        // <td>
 
-@section Scripts {
+        // <a href="/CategoryPage/Edit/${category.categoryID}"
+        // class="btn btn-warning btn-sm">
 
+        // <i class="bi bi-pencil-square"></i>
 
-    <script>
+        // </a>
 
+        // <button
+        // class="btn btn-danger btn-sm"
+        // onclick="deleteCategory(${category.categoryID})">
 
-        async function createCategory() {
+        // <i class="bi bi-trash"></i>
 
-            const token = localStorage.getItem("token");
+        // </button>
 
+        // </td>
 
-            if (!token) {
-                alert("Login expired. Please login again.");
-                return;
-            }
+        // </tr>
 
+        // `;
+
+        rows += `
+<tr>
+<td>${category.categoryID}</td>
+<td>${category.name}</td>
+<td>${category.type}</td>
+<td>
+<a href="/CategoryPage/Edit/${category.categoryID}" class="btn btn-warning btn-sm">
+<i class="bi bi-pencil-square"></i>
+</a>
+<a href="/CategoryPage/Budget/${category.categoryID}" class="btn btn-info btn-sm">
+<i class="bi bi-piggy-bank-fill"></i>
+</a>
+<button class="btn btn-danger btn-sm" onclick="deleteCategory(${category.categoryID})">
+<i class="bi bi-trash"></i>
+</button>
+</td>
+</tr>
+`;
 
 
             const category =

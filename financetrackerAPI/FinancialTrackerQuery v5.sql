@@ -4,6 +4,7 @@ USE FinancialTracker;
 
 CREATE TABLE Users (
 	userId INT IDENTITY(1,1) PRIMARY KEY,
+	username nvarchar(255) NULL,
 	email nvarchar(255) NULL,
 	[password] [nvarchar] (255) NULL,
 	creationTime date NULL
