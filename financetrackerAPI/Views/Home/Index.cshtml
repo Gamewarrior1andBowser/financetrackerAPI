@@ -3,37 +3,59 @@
 }
 
 
-<div class="container">
+<!-- Hero Section -->
+
+<div class="row align-items-center py-5">
 
 
-    <!-- Hero Section -->
+    <div class="col-md-6">
 
-    <div class="row align-items-center py-5">
+        <h1 class="display-4 fw-bold text-primary">
 
+            <i class="bi bi-wallet2 me-2"></i>
 
-        <div class="col-md-6">
+            Finance Tracker
 
-
-            <h1 class="display-4 fw-bold text-primary">
-
-                <i class="bi bi-wallet2 me-2"></i>
-
-                Finance Tracker
-
-            </h1>
+        </h1>
 
 
-            <p class="lead mt-3">
+        <p class="lead mt-3">
 
-                Manage your income, expenses, budgets, and financial goals easily with one simple platform.
+            Manage your income, expenses, budgets, and financial goals easily with one simple platform.
 
-            </p>
+        </p>
 
 
-            <p class="mt-4 text-muted">
+        <p class="mt-4 text-muted">
 
-                Explore how Finance Tracker helps users organize their money,
-                analyze spending habits, and make better financial decisions.
+            Explore how Finance Tracker helps users organize their money,
+            analyze spending habits, and make better financial decisions.
+
+        </p>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-6">
+
+
+        <div class="card shadow border-0 p-4">
+
+
+            <h3 class="fw-bold">
+
+                Why use Finance Tracker?
+
+            </h3>
+
+
+            <p>
+
+                Track transactions, organize categories, manage budgets,
+                and understand your financial habits through detailed reports.
 
             </p>
 
@@ -41,25 +63,417 @@
         </div>
 
 
+    </div>
 
-        <div class="col-md-6">
+
+</div>
+
+
+
+
+
+@if (ViewBag.DemoData != null)
+{
+
+    var data = ViewBag.DemoData;
+
+
+
+    <!-- Summary Cards -->
+
+    <div class="row mt-4">
+
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow border-0 p-4 text-center">
+
+
+                <i class="bi bi-cash-stack text-success"
+                   style="font-size:45px;">
+                </i>
+
+
+                <h5 class="mt-3">
+                    Total Income
+                </h5>
+
+
+                <h2 class="text-success fw-bold">
+
+                    $@data.GetProperty("income").GetInt32()
+
+                </h2>
+
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="col-md-4 mb-4">
+
+
+            <div class="card shadow border-0 p-4 text-center">
+
+
+                <i class="bi bi-credit-card text-danger"
+                   style="font-size:45px;">
+                </i>
+
+
+                <h5 class="mt-3">
+                    Total Expenses
+                </h5>
+
+
+                <h2 class="text-danger fw-bold">
+
+                    $@data.GetProperty("expenses").GetInt32()
+
+                </h2>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <div class="col-md-4 mb-4">
+
+
+            <div class="card shadow border-0 p-4 text-center">
+
+
+                <i class="bi bi-wallet-fill text-primary"
+                   style="font-size:45px;">
+                </i>
+
+
+                <h5 class="mt-3">
+                    Balance
+                </h5>
+
+
+                <h2 class="text-primary fw-bold">
+
+                    $@data.GetProperty("balance").GetInt32()
+
+                </h2>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+    <!-- Budget and Savings -->
+
+
+    <div class="row">
+
+
+        <div class="col-md-6 mb-4">
 
 
             <div class="card shadow border-0 p-4">
 
 
-                <h3 class="fw-bold">
+                <h4>
 
-                    Why use Finance Tracker?
+                    <i class="bi bi-piggy-bank-fill me-2"></i>
 
-                </h3>
+                    Monthly Budget
+
+                </h4>
+
+
+                <hr />
 
 
                 <p>
+                    Limit:
 
-                    Track transactions, organize categories, manage budgets,
-                    and understand your financial habits through detailed reports.
+                    <strong>
+                        $@data.GetProperty("budget").GetProperty("monthlyLimit").GetInt32()
+                    </strong>
 
+                </p>
+
+
+                <p>
+                    Used:
+
+                    <strong>
+                        $@data.GetProperty("budget").GetProperty("used").GetInt32()
+                    </strong>
+
+                </p>
+
+
+                <p>
+                    Remaining:
+
+                    <strong class="text-success">
+                        $@data.GetProperty("budget").GetProperty("remaining").GetInt32()
+                    </strong>
+
+                </p>
+
+
+
+                <div class="progress">
+
+
+                    <div class="progress-bar bg-warning"
+                         style="width:@data.GetProperty("budget").GetProperty("usagePercentage").GetInt32()%">
+
+                        @data.GetProperty("budget").GetProperty("usagePercentage").GetInt32()%
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+
+        <div class="col-md-6 mb-4">
+
+
+            <div class="card shadow border-0 p-4">
+
+
+                <h4>
+
+                    <i class="bi bi-bullseye me-2"></i>
+
+                    Savings Goal
+
+                </h4>
+
+
+                <hr />
+
+
+
+                <p>
+                    Goal:
+
+                    <strong>
+                        $@data.GetProperty("savingsGoal").GetProperty("goal").GetInt32()
+                    </strong>
+
+                </p>
+
+
+
+
+                <p>
+                    Saved:
+
+                    <strong class="text-success">
+
+                        $@data.GetProperty("savingsGoal").GetProperty("current").GetInt32()
+
+                    </strong>
+
+                </p>
+
+
+
+
+                <p>
+                    Remaining:
+
+                    <strong>
+
+                        $@data.GetProperty("savingsGoal").GetProperty("remaining").GetInt32()
+
+                    </strong>
+
+                </p>
+
+
+
+
+                <div class="progress">
+
+
+                    <div class="progress-bar bg-success"
+                         style="width:@data.GetProperty("savingsGoal").GetProperty("progress").GetInt32()%">
+
+
+                        @data.GetProperty("savingsGoal").GetProperty("progress").GetInt32()%
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+    <!-- Transactions Table -->
+
+
+    <div class="card shadow border-0 p-4 mt-4">
+
+
+        <h3 class="mb-4">
+
+            <i class="bi bi-clock-history me-2"></i>
+
+            Recent Transactions
+
+        </h3>
+
+
+
+        <div class="table-responsive">
+
+
+            <table class="table table-hover">
+
+
+                <thead class="table-primary">
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Category</th>
+
+                        <th>Type</th>
+
+                        <th>Amount</th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    @foreach (var transaction in data.GetProperty("transactions").EnumerateArray())
+                    {
+
+                        <tr>
+
+                            <td>
+                                @transaction.GetProperty("date").GetString()
+                            </td>
+
+
+                            <td>
+                                @transaction.GetProperty("category").GetString()
+                            </td>
+
+
+                            <td>
+                                @transaction.GetProperty("type").GetString()
+                            </td>
+
+
+                            <td class="fw-bold">
+
+                                $@transaction.GetProperty("amount").GetInt32()
+
+                            </td>
+
+
+                        </tr>
+
+                    }
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+}
+
+
+
+
+
+
+
+<!-- Features -->
+
+
+<div class="row mt-5">
+
+
+    <div class="col-md-4 mb-4">
+
+
+        <div class="card shadow border-0 h-100">
+
+
+            <div class="card-body text-center">
+
+
+                <i class="bi bi-cash-stack text-success"
+                   style="font-size:50px;">
+                </i>
+
+
+                <h4 class="mt-3">
+                    Track Transactions
+                </h4>
+
+
+                <p>
+                    Record and monitor income and expenses.
                 </p>
 
 
@@ -68,50 +482,35 @@
 
         </div>
 
-        <p class="mt-4 text-muted">
-    Start tracking your finances, manage budgets, and monitor your spending easily.
-</p>
-      
+
     </div>
 
 
 
 
 
-    <!-- Features -->
+    <div class="col-md-4 mb-4">
 
 
-    <div class="row mt-5">
+        <div class="card shadow border-0 h-100">
 
 
-        <div class="col-md-4 mb-4">
+            <div class="card-body text-center">
 
 
-            <div class="card shadow border-0 h-100">
+                <i class="bi bi-tags-fill text-primary"
+                   style="font-size:50px;">
+                </i>
 
 
-                <div class="card-body text-center">
-                  
-                    <i class="bi bi-cash-stack text-success"
-                       style="font-size:50px;">
-                    </i>
+                <h4 class="mt-3">
+                    Manage Categories
+                </h4>
 
 
-                    <h4 class="mt-3">
-
-                        Track Transactions
-
-                    </h4>
-
-
-                    <p>
-
-                        Record and monitor income and expenses.
-
-                    </p>
-
-
-                </div>
+                <p>
+                    Organize financial activities into meaningful categories.
+                </p>
 
 
             </div>
@@ -120,38 +519,34 @@
         </div>
 
 
+    </div>
 
 
 
-        <div class="col-md-4 mb-4">
 
 
-            <div class="card shadow border-0 h-100">
+    <div class="col-md-4 mb-4">
 
 
-                <div class="card-body text-center">
+        <div class="card shadow border-0 h-100">
 
 
-                    <i class="bi bi-tags-fill text-primary"
-                       style="font-size:50px;">
-                    </i>
+            <div class="card-body text-center">
 
 
-                    <h4 class="mt-3">
-
-                        Manage Categories
-
-                    </h4>
+                <i class="bi bi-wallet-fill text-warning"
+                   style="font-size:50px;">
+                </i>
 
 
-                    <p>
-
-                        Organize financial activities into meaningful categories.
-
-                    </p>
+                <h4 class="mt-3">
+                    Set Budgets
+                </h4>
 
 
-                </div>
+                <p>
+                    Create budgets and control your monthly spending limits.
+                </p>
 
 
             </div>
@@ -159,26 +554,33 @@
 
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow border-0 h-100">
-                <div class="card-body text-center">
 
-                    <i class="bi bi-wallet-fill text-warning"
-                       style="font-size:50px;">
-                    </i>
-
-
-                    <h4 class="mt-3"> Set Budgets </h4>
-
-                    <p> Create budgets and control your monthly spending limits. </p>
-                </div>
-           </div>
-        </div>
     </div>
 
-    <div class="text-center mt-5 mb-5">
-        <h3>  <i class="bi bi-bar-chart-fill me-2"></i> Take control of your financial future </h3>
 
-        <p class="text-muted"> Simple tracking, better planning, smarter decisions. </p>
-    </div>
+</div>
+
+
+
+
+
+<div class="text-center mt-5 mb-5">
+
+
+    <h3>
+
+        <i class="bi bi-bar-chart-fill me-2"></i>
+
+        Take control of your financial future
+
+    </h3>
+
+
+    <p class="text-muted">
+
+        Simple tracking, better planning, smarter decisions.
+
+    </p>
+
+
 </div>
