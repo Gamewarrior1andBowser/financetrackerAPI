@@ -12,25 +12,22 @@
         <div class="col-md-6">
 
 
-            <div class="card shadow p-4">
+            <div class="card shadow border-0 p-4">
 
 
-                <div class="text-center mb-4">
+                <h2 class="fw-bold mb-4">
+
+                    <i class="bi bi-eye-fill me-2"></i>
+
+                    Transaction Details
+
+                </h2>
 
 
-                    <i class="bi bi-receipt-cutoff"
-                       style="font-size:60px;">
-                    </i>
 
 
-                    <h2 class="mt-3">
 
-                        Transaction Details
-
-                    </h2>
-
-
-                </div>
+                <input type="hidden" id="transactionID" value="@ViewBag.transactionsID" />
 
 
 
@@ -38,34 +35,7 @@
 
                 <div class="mb-3">
 
-                    <strong>
-                        Amount:
-                    </strong>
-
-                    <span id="amount"></span>
-
-                </div>
-
-
-
-                <div class="mb-3">
-
-                    <strong>
-                        Category ID:
-                    </strong>
-
-                    <span id="categoryID"></span>
-
-                </div>
-
-
-
-
-                <div class="mb-3">
-
-                    <strong>
-                        Date:
-                    </strong>
+                    <strong>Date:</strong>
 
                     <span id="date"></span>
 
@@ -74,15 +44,50 @@
 
 
 
+
+                <div class="mb-3">
+
+                    <strong>Category:</strong>
+
+                    <span id="category"></span>
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <strong>Amount:</strong>
+
+                    <span id="amount"></span>
+
+                </div>
+
+
+
+
+
+                <div class="mb-4">
+
+                    <strong>Type:</strong>
+
+                    <span id="type"></span>
+
+                </div>
+
+
+
+
+
                 <a asp-controller="TransactionPage"
                    asp-action="Index"
-                   class="btn btn-secondary w-100">
-
+                   class="btn btn-secondary">
 
                     <i class="bi bi-arrow-left-circle me-1"></i>
 
-                    Back to Transactions
-
+                    Back
 
                 </a>
 
@@ -102,66 +107,91 @@
 
 
 
+
+
 @section Scripts {
 
 
-    <script>
+<script>
 
 
-        const token = localStorage.getItem("token");
+const token = localStorage.getItem("token");
 
 
-        const id = @ViewBag.transactionsID;
-
-
-
-
-        loadDetails();
+const id = document.getElementById("transactionID").value;
 
 
 
-
-
-        async function loadDetails() {
-
-
-            const response = await fetch("/api/Transactions/" + id, {
-
-
-                headers: {
-
-
-                    "Authorization": "Bearer " + token
-
-
-                }
-
-
-            });
+loadDetails();
 
 
 
-            const transaction = await response.json();
 
 
 
-            document.getElementById("amount").innerHTML =
-                "$" + transaction.amount;
+async function loadDetails()
+{
 
 
-            document.getElementById("categoryID").innerHTML =
-                transaction.categoryID;
+    const response = await fetch("/api/Transactions/" + id,
+    {
 
+        headers:
+        {
 
-            document.getElementById("date").innerHTML =
-                transaction.date.substring(0, 10);
-
+            "Authorization":"Bearer " + token
 
         }
 
+    });
 
 
-    </script>
+
+
+    if(!response.ok)
+    {
+        return;
+    }
+
+
+
+
+    const transaction = await response.json();
+
+
+
+
+
+    document.getElementById("date").innerText =
+        transaction.date.substring(0,10);
+
+
+
+
+    document.getElementById("category").innerText =
+        transaction.categoryName ?? "No Category";
+
+
+
+
+    document.getElementById("amount").innerText =
+        "$" + transaction.amount;
+
+
+
+
+    document.getElementById("type").innerText =
+        transaction.type ?? "Not Available";
+
+
+}
+
+
+
+</script>
+
+
+<script src="~/js/authGuard.js"></script>
 
 
 }

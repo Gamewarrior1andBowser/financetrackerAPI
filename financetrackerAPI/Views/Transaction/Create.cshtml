@@ -5,9 +5,12 @@
 
 <div class="container">
 
+
     <div class="row justify-content-center">
 
+
         <div class="col-md-6">
+
 
             <div class="card shadow border-0 p-4">
 
@@ -19,6 +22,9 @@
                     Add Transaction
 
                 </h2>
+
+
+
 
 
                 <div class="mb-3">
@@ -39,30 +45,6 @@
 
 
 
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Type
-                    </label>
-
-
-                    <select id="type"
-                            class="form-select">
-
-                        <option value="Income">
-                            Income
-                        </option>
-
-
-                        <option value="Expense">
-                            Expense
-                        </option>
-
-                    </select>
-
-
-                </div>
-
 
 
 
@@ -80,11 +62,44 @@
                             Loading categories...
                         </option>
 
+                    </select>
+
+
+                </div>
+
+
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Type
+                    </label>
+
+
+                    <select id="type"
+                            class="form-select">
+
+
+                        <option value="Expense">
+                            Expense
+                        </option>
+
+
+                        <option value="Income">
+                            Income
+                        </option>
+
 
                     </select>
 
 
                 </div>
+
+
 
 
 
@@ -108,17 +123,22 @@
 
 
 
+
+
                 <div class="d-flex gap-2">
 
 
                     <button class="btn btn-success"
                             onclick="createTransaction()">
 
+
                         <i class="bi bi-check-circle me-1"></i>
 
                         Save
 
+
                     </button>
+
 
 
 
@@ -126,9 +146,11 @@
                        asp-action="Index"
                        class="btn btn-secondary">
 
+
                         <i class="bi bi-arrow-left-circle me-1"></i>
 
                         Back
+
 
                     </a>
 
@@ -136,13 +158,19 @@
                 </div>
 
 
+
             </div>
+
 
         </div>
 
+
     </div>
 
+
 </div>
+
+
 
 
 
@@ -157,6 +185,7 @@
         const token = localStorage.getItem("token");
 
 
+
         loadCategories();
 
 
@@ -165,25 +194,33 @@
 
         async function loadCategories() {
 
+
             const response = await fetch("/api/Category",
                 {
 
                     headers:
                     {
+
                         "Authorization": "Bearer " + token
+
                     }
+
 
                 });
 
 
 
+
             if (!response.ok) {
 
-                alert("Unable to load categories");
+                document.getElementById("categoryID").innerHTML =
+                    "<option>No Categories</option>";
 
                 return;
 
             }
+
+
 
 
 
@@ -192,6 +229,7 @@
 
 
             let options = "";
+
 
 
 
@@ -213,6 +251,7 @@
 
 
 
+
             document.getElementById("categoryID").innerHTML = options;
 
 
@@ -224,27 +263,35 @@
 
 
 
+
+
         async function createTransaction() {
 
 
-            const amount =
-                Number(document.getElementById("amount").value);
+            const transaction =
+            {
+
+
+                amount:
+                    Number(document.getElementById("amount").value),
 
 
 
-            const type =
-                document.getElementById("type").value;
+                categoryID:
+                    Number(document.getElementById("categoryID").value),
 
 
 
-            const categoryID =
-                Number(document.getElementById("categoryID").value);
+                type:
+                    document.getElementById("type").value,
 
 
 
-            const date =
-                document.getElementById("date").value;
+                date:
+                    document.getElementById("date").value
 
+
+            };
 
 
 
@@ -253,7 +300,9 @@
             const response = await fetch("/api/Transactions",
                 {
 
+
                     method: "POST",
+
 
 
                     headers:
@@ -267,22 +316,10 @@
 
 
 
-                    body: JSON.stringify(
-                        {
-
-                            amount: amount,
-
-                            type: type,
-
-                            categoryID: categoryID,
-
-                            date: date
-
-                        })
+                    body: JSON.stringify(transaction)
 
 
                 });
-
 
 
 
@@ -294,16 +331,9 @@
 
             }
 
-            else {
-
-                const error = await response.text();
-
-                alert(error);
-
-            }
-
 
         }
+
 
 
     </script>

@@ -5,15 +5,17 @@
 
 <div class="container">
 
+
     <div class="row justify-content-center">
+
 
         <div class="col-md-6">
 
 
-            <div class="card shadow p-4">
+            <div class="card shadow border-0 p-4">
 
 
-                <h2 class="mb-4">
+                <h2 class="mb-4 fw-bold">
 
                     <i class="bi bi-pencil-square me-2"></i>
 
@@ -24,21 +26,28 @@
 
 
 
+
+                <input type="hidden" id="transactionID" value="@ViewBag.transactionsID" />
+
+
+
+
+
                 <div class="mb-3">
 
                     <label class="form-label">
-
                         Amount
-
                     </label>
 
 
                     <input id="amount"
                            type="number"
+                           step="0.01"
                            class="form-control" />
 
-
                 </div>
+
+
 
 
 
@@ -47,18 +56,50 @@
                 <div class="mb-3">
 
                     <label class="form-label">
-
-                        Category ID
-
+                        Category
                     </label>
 
 
-                    <input id="categoryID"
-                           type="number"
-                           class="form-control" />
+                    <select id="categoryID"
+                            class="form-select">
+                    </select>
 
 
                 </div>
+
+
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Type
+                    </label>
+
+
+                    <select id="type"
+                            class="form-select">
+
+
+                        <option value="Expense">
+                            Expense
+                        </option>
+
+
+                        <option value="Income">
+                            Income
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
 
 
 
@@ -67,9 +108,7 @@
                 <div class="mb-4">
 
                     <label class="form-label">
-
                         Date
-
                     </label>
 
 
@@ -84,10 +123,12 @@
 
 
 
+
+
                 <div class="d-flex gap-2">
 
 
-                    <button class="btn btn-primary"
+                    <button class="btn btn-warning"
                             onclick="updateTransaction()">
 
 
@@ -101,12 +142,11 @@
 
 
 
+
                     <a asp-controller="TransactionPage"
                        asp-action="Index"
                        class="btn btn-secondary">
 
-
-                        <i class="bi bi-arrow-left-circle me-1"></i>
 
                         Back
 
@@ -114,8 +154,8 @@
                     </a>
 
 
-
                 </div>
+
 
 
             </div>
@@ -132,6 +172,9 @@
 
 
 
+
+
+
 @section Scripts {
 
 
@@ -140,11 +183,15 @@
 
         const token = localStorage.getItem("token");
 
-        const id = @ViewBag.transactionsID;
+
+        const id = document.getElementById("transactionID").value;
 
 
 
         loadTransaction();
+
+        loadCategories();
+
 
 
 
@@ -153,19 +200,25 @@
         async function loadTransaction() {
 
 
-            const response = await fetch("/api/Transactions/" + id, {
+            const response = await fetch("/api/Transactions/" + id,
+                {
+
+                    headers:
+                    {
+
+                        "Authorization": "Bearer " + token
+
+                    }
+
+                });
 
 
-                headers: {
 
 
-                    "Authorization": "Bearer " + token
+            if (!response.ok) {
+                return;
+            }
 
-
-                }
-
-
-            });
 
 
 
@@ -174,17 +227,96 @@
 
 
 
-            document.getElementById("amount").value = transaction.amount;
+            document.getElementById("amount").value =
+                transaction.amount;
 
 
-            document.getElementById("categoryID").value = transaction.categoryID;
+
+            document.getElementById("type").value =
+                transaction.type;
 
 
-            document.getElementById("date").value = transaction.date.substring(0, 10);
 
+            document.getElementById("date").value =
+                transaction.date.substring(0, 10);
+
+
+
+            document.getElementById("categoryID").value =
+                transaction.categoryID;
 
 
         }
+
+
+
+
+
+
+
+
+
+        async function loadCategories() {
+
+
+            const response = await fetch("/api/Category",
+                {
+
+                    headers:
+                    {
+
+                        "Authorization": "Bearer " + token
+
+                    }
+
+                });
+
+
+
+
+            if (!response.ok) {
+                return;
+            }
+
+
+
+
+
+            const categories = await response.json();
+
+
+
+            let options = "";
+
+
+
+
+            categories.forEach(category => {
+
+
+                options += `
+
+                <option value="${category.categoryID}">
+
+                    ${category.name}
+
+                </option>
+
+                `;
+
+
+            });
+
+
+
+
+            document.getElementById("categoryID").innerHTML = options;
+
+
+        }
+
+
+
 
 
 
@@ -194,47 +326,58 @@
         async function updateTransaction() {
 
 
-
-            const response = await fetch("/api/Transactions/" + id, {
-
-
-                method: "PUT",
+            const transaction =
+            {
 
 
-                headers: {
-
-
-                    "Content-Type": "application/json",
-
-                    "Authorization": "Bearer " + token
-
-
-                },
+                amount:
+                    Number(document.getElementById("amount").value),
 
 
 
-                body: JSON.stringify({
+                categoryID:
+                    Number(document.getElementById("categoryID").value),
 
 
 
-                    transactionsID: id,
-
-
-                    amount: document.getElementById("amount").value,
-
-
-                    categoryID: document.getElementById("categoryID").value,
-
-
-                    date: document.getElementById("date").value
+                type:
+                    document.getElementById("type").value,
 
 
 
-                })
+                date:
+                    document.getElementById("date").value
+
+
+            };
 
 
 
-            });
+
+
+            const response = await fetch("/api/Transactions/" + id,
+                {
+
+
+                    method: "PUT",
+
+
+
+                    headers:
+                    {
+
+                        "Content-Type": "application/json",
+
+                        "Authorization": "Bearer " + token
+
+                    },
+
+
+
+                    body: JSON.stringify(transaction)
+
+
+                });
 
 
 
@@ -242,12 +385,9 @@
 
             if (response.ok) {
 
-
                 window.location.href = "/TransactionPage";
 
-
             }
-
 
 
         }
@@ -255,6 +395,9 @@
 
 
     </script>
+
+
+    <script src="~/js/authGuard.js"></script>
 
 
 }
