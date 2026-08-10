@@ -11,6 +11,6 @@
         public int userID { get; set; }
 
 
-        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+        //public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
     }
 }
