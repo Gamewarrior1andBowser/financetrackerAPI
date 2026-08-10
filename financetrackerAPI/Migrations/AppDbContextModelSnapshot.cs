@@ -30,10 +30,10 @@ namespace financetrackerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("budgetID"));
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Limit")
+                    b.Property<int>("limits")
                         .HasColumnType("int")
                         .HasColumnName("limits");
 
@@ -47,7 +47,7 @@ namespace financetrackerAPI.Migrations
 
                     b.HasIndex("categoryID");
 
-                    b.ToTable("Budget");
+                    b.ToTable("Budget", (string)null);
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Category", b =>
@@ -71,7 +71,7 @@ namespace financetrackerAPI.Migrations
 
                     b.HasKey("categoryID");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
@@ -82,11 +82,11 @@ namespace financetrackerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
 
-                    b.Property<decimal>("Amount")
+                    b.Property<decimal>("amount")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("categoryID")
@@ -99,7 +99,7 @@ namespace financetrackerAPI.Migrations
 
                     b.HasIndex("categoryID");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.User", b =>
@@ -123,7 +123,7 @@ namespace financetrackerAPI.Migrations
 
                     b.HasKey("userID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>

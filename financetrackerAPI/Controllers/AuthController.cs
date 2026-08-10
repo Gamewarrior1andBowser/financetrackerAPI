@@ -78,8 +78,8 @@ public class AuthController : ControllerBase
     {
         User user = _context.Users
             .FirstOrDefault(u =>
-                u.email == login.UsernameOrEmail ||
-                u.username == login.UsernameOrEmail);
+                u.email == login.UsernameOrEmail); //||
+                //u.username == login.UsernameOrEmail);
 
         if (user == null)
         {

@@ -353,7 +353,7 @@ ViewData["Title"] = "Home";
 
                     Monthly Budget:
 
-                    <strong id="budgetLimit">
+                    <strong id="budgetlimits">
                         $0
                     </strong>
 
@@ -363,7 +363,7 @@ ViewData["Title"] = "Home";
 
                 <p>
 
-                    Amount Used:
+                    amount Used:
 
                     <strong id="budgetUsed">
                         $0
@@ -384,6 +384,17 @@ ViewData["Title"] = "Home";
 
                 </p>
 
+                
+                <p>
+
+                    Percentage:
+
+                    <strong class="text-success"
+                            id="budgetPercentage">
+                        $0
+                    </strong>
+
+                </p>
 
             </div>
 
@@ -414,7 +425,7 @@ ViewData["Title"] = "Home";
 
                 <p>
 
-                    Goal Amount:
+                    Goal amount:
 
                     <strong id="savingGoal">
                         $0
@@ -434,7 +445,24 @@ ViewData["Title"] = "Home";
                     </strong>
 
                 </p>
+                <p>
+                    Remaining:
 
+                    <strong class="text-danger"
+                            id="savingRemaining">
+                        $0
+                    </strong>
+                </p>
+
+
+                <p>
+                    Progress:
+
+                    <strong class="text-success"
+                            id="savingProgress">
+                        0%
+                    </strong>
+                </p>
 
             </div>
 
@@ -466,13 +494,13 @@ ViewData["Title"] = "Home";
 
                 <tr>
 
-                    <th>Date</th>
+                    <th>date</th>
 
                     <th>Category</th>
 
                     <th>Type</th>
 
-                    <th>Amount</th>
+                    <th>amount</th>
 
                 </tr>
 
@@ -524,8 +552,8 @@ ViewData["Title"] = "Home";
             document.getElementById("balance").innerHTML =
                 "$" + data.balance;
 
-            document.getElementById("budgetLimit").innerHTML =
-                "$" + data.budget.monthlyLimit;
+            document.getElementById("budgetlimits").innerHTML =
+                "$" + data.budget.monthlylimits;
 
 
             document.getElementById("budgetUsed").innerHTML =
@@ -535,7 +563,8 @@ ViewData["Title"] = "Home";
             document.getElementById("budgetRemaining").innerHTML =
                 "$" + data.budget.remaining;
 
-
+                  document.getElementById("budgetPercentage").innerHTML =
+                 + data.budget.usagePercentage + "%";
 
             document.getElementById("savingGoal").innerHTML =
                 "$" + data.savingsGoal.goal;
@@ -543,6 +572,12 @@ ViewData["Title"] = "Home";
 
             document.getElementById("savingCurrent").innerHTML =
                 "$" + data.savingsGoal.current;
+
+                 document.getElementById("savingRemaining").innerHTML =
+                "$" + data.savingsGoal.remaining;
+
+                 document.getElementById("savingProgress").innerHTML =
+                "$" + data.savingsGoal.progress;
 
             let rows = "";
 

@@ -3,92 +3,115 @@ using financetrackerAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace financetrackerAPI.Controllers;
-
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 
-public class BudgetController : ControllerBase {
+public class BudgetController : ControllerBase
+{
     private readonly AppDbContext _context;
 
-    public BudgetController(AppDbContext context) {
+    public BudgetController(AppDbContext context)
+    {
         _context = context;
     }
 
-    // Create Budget
-    
-    [HttpPost]
-    public async Task<IActionResult> Create(Budget budget) {
-        var userID = int.Parse(User.FindFirst("id").Value);
 
-        budget.userID = userID;
+    // GET: api/Budget
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        var userID = int.Parse(
+            User.FindFirst("id")!.Value
+        );
+
+
+        var budgets = _context.Budgets
+            .Where(b => b.userID == userID)
+            .ToList();
+
+
+        return Ok(budgets);
+    }
+
+
+
+    // GET: api/Budget/5
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        var userID = int.Parse(
+            User.FindFirst("id")!.Value
+        );
+
+
+        var budget = _context.Budgets
+            .FirstOrDefault(b =>
+                b.budgetID == id &&
+                b.userID == userID
+            );
+
+
+        if (budget == null)
+        {
+            return NotFound();
+        }
+
+
+        return Ok(budget);
+    }
+
+
+
+    // POST: api/Budget
+    [HttpPost]
+    public async Task<IActionResult> Create(Budget budget)
+    {
+      
+
+        budget.userID = 1;
+        budget.date = DateTime.Now;
+
 
         _context.Budgets.Add(budget);
 
         await _context.SaveChangesAsync();
 
-        return Ok(budget);
-    }
-
-    // Get All User Budgets
-    
-    [HttpGet]
-    public IActionResult GetAll() {
-        var userID = int.Parse(User.FindFirst("id").Value);
-
-        var budget = _context.Budgets
-            .Where(t => t.userID == userID)
-            .ToList();
 
         return Ok(budget);
     }
 
-    // Get Single Budget
-
-    [HttpGet("{id}")]
-    public IActionResult GetById(int id) {
-        var userID = int.Parse(User.FindFirst("id").Value);
-
-        var budget = _context.Budgets
-            .FirstOrDefault(t =>
-                t.budgetID == id &&
-                t.userID == userID);
 
 
-        if (budget == null) {
-            return NotFound("Budget not found");
-        }
-
-
-        return Ok(budget);
-    }
-
-    // Update Budget
-   
+    // PUT: api/Budget/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Budget updatedBudget) {
-        var userID = int.Parse(User.FindFirst("id").Value);
+    public async Task<IActionResult> Update(
+        int id,
+        Budget updatedBudget)
+    {
+
+        var userID = int.Parse(
+            User.FindFirst("id")!.Value
+        );
 
 
         var budget = _context.Budgets
-            .FirstOrDefault(t =>
-                t.budgetID == id &&
-                t.userID == userID);
+            .FirstOrDefault(b =>
+                b.budgetID == id &&
+                b.userID == userID
+            );
 
 
-        if (budget == null) {
-            return NotFound("Budget not found");
+        if (budget == null)
+        {
+            return NotFound();
         }
 
 
-        budget.Limit = updatedBudget.Limit;
-
-        budget.budgetID = updatedBudget.budgetID;
-
-        budget.Date = updatedBudget.Date;
+        budget.username = updatedBudget.username;
+        budget.limits = updatedBudget.limits;
 
 
         await _context.SaveChangesAsync();
@@ -97,21 +120,28 @@ public class BudgetController : ControllerBase {
         return Ok(budget);
     }
 
-    // Delete Budget
 
+
+    // DELETE: api/Budget/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id) {
-        var userID = int.Parse(User.FindFirst("id").Value);
+    public async Task<IActionResult> Delete(int id)
+    {
+
+        var userID = int.Parse(
+            User.FindFirst("id")!.Value
+        );
 
 
         var budget = _context.Budgets
-            .FirstOrDefault(t =>
-                t.budgetID == id &&
-                t.userID == userID);
+            .FirstOrDefault(b =>
+                b.budgetID == id &&
+                b.userID == userID
+            );
 
 
-        if (budget == null) {
-            return NotFound("Budget not found");
+        if (budget == null)
+        {
+            return NotFound();
         }
 
 
@@ -120,6 +150,6 @@ public class BudgetController : ControllerBase {
         await _context.SaveChangesAsync();
 
 
-        return Ok("Budget deleted");
+        return Ok();
     }
 }
