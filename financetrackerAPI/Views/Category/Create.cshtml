@@ -1,7 +1,15 @@
-﻿<div class="container">
+﻿
+@{
+    ViewData["Title"] = "Add Category";
+}
+
+<div class="container mt-4">
+
     <div class="row justify-content-center">
+
         <div class="col-md-6">
-            <div class="card shadow p-4">
+
+            <div class="card shadow border-0 p-4">
 
                 <h2 class="mb-4">
                     <i class="bi bi-plus-circle-fill me-2"></i>
@@ -9,80 +17,188 @@
                 </h2>
 
                 <div class="mb-3">
-                    <label class="form-label">Category Name</label>
-                    <input id="name" type="text" class="form-control" placeholder="e.g. Groceries" />
+
+                    <label class="form-label">
+                        Category Name
+                    </label>
+
+                    <input id="name"
+                           type="text"
+                           class="form-control"
+                           placeholder="e.g. Groceries" />
+
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Type</label>
-                    <select id="type" class="form-select">
-                        <option value="Expense">Expense</option>
-                        <option value="Income">Income</option>
+
+                    <label class="form-label">
+                        Type
+                    </label>
+
+                    <select id="type"
+                            class="form-select">
+
+                        <option value="Expense">
+                            Expense
+                        </option>
+
+                        <option value="Income">
+                            Income
+                        </option>
+
                     </select>
+
                 </div>
 
-                <div id="createError" class="alert alert-danger" style="display:none;"></div>
+                <div id="createError"
+                     class="alert alert-danger"
+                     style="display:none;">
+                </div>
 
                 <div class="d-flex gap-2">
-                    <button class="btn btn-success" onclick="createCategory()">
+
+                    <button class="btn btn-success"
+                            onclick="createCategory()">
+
                         <i class="bi bi-check-circle me-1"></i>
                         Save
+
                     </button>
 
-                    <a asp-controller="CategoryPage" asp-action="Index" class="btn btn-secondary">
+                    <a asp-controller="CategoryPage"
+                       asp-action="Index"
+                       class="btn btn-secondary">
+
                         <i class="bi bi-arrow-left-circle me-1"></i>
                         Back
+
                     </a>
+
                 </div>
 
             </div>
+
         </div>
+
     </div>
+
 </div>
 
-
 @section Scripts {
+
     <script>
 
-        const token = localStorage.getItem("token");
-
         function showError(message) {
+
             const box = document.getElementById("createError");
+
             box.innerText = message;
+
             box.style.display = "block";
         }
 
+
         async function createCategory() {
 
-            const name = document.getElementById("name").value.trim();
-            const type = document.getElementById("type").value;
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+
+                showError("You are not logged in. Please log in again.");
+
+                return;
+            }
+
+
+            const name =
+                document.getElementById("name").value.trim();
+
+            const type =
+                document.getElementById("type").value;
+
 
             if (!name) {
+
                 showError("Please enter a category name.");
+
                 return;
             }
 
-            const category = { name: name, type: type };
 
-            const categoryResponse = await fetch("/api/Category", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + token
-                },
-                body: JSON.stringify(category)
-            });
+            const category = {
+                name: name,
+                type: type
+            };
 
-            if (!categoryResponse.ok) {
-                showError("Unable to create category.");
-                return;
+
+            try {
+
+                const categoryResponse = await fetch(
+                    "/api/Category",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + token
+                        },
+
+                        body: JSON.stringify(category)
+                    }
+                );
+
+
+                if (!categoryResponse.ok) {
+
+                    const errorText =
+                        await categoryResponse.text();
+
+                    console.log(
+                        "Category API Error:",
+                        categoryResponse.status,
+                        errorText
+                    );
+
+                    showError(
+                        "Error " +
+                        categoryResponse.status +
+                        ": " +
+                        errorText
+                    );
+
+                    return;
+                }
+
+
+                const createdCategory =
+                    await categoryResponse.json();
+
+
+                console.log(
+                    "Category created:",
+                    createdCategory
+                );
+
+
+                window.location.href =
+                    "/CategoryPage";
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Request failed:",
+                    error
+                );
+
+                showError(
+                    "Unable to connect to the server: " +
+                    error.message
+                );
             }
 
-            const createdCategory = await categoryResponse.json();
-
-            window.location.href = "/CategoryPage";
-            return;
         }
 
     </script>
+
 }
