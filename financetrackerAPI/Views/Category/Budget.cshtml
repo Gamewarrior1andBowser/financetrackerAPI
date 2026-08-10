@@ -7,7 +7,7 @@
         <div class="col-md-6">
             <div class="card shadow p-4" id="budgetCard">
                 <h2 id="budgetName" class="mb-4"></h2>
-                <p><strong>Created:</strong> <span id="budgetDate"></span></p>
+                <p><strong>Created:</strong> <span id="budgetdate"></span></p>
                 <p><strong>limits:</strong> <span id="budgetlimits"></span></p>
                 <a asp-controller="CategoryPage" asp-action="Index" class="btn btn-secondary mt-3">
                     <i class="bi bi-arrow-left-circle me-1"></i> Back
@@ -44,7 +44,7 @@
             }
 
             document.getElementById("budgetName").textContent = category.name + " Budget";
-            document.getElementById("budgetDate").textContent = new Date(budget.date).toLocaleDateString();
+            document.getElementById("budgetdate").textContent = new date(budget.date).toLocaledateString();
             document.getElementById("budgetlimits").textContent = budget.limit;
         }
 

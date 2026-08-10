@@ -30,7 +30,7 @@ namespace financetrackerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("budgetID"));
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("limits")
@@ -82,11 +82,11 @@ namespace financetrackerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
 
-                    b.Property<decimal>("Amount")
+                    b.Property<decimal>("amount")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("categoryID")

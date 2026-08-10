@@ -13,6 +13,6 @@ namespace financetrackerAPI.Models
 
         public decimal limits { get; set; }
 
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime date { get; set; } = DateTime.Now;
     }
 }

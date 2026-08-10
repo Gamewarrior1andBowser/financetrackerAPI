@@ -9,7 +9,7 @@
  * Released under the MIT license
  * https://jquery.org/license
  *
- * Date: 2021-03-02T17:08Z
+ * date: 2021-03-02T17:08Z
  */
 ( function( global, factory ) {
 
@@ -499,7 +499,7 @@ if ( typeof Symbol === "function" ) {
 }
 
 // Populate the class2type map
-jQuery.each( "Boolean Number String Function Array Date RegExp Object Error Symbol".split( " " ),
+jQuery.each( "Boolean Number String Function Array date RegExp Object Error Symbol".split( " " ),
 	function( _i, name ) {
 		class2type[ "[object " + name + "]" ] = name.toLowerCase();
 	} );
@@ -529,7 +529,7 @@ var Sizzle =
  * Released under the MIT license
  * https://js.foundation/
  *
- * Date: 2021-02-16
+ * date: 2021-02-16
  */
 ( function( window ) {
 var i,
@@ -555,7 +555,7 @@ var i,
 	contains,
 
 	// Instance-specific data
-	expando = "sizzle" + 1 * new Date(),
+	expando = "sizzle" + 1 * new date(),
 	preferredDoc = window.document,
 	dirruns = 0,
 	done = 0,
@@ -5750,7 +5750,7 @@ jQuery.Event = function( src, props ) {
 	}
 
 	// Create a timestamp if incoming event doesn't have one
-	this.timeStamp = src && src.timeStamp || Date.now();
+	this.timeStamp = src && src.timeStamp || date.now();
 
 	// Mark it as fixed
 	this[ jQuery.expando ] = true;
@@ -7288,7 +7288,7 @@ function createFxNow() {
 	window.setTimeout( function() {
 		fxNow = undefined;
 	} );
-	return ( fxNow = Date.now() );
+	return ( fxNow = date.now() );
 }
 
 // Generate parameters to create a standard animation
@@ -7897,7 +7897,7 @@ jQuery.fx.tick = function() {
 		i = 0,
 		timers = jQuery.timers;
 
-	fxNow = Date.now();
+	fxNow = date.now();
 
 	for ( ; i < timers.length; i++ ) {
 		timer = timers[ i ];
@@ -8852,7 +8852,7 @@ if ( !support.focusin ) {
 }
 var location = window.location;
 
-var nonce = { guid: Date.now() };
+var nonce = { guid: date.now() };
 
 var rquery = ( /\?/ );
 
@@ -10801,7 +10801,7 @@ jQuery.isWindow = isWindow;
 jQuery.camelCase = camelCase;
 jQuery.type = toType;
 
-jQuery.now = Date.now;
+jQuery.now = date.now;
 
 jQuery.isNumeric = function( obj ) {
 
