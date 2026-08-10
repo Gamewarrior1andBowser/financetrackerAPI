@@ -30,8 +30,8 @@
                         <dt class="col-sm-4">Total Spent</dt>
                         <dd class="col-sm-8" id="txTotal"></dd>
 
-                        <dt class="col-sm-4">Budget Limit</dt>
-                        <dd class="col-sm-8" id="budgetLimit"></dd>
+                        <dt class="col-sm-4">Budget limits</dt>
+                        <dd class="col-sm-8" id="budgetlimits"></dd>
                     </dl>
 
                     <label class="form-label fw-bold">Budget Used</label>
@@ -134,7 +134,7 @@ async function loadDetails() {
 
     document.getElementById("txCount").innerText = categoryTransactions.length;
     document.getElementById("txTotal").innerText = "$" + totalSpent.toFixed(2);
-    document.getElementById("budgetLimit").innerText = budget ? "$" + limit.toFixed(2) : "No budget found";
+    document.getElementById("budgetlimits").innerText = budget ? "$" + limit.toFixed(2) : "No budget found";
 
     const bar = document.getElementById("progressBar");
     const barWidth = Math.min(percent, 100);
