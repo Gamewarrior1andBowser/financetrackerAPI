@@ -47,7 +47,7 @@ namespace financetrackerAPI.Migrations
 
                     b.HasIndex("categoryID");
 
-                    b.ToTable("Budget");
+                    b.ToTable("Budget", (string)null);
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Category", b =>
@@ -71,7 +71,7 @@ namespace financetrackerAPI.Migrations
 
                     b.HasKey("categoryID");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
@@ -99,7 +99,7 @@ namespace financetrackerAPI.Migrations
 
                     b.HasIndex("categoryID");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.User", b =>
@@ -123,7 +123,7 @@ namespace financetrackerAPI.Migrations
 
                     b.HasKey("userID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>
