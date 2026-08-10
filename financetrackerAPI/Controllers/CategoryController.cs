@@ -24,7 +24,7 @@ public class CategoryController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(Category category)
     {
-        var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        var userClaim = User.FindFirst("id");
 
         if (userClaim == null)
         {
@@ -56,7 +56,7 @@ public class CategoryController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        var userClaim = User.FindFirst("id");
 
         if (userClaim == null)
         {
@@ -76,7 +76,7 @@ public class CategoryController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        var userClaim = User.FindFirst("id");
 
         if (userClaim == null)
         {
@@ -104,7 +104,7 @@ public class CategoryController : ControllerBase
         int id,
         Category updatedCategory)
     {
-        var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        var userClaim = User.FindFirst("id");
 
         if (userClaim == null)
         {
@@ -135,7 +135,7 @@ public class CategoryController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        var userClaim = User.FindFirst("id");
 
         if (userClaim == null)
         {
