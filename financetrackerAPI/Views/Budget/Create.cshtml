@@ -108,8 +108,9 @@
 
             if (!name) {
 
-                showError("Please enter a budget name.");
-                return;
+            
+            let valid = true;
+            [nameInput, limitInput].forEach(input => input.classList.remove('is-invalid'));
 
             }
 
@@ -158,24 +159,13 @@
 
                     showError("Unable to create budget.");
 
-                    return;
+                
+                setTimeout(() => {
+                    window.location.href = '@Url.Action("Index", "BudgetPage")';
+                }, 1200);
 
                 }
 
 
                 window.location.href = "/BudgetPage";
 
-            }
-            catch (error) {
-
-                console.error(error);
-
-                showError("Something went wrong. Please try again.");
-
-            }
-
-        });
-
-    </script>
-
-}
