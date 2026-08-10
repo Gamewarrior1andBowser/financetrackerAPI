@@ -263,6 +263,7 @@ async function register()
 
         body:JSON.stringify(
         {
+             username: username,
 
             email: email,
 
@@ -282,6 +283,7 @@ async function register()
     if(!response.ok)
     {
 
+        console.log("Registration failed:", data); alert(data.message || "Registration failed."); 
         return;
 
     }

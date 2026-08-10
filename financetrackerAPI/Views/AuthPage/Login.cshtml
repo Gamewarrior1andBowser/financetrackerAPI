@@ -192,10 +192,11 @@
 
 @section Scripts {
 
-
     <script>
-    async function login() {
-            const usernameOrEmail = document.getElementById("usernameOrEmail").value;
+
+        async function login() {
+
+            const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
             const response = await fetch("/api/Auth/login", {
@@ -204,25 +205,28 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    usernameOrEmail: usernameOrEmail,
+                    usernameOrEmail: email,
                     password: password
-            })
-        });
-        const data = await response.json();
-        if(response.ok){
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+
+                alert(data);
+
+                return;
+            }
+
             localStorage.setItem("token", data.token);
+
             window.location.href = "/Dashboard";
-
-
         }
-
-
 
     </script>
 
-
-
     <script src="~/js/authGuard.js"></script>
 
-
 }
+
