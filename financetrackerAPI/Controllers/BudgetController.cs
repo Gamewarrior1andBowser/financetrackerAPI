@@ -72,7 +72,7 @@ public class BudgetController : ControllerBase
       
 
         budget.userID = 1;
-        budget.Date = DateTime.Now;
+        budget.date = DateTime.Now;
 
 
         _context.Budgets.Add(budget);

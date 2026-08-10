@@ -41,7 +41,7 @@ public class AppDbContext : DbContext
 
 
         modelBuilder.Entity<Transaction>()
-            .Property(t => t.Amount)
+            .Property(t => t.amount)
             .HasPrecision(10, 2);
 
     }

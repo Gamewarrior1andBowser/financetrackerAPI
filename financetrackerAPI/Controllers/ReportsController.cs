@@ -34,14 +34,14 @@ namespace financetrackerAPI.Controllers
             var income = _context.Transactions
                 .Include(t => t.Category)
                 .Where(t => t.Category.Type == "Income")
-                .Sum(t => t.Amount);
+                .Sum(t => t.amount);
 
 
 
             var expenses = _context.Transactions
                 .Include(t => t.Category)
                 .Where(t => t.Category.Type == "Expense")
-                .Sum(t => t.Amount);
+                .Sum(t => t.amount);
 
 
 
@@ -55,7 +55,7 @@ namespace financetrackerAPI.Controllers
                 {
                     category = c.Key,
 
-                    amount = c.Sum(x => x.Amount)
+                    amount = c.Sum(x => x.amount)
                 })
                 .ToList();
 

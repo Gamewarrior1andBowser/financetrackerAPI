@@ -1447,7 +1447,7 @@ $.extend( $.validator, {
 					if ( this.settings.debug && window.console ) {
 						console.warn(
 							"The `date` method is deprecated and will be removed in version '2.0.0'.\n" +
-							"Please don't use it, since it relies on the Date constructor, which\n" +
+							"Please don't use it, since it relies on the date constructor, which\n" +
 							"behaves very differently across browsers and locales. Use `dateISO`\n" +
 							"instead or one of the locale specific methods in `localizations/`\n" +
 							"and `additional-methods.js`."
@@ -1455,7 +1455,7 @@ $.extend( $.validator, {
 					}
 				}
 
-				return this.optional( element ) || !/Invalid|NaN/.test( new Date( value ).toString() );
+				return this.optional( element ) || !/Invalid|NaN/.test( new date( value ).toString() );
 			};
 		}() ),
 
