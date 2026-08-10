@@ -31,13 +31,13 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
 
-
+        /*
         modelBuilder.Entity<Transaction>()
             .HasOne(t => t.Category)
-            .WithMany(c => c.Transactions)
+            .WithMany(c => c.categoryID)
             .HasForeignKey(t => t.categoryID)
             .OnDelete(DeleteBehavior.Cascade);
-
+        */
 
 
         modelBuilder.Entity<Transaction>()
