@@ -33,21 +33,19 @@ namespace financetrackerAPI.Migrations
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("limits")
-                        .HasColumnType("int")
-                        .HasColumnName("limits");
-
-                    b.Property<int>("categoryID")
-                        .HasColumnType("int");
+                    b.Property<decimal>("limits")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
+                    b.Property<string>("username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("budgetID");
 
-                    b.HasIndex("categoryID");
-
-                    b.ToTable("Budget", (string)null);
+                    b.ToTable("Budget");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Category", b =>
@@ -71,7 +69,7 @@ namespace financetrackerAPI.Migrations
 
                     b.HasKey("categoryID");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
@@ -82,15 +80,15 @@ namespace financetrackerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
 
-                    b.Property<decimal>("amount")
+                    b.Property<int>("amount")
                         .HasPrecision(10, 2)
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("int");
 
                     b.Property<int>("categoryID")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
@@ -99,7 +97,7 @@ namespace financetrackerAPI.Migrations
 
                     b.HasIndex("categoryID");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.User", b =>
@@ -121,36 +119,24 @@ namespace financetrackerAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("userID");
 
-                    b.ToTable("Users", (string)null);
-                });
-
-            modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>
-                {
-                    b.HasOne("financetrackerAPI.Models.Category", "categories")
-                        .WithMany()
-                        .HasForeignKey("categoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("categories");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
                 {
                     b.HasOne("financetrackerAPI.Models.Category", "Category")
-                        .WithMany("Transactions")
+                        .WithMany()
                         .HasForeignKey("categoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("financetrackerAPI.Models.Category", b =>
-                {
-                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }
