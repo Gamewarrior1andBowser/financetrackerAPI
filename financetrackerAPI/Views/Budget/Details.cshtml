@@ -30,15 +30,15 @@ Budget Details
 
 
     <p>
-        <strong>Limit:</strong>
-        $<span id="budgetLimit"></span>
+        <strong>limits:</strong>
+        $<span id="budgetlimits"></span>
     </p>
 
 
 
     <p>
-        <strong>Date Created:</strong>
-        <span id="budgetDate"></span>
+        <strong>date Created:</strong>
+        <span id="budgetdate"></span>
     </p>
 
 
@@ -94,15 +94,15 @@ async function loadBudget(){
 
 
 
-        document.getElementById("budgetLimit")
+        document.getElementById("budgetlimits")
         .innerText = budget.limit;
 
 
 
-        document.getElementById("budgetDate")
+        document.getElementById("budgetdate")
         .innerText =
-        new Date(budget.date)
-        .toLocaleDateString();
+        new date(budget.date)
+        .toLocaledateString();
 
 
 

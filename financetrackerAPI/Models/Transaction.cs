@@ -7,7 +7,7 @@ namespace financetrackerAPI.Models
         [Key]
         public int transactionsID { get; set; }
 
-        public decimal Amount { get; set; }
+        public int amount { get; set; }
 
         public int userID { get; set; }
 
@@ -15,6 +15,6 @@ namespace financetrackerAPI.Models
 
         public Category? Category { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime date { get; set; }
     }
 }

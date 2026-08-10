@@ -353,7 +353,7 @@ ViewData["Title"] = "Home";
 
                     Monthly Budget:
 
-                    <strong id="budgetLimit">
+                    <strong id="budgetlimits">
                         $0
                     </strong>
 
@@ -363,7 +363,7 @@ ViewData["Title"] = "Home";
 
                 <p>
 
-                    Amount Used:
+                    amount Used:
 
                     <strong id="budgetUsed">
                         $0
@@ -425,7 +425,7 @@ ViewData["Title"] = "Home";
 
                 <p>
 
-                    Goal Amount:
+                    Goal amount:
 
                     <strong id="savingGoal">
                         $0
@@ -494,13 +494,13 @@ ViewData["Title"] = "Home";
 
                 <tr>
 
-                    <th>Date</th>
+                    <th>date</th>
 
                     <th>Category</th>
 
                     <th>Type</th>
 
-                    <th>Amount</th>
+                    <th>amount</th>
 
                 </tr>
 
@@ -552,8 +552,8 @@ ViewData["Title"] = "Home";
             document.getElementById("balance").innerHTML =
                 "$" + data.balance;
 
-            document.getElementById("budgetLimit").innerHTML =
-                "$" + data.budget.monthlyLimit;
+            document.getElementById("budgetlimits").innerHTML =
+                "$" + data.budget.monthlylimits;
 
 
             document.getElementById("budgetUsed").innerHTML =

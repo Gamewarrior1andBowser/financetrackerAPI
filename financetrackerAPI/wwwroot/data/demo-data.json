@@ -4,7 +4,7 @@
   "balance": 2575,
 
   "budget": {
-    "monthlyLimit": 4000,
+    "monthlylimits": 4000,
     "used": 3275,
     "remaining": 725,
     "usagePercentage": 82
