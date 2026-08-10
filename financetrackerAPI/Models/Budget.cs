@@ -9,9 +9,9 @@ namespace financetrackerAPI.Models
 
         public int userID { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+        public string username { get; set; } = string.Empty;
 
-        public decimal Limit { get; set; }
+        public decimal limits { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
     }
