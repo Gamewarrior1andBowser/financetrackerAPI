@@ -165,10 +165,10 @@
 
 const token = localStorage.getItem("token");
 
-    <script>
+    
 
 
-        const token = localStorage.getItem("token");
+   
 
 
 
@@ -347,60 +347,13 @@ async function getBudgetStatus(categoryID, excludeTransactionID) {
 
 
 
-    </script>
+
+   
 
 
     <script src="~/js/authGuard.js"></script>
 
-async function createTransaction() {
 
-    hideBudgetPopup();
-
-    const categoryID = Number(document.getElementById("categoryID").value);
-    const amount = Number(document.getElementById("amount").value);
-
-    if (!categoryID) {
-        showBudgetPopup("Please create a category first.");
-        return;
-    }
-
-    if (!amount || amount <= 0) {
-        showBudgetPopup("Please enter an amount greater than 0.");
-        return;
-    }
-
-    const status = await getBudgetStatus(categoryID, null);
-
-    if (status.hasBudget && amount > status.remaining) {
-        showBudgetPopup(
-            "This transaction cannot go through because it would put this category over its budget. " +
-            "Please enter an amount less than or equal to $" + Math.max(status.remaining, 0).toFixed(2) + "."
-        );
-        return;
-    }
-
-    const transaction = {
-        amount: amount,
-        categoryID: categoryID,
-        date: document.getElementById("date").value
-    };
-
-    const response = await fetch("/api/Transactions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        body: JSON.stringify(transaction)
-    });
-
-    if (response.ok) {
-        window.location.href = "/TransactionPage";
-    } else {
-        const error = await response.text();
-        showBudgetPopup(error || "Unable to create transaction.");
-    }
-}
 
 </script>
 }
