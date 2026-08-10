@@ -60,7 +60,7 @@
             const submitBtn = document.getElementById('submitBtn');
             const spinner = document.getElementById('submitSpinner');
 
-            // Basic validation
+            
             let valid = true;
             [nameInput, limitInput].forEach(input => input.classList.remove('is-invalid'));
 
@@ -107,7 +107,7 @@
 
                 document.getElementById('createBudgetForm').reset();
 
-                // Optional: redirect back to budget list after a short delay
+                
                 setTimeout(() => {
                     window.location.href = '@Url.Action("Index", "BudgetPage")';
                 }, 1200);
@@ -128,42 +128,3 @@
 
 
 
-@*    
-@{
-    ViewData["Title"] = "Create Budget";
-}
-
-
-<div class="container py-5"> 
-    <div class="card shadow-lg p-5 mx-auto" style="max-width: 1100px;">
-        <div class="card-header"><h2 class="mb-4 text-center display-2">Create Budget</h2></div> 
-        <form>
-            <div class=" mb-3">
-                <div class="mb-4">
-                    <label for="budgetName" class="form-label  fs-3">Budget Name</label> 
-                    <input type="text" class="form-control" id="budgetName" placeholder="Type Name"> 
-                </div>
-                <div class="mb-4">
-                    <label for="budgetLimit" class="form-label fs-3">Budget Limit</label> 
-                    <input type="text" class="form-control" id="budgetLimit" placeholder="Insert figure"> 
-                </div>
-            </div>
-            <div class="d-grid gap-2 mb-4">
-                <button type="submit" class="btn btn-lg btn-success">Submit</button> 
-                <button type="reset" class="btn btn-outline-warning">Clear</button>  
-            </div>
-        </form>
-        <p class="text-center">
-            <a asp-controller="BudgetPage"
-               asp-action="Index">
-                <i class="bi bi-arrow-left-circle"></i> Back to Budget
-            </a>
-        </p>
-    </div> *@
-
-
-
-
-
-
-@**@
