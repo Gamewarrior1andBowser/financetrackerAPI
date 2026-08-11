@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Register";
 }
  
@@ -41,11 +41,11 @@
                    type="email"
                    class="form-control"
                    placeholder="Enter your email" />
-</div>
- 
+        </div>
+
         <div class="mb-3 position-relative">
-<label class="form-label">
-<i class="bi bi-lock-fill me-2"></i>
+            <label class="form-label">
+                <i class="bi bi-lock-fill me-2"></i>
                 Password
 </label>
 <input id="password"
@@ -53,17 +53,17 @@
                    class="form-control"
                    placeholder="Create your password"
                    oninput="checkPasswordStrength(); checkPasswordMatch();" />
- 
+
             <div id="passwordHint" class="form-text">
                 Create a password with a strong mix of figures.
-</div>
- 
+            </div>
+
             <div id="passwordStrengthError" class="form-text text-danger d-none">
-<i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
                 Please choose a stronger password. Try a mix of letters, numbers, and symbols.
-</div>
-</div>
- 
+            </div>
+        </div>
+
         <div class="mb-4 position-relative">
 <label class="form-label">
 <i class="bi bi-lock-fill me-2"></i>
@@ -114,31 +114,36 @@
  
 @section Scripts {
     <script>
+        // Returns true if the password fails our strength rules:
+        // - must be at least 8 characters
+        // - must not consist of a single character repeated throughout
         function isWeakPassword(password) {
             if (password.length < 8) {
                 return true;
             }
- 
+
             const allSameChar = password.split("").every(ch => ch === password[0]);
             if (allSameChar) {
                 return true;
             }
- 
+
             return false;
         }
- 
- 
+
+        // Anchored strictly under #password: toggles between the persistent
+        // hint text and the strength error message as the user types.
         function checkPasswordStrength() {
             const password = document.getElementById("password").value;
             const defaultHint = document.getElementById("passwordHint");
             const strengthError = document.getElementById("passwordStrengthError");
- 
+
             if (password.length === 0) {
+                // Nothing typed yet: show the default hint only
                 defaultHint.classList.remove("d-none");
                 strengthError.classList.add("d-none");
                 return;
             }
- 
+
             if (isWeakPassword(password)) {
                 defaultHint.classList.add("d-none");
                 strengthError.classList.remove("d-none");
@@ -147,13 +152,13 @@
                 strengthError.classList.add("d-none");
             }
         }
- 
-   
+
+        // Anchored strictly under #confirmPassword: unchanged mismatch popup logic.
         function checkPasswordMatch() {
             const password = document.getElementById("password").value;
             const confirmPassword = document.getElementById("confirmPassword").value;
             const popup = document.getElementById("passwordMismatch");
- 
+
             if (confirmPassword.length > 0 && password !== confirmPassword) {
                 popup.classList.add("show");
             } else {
@@ -166,17 +171,18 @@
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
             const confirmPassword = document.getElementById("confirmPassword").value;
- 
- 
+
+            // Re-run both validators so any un-triggered state (e.g. user
+            // clicked Register without ever typing in a field) still shows.
             checkPasswordStrength();
             checkPasswordMatch();
- 
+
             if (isWeakPassword(password)) {
-                return; 
+                return; // blocked client-side; error already visible under Password
             }
- 
+
             if (password !== confirmPassword) {
-                return; 
+                return; // blocked client-side; mismatch popup already visible
             }
  
             const response = await fetch("/api/Auth/register", {
@@ -191,7 +197,7 @@
                     password
                 })
             });
- 
+
             if (response.ok) {
                 window.location.href = "/AuthPage/Login";
             } else {
@@ -200,4 +206,5 @@
             }
         }
     </script>
+
 }
