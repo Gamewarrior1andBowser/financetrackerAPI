@@ -2,7 +2,7 @@ namespace financetrackerAPI
 {
     public class WeatherForecast
     {
-        public DateOnly Date { get; set; }
+        public DateOnly date { get; set; }
 
         public int TemperatureC { get; set; }
 

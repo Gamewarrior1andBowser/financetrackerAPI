@@ -1,12 +1,13 @@
 ﻿using financetrackerAPI.Data;
 using financetrackerAPI.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 
 
 namespace financetrackerAPI.Controllers;
@@ -37,9 +38,6 @@ public class AuthController : ControllerBase
         }
         else if (string.IsNullOrWhiteSpace(user.password)) {
             return BadRequest("Password is required");
-        }
-        else if (string.IsNullOrWhiteSpace(user.username)) {
-            return BadRequest("Username is required");
         }
 
         user.email = user.email.ToLower().Trim();
@@ -76,15 +74,16 @@ public class AuthController : ControllerBase
 
 
     [HttpPost("login")]
-    public IActionResult Login(User login)
+    public IActionResult Login(UserLoginRequest login)
     {
-        var user = _context.Users
-            .FirstOrDefault(u => u.email == login.email);
-
+        User user = _context.Users
+            .FirstOrDefault(u =>
+                u.email == login.UsernameOrEmail); //||
+                //u.username == login.UsernameOrEmail);
 
         if (user == null)
         {
-            return Unauthorized("This account doesn't existy");
+            return Unauthorized("This account doesn't exist");
         }
 
 
@@ -97,7 +96,7 @@ public class AuthController : ControllerBase
 
         if (!validPassword)
         {
-            return Unauthorized("Invalid email or password");
+            return Unauthorized("Invalid username/email or password");
         }
 
 
@@ -125,8 +124,7 @@ public class AuthController : ControllerBase
 
         var claims = new[]
         {
-            new Claim("id", user.userID.ToString()),
-        new Claim(ClaimTypes.NameIdentifier, user.userID.ToString())
+         new Claim("id", user.userID.ToString())
     };
 
         var token = new JwtSecurityToken(
