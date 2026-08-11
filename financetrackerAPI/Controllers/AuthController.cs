@@ -125,6 +125,7 @@ public class AuthController : ControllerBase
         var claims = new[]
         {
          new Claim("id", user.userID.ToString())
+         //new Claim("name", user.email) 
     };
 
         var token = new JwtSecurityToken(
