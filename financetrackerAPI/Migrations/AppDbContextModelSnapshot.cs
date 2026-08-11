@@ -33,8 +33,8 @@ namespace financetrackerAPI.Migrations
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("limits")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("limits")
+                        .HasColumnType("int");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");

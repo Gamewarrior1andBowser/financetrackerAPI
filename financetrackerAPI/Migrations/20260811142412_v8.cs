@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace financetrackerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class v7 : Migration
+    public partial class v8 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,7 @@ namespace financetrackerAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     userID = table.Column<int>(type: "int", nullable: false),
                     username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    limits = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    limits = table.Column<int>(type: "int", nullable: false),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
