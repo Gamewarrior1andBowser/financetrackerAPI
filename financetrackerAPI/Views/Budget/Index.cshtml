@@ -4,262 +4,71 @@
 
 <div class="budget-page">
 
-    <!-- Page Header -->
     <div class="budget-header">
         <div>
-            <p class="budget-subtitle">Personal Finance</p>
-
             <h1 class="budget-title">
-                Budget Tracker
+                <i class="bi bi-piggy-bank-fill"></i>
+                Budgets
             </h1>
-
             <p class="budget-description">
-                Manage your budgets, spending limits, and financial goals.
+                Manage your spending limits and stay on track.
             </p>
         </div>
 
-        <a asp-controller="BudgetPage"
-           asp-action="Create"
-           class="btn btn-primary budget-add-btn">
-
-            <i class="bi bi-plus-circle me-2"></i>
+        <button type="button"
+                class="budget-add-btn"
+                onclick="showCreatePanel()">
+            <i class="bi bi-plus-lg"></i>
             Add Budget
-
-        </a>
+        </button>
     </div>
 
+    <div class="budget-content">
 
-    <!-- Main Layout -->
-    <div class="budget-layout">
+        <main class="budget-main">
 
-        <!-- LEFT SIDEBAR -->
-        <aside class="budget-sidebar">
+            <div id="budgetList" class="budget-grid"></div>
 
-            <div class="sidebar-section">
-
-                <h6 class="sidebar-title">
-                    Budget Categories
-                </h6>
-
-                <div class="budget-category-list">
-
-                    <button class="budget-category active"
-                            onclick="showAllBudgets()">
-
-                        <i class="bi bi-grid-fill"></i>
-
-                        <span>All Budgets</span>
-
-                    </button>
-
-                    <button class="budget-category"
-                            onclick="filterBudgets('active')">
-
-                        <i class="bi bi-check-circle"></i>
-
-                        <span>Active</span>
-
-                    </button>
-
-                    <button class="budget-category"
-                            onclick="filterBudgets('recent')">
-
-                        <i class="bi bi-calendar3"></i>
-
-                        <span>Recently Added</span>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- QUICK LINKS -->
-            <div class="sidebar-section">
-
-                <h6 class="sidebar-title">
-                    Quick Links
-                </h6>
-
-                <div class="quick-links">
-
-                    <a asp-controller="Dashboard"
-                       asp-action="Index"
-                       class="quick-link">
-
-                        <i class="bi bi-house-door-fill"></i>
-                        Home
-
-                    </a>
-
-                    <a asp-controller="TransactionPage"
-                       asp-action="Index"
-                       class="quick-link">
-
-                        <i class="bi bi-arrow-left-right"></i>
-                        Transactions
-
-                    </a>
-
-                    <a asp-controller="CategoryPage"
-                       asp-action="Index"
-                       class="quick-link">
-
-                        <i class="bi bi-tags-fill"></i>
-                        Categories
-
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <!-- BUDGET SUMMARY -->
-            <div class="sidebar-summary">
-
-                <div class="summary-icon">
+            <div id="emptyBudget" class="budget-empty" style="display:none;">
+                <div class="budget-empty-icon">
                     <i class="bi bi-piggy-bank-fill"></i>
                 </div>
 
-                <div>
-                    <small>Total Budgets</small>
-
-                    <strong id="totalBudgets">
-                        0
-                    </strong>
-                </div>
-
-            </div>
-
-        </aside>
-
-
-        <!-- CENTER CONTENT -->
-        <main class="budget-main">
-
-            <div class="section-heading">
-
-                <div>
-                    <h2>My Budgets</h2>
-
-                    <span>
-                        All your budgets in one place
-                    </span>
-                </div>
-
-                <span class="budget-count"
-                      id="budgetCount">
-                    0 budgets
-                </span>
-
-            </div>
-
-
-            <!-- Budget Cards -->
-            <div id="budgetCards"
-                 class="budget-card-grid">
-
-                <!-- JavaScript will load budgets here -->
-
-            </div>
-
-
-            <!-- Empty State -->
-            <div id="emptyBudget"
-                 class="empty-budget"
-                 style="display:none;">
-
-                <div class="empty-icon">
-                    <i class="bi bi-wallet2"></i>
-                </div>
-
                 <h3>No budgets yet</h3>
+                <p>Create your first budget to start tracking your spending.</p>
 
-                <p>
-                    Create your first budget to start managing your spending.
-                </p>
-
-                <a asp-controller="BudgetPage"
-                   asp-action="Create"
-                   class="btn btn-primary">
-
-                    <i class="bi bi-plus-circle me-1"></i>
+                <button type="button"
+                        class="budget-add-btn"
+                        onclick="showCreatePanel()">
+                    <i class="bi bi-plus-lg"></i>
                     Create Budget
+                </button>
+            </div>
 
-                </a>
-
+            <div id="budgetError"
+                 class="budget-error"
+                 style="display:none;">
+                Unable to load budgets.
             </div>
 
         </main>
 
+        <aside id="budgetPanel" class="budget-panel">
 
-        <!-- RIGHT NOTES -->
-        <aside class="budget-notes">
-
-            <h6 class="notes-title">
-                Notes
-            </h6>
-
-
-            <div class="note-card note-yellow">
-
-                <div class="note-icon">
-                    <i class="bi bi-lightbulb-fill"></i>
-                </div>
-
+            <div class="budget-panel-header">
                 <div>
-
-                    <strong>Budget Tip</strong>
-
-                    <p>
-                        Set realistic spending limits for each budget category.
-                    </p>
-
+                    <h2 id="panelTitle">Budget</h2>
+                    <p>Manage this budget</p>
                 </div>
 
+                <button type="button"
+                        class="budget-panel-close"
+                        onclick="closePanel()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
 
-
-            <div class="note-card note-gray">
-
-                <div class="note-icon">
-                    <i class="bi bi-info-circle-fill"></i>
-                </div>
-
-                <div>
-
-                    <strong>Your Budgets</strong>
-
-                    <p>
-                        Your budget limits help you keep track of how much you
-                        plan to spend.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="note-card note-blue">
-
-                <div class="note-icon">
-                    <i class="bi bi-piggy-bank-fill"></i>
-                </div>
-
-                <div>
-
-                    <strong>Save More</strong>
-
-                    <p>
-                        Review your budgets regularly and adjust them when
-                        your financial goals change.
-                    </p>
-
-                </div>
-
-            </div>
+            <div id="panelContent" class="budget-panel-content"></div>
 
         </aside>
 
@@ -267,391 +76,405 @@
 
 </div>
 
-
 @section Scripts {
-
 <script>
+    const token = localStorage.getItem("token");
 
-    let allBudgets = [];
+    const budgetList = document.getElementById("budgetList");
+    const emptyBudget = document.getElementById("emptyBudget");
+    const budgetError = document.getElementById("budgetError");
+    const budgetPanel = document.getElementById("budgetPanel");
+    const panelTitle = document.getElementById("panelTitle");
+    const panelContent = document.getElementById("panelContent");
 
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function openPanel(title, content) {
+        panelTitle.innerHTML =
+            `<i class="bi bi-piggy-bank-fill"></i> ${title}`;
+
+        panelContent.innerHTML = content;
+        budgetPanel.classList.add("open");
+    }
+
+    function closePanel() {
+        budgetPanel.classList.remove("open");
+    }
 
     async function loadBudgets() {
-
         try {
-
-            const response = await fetch("/api/Budget",
-            {
-                headers:
-                {
+            const response = await fetch("/api/Budget", {
+                headers: {
                     "Authorization": "Bearer " + token
                 }
             });
 
-            if (!response.ok) {
-                throw new Error("Unable to load budgets.");
+            if (!response.ok) throw new Error();
+
+            const budgets = await response.json();
+
+            if (!budgets.length) {
+                budgetList.innerHTML = "";
+                emptyBudget.style.display = "block";
+                return;
             }
 
-            allBudgets = await response.json();
+            emptyBudget.style.display = "none";
 
-            displayBudgets(allBudgets);
+            budgetList.innerHTML = budgets.map(budget => {
+                const name = budget.username || "Unnamed Budget";
+                const limit = Number(budget.limits) || 0;
+                const date = budget.date
+                    ? new Date(budget.date).toLocaleDateString()
+                    : "Unknown";
 
-        }
-        catch (error) {
+                return `
+                    <article class="budget-card">
 
-            console.error(error);
+                        <div class="budget-card-body">
 
-            document.getElementById("budgetCards").innerHTML = `
-                <div class="budget-error">
-                    <i class="bi bi-exclamation-circle"></i>
-                    <p>Unable to load budgets.</p>
-                </div>
-            `;
+                            <div class="budget-card-icon">
+                                <i class="bi bi-piggy-bank-fill"></i>
+                            </div>
 
-        }
+                            <h2>${escapeHtml(name)}</h2>
 
-    }
+                            <div class="budget-limit">
+                                <span>Budget Limit</span>
+                                <strong>$${limit.toFixed(2)}</strong>
+                            </div>
 
-
-    function displayBudgets(budgets) {
-
-        const container =
-            document.getElementById("budgetCards");
-
-        const empty =
-            document.getElementById("emptyBudget");
-
-        const count =
-            document.getElementById("budgetCount");
-
-        const total =
-            document.getElementById("totalBudgets");
-
-
-        container.innerHTML = "";
-
-
-        count.textContent =
-            `${budgets.length} ${budgets.length === 1 ? "budget" : "budgets"}`;
-
-
-        total.textContent = budgets.length;
-
-
-        if (budgets.length === 0) {
-
-            empty.style.display = "block";
-
-            return;
-
-        }
-
-
-        empty.style.display = "none";
-
-
-        budgets.forEach((budget, index) => {
-
-            const id =
-                budget.budgetID ??
-                budget.BudgetID ??
-                budget.id;
-
-
-            const name =
-                budget.name ??
-                budget.Name ??
-                "Unnamed Budget";
-
-
-            const limit =
-                budget.limit ??
-                budget.Limit ??
-                0;
-
-
-            const date =
-                budget.date ??
-                budget.Date ??
-                budget.dateCreated ??
-                budget.DateCreated;
-
-
-            let formattedDate = "Not available";
-
-
-            if (date) {
-
-                formattedDate =
-                    new Date(date).toLocaleDateString(
-                        "en-CA",
-                        {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric"
-                        }
-                    );
-
-            }
-
-
-            const card = document.createElement("div");
-
-            card.className = "budget-card";
-
-
-            card.innerHTML = `
-
-                <div class="budget-card-top">
-
-                    <div class="budget-status">
-                        <span class="status-dot"></span>
-                        Active
-                    </div>
-
-                    <div class="budget-menu">
-
-                        <button
-                            class="budget-menu-btn"
-                            onclick="toggleMenu(${index})">
-
-                            <i class="bi bi-three-dots"></i>
-
-                        </button>
-
-                        <div
-                            id="menu-${index}"
-                            class="budget-dropdown">
-
-                            <a href="/BudgetPage/Details?id=${id}">
-                                <i class="bi bi-eye"></i>
-                                Details
-                            </a>
-
-                            <a href="/BudgetPage/Edit?id=${id}">
-                                <i class="bi bi-pencil"></i>
-                                Edit
-                            </a>
-
-                            <a href="/BudgetPage/Delete?id=${id}"
-                               class="delete-link">
-
-                                <i class="bi bi-trash"></i>
-                                Delete
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="budget-card-body">
-
-                    <div class="budget-icon">
-
-                        <i class="bi bi-wallet2"></i>
-
-                    </div>
-
-
-                    <h3>
-                        ${name}
-                    </h3>
-
-
-                    <div class="budget-limit">
-
-                        <span>Budget Limit</span>
-
-                        <strong>
-                            $${Number(limit).toFixed(2)}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="budget-progress">
-
-                        <div class="progress-label">
-
-                            <span>
-                                Spending Limit
-                            </span>
-
-                            <span>
-                                $${Number(limit).toFixed(2)}
-                            </span>
-
-                        </div>
-
-                        <div class="progress">
-
-                            <div class="progress-bar"
-                                 style="width: 100%;">
+                            <div class="budget-date">
+                                <i class="bi bi-calendar3"></i>
+                                Created ${date}
                             </div>
 
                         </div>
 
-                    </div>
+                        <div class="budget-card-actions">
 
+                            <button type="button"
+                                    class="budget-card-btn budget-view-btn"
+                                    onclick="showDetails(${budget.budgetID})">
+                                <i class="bi bi-eye"></i>
+                                View Details
+                            </button>
 
-                    <div class="budget-date">
+                            <button type="button"
+                                    class="budget-card-btn budget-edit-btn"
+                                    onclick="showEditPanel(${budget.budgetID})">
+                                <i class="bi bi-pencil"></i>
+                                Edit
+                            </button>
 
-                        <i class="bi bi-calendar3"></i>
+                            <button type="button"
+                                    class="budget-card-btn budget-delete-btn"
+                                    onclick="showDeletePanel(${budget.budgetID})">
+                                <i class="bi bi-trash"></i>
+                                Delete
+                            </button>
 
-                        Created ${formattedDate}
+                        </div>
 
-                    </div>
+                    </article>
+                `;
+            }).join("");
 
-                </div>
-
-
-                <div class="budget-card-footer">
-
-                    <a href="/BudgetPage/Details?id=${id}"
-                       class="view-budget">
-
-                        View Details
-
-                        <i class="bi bi-arrow-right"></i>
-
-                    </a>
-
-                </div>
-
-            `;
-
-
-            container.appendChild(card);
-
-        });
-
+        } catch (error) {
+            console.error(error);
+            budgetError.style.display = "block";
+        }
     }
 
+    function showCreatePanel() {
+        openPanel("Add Budget", `
+            <form id="createBudgetForm">
 
-    function toggleMenu(index) {
+                <div class="budget-form-group">
+                    <label>Budget Name</label>
+                    <input id="createName"
+                           class="budget-input"
+                           placeholder="e.g. Groceries"
+                           required>
+                </div>
 
-        document
-            .querySelectorAll(".budget-dropdown")
-            .forEach(menu => {
+                <div class="budget-form-group">
+                    <label>Budget Limit</label>
+                    <input id="createLimit"
+                           type="number"
+                           min="1"
+                           step="0.01"
+                           class="budget-input"
+                           placeholder="Enter budget limit"
+                           required>
+                </div>
 
-                menu.classList.remove("show");
+                <div id="createError"
+                     class="budget-panel-error"
+                     style="display:none;">
+                </div>
 
+                <button class="budget-panel-primary">
+                    <i class="bi bi-check-circle"></i>
+                    Save Budget
+                </button>
+
+            </form>
+        `);
+
+        document.getElementById("createBudgetForm")
+            .addEventListener("submit", createBudget);
+    }
+
+    async function createBudget(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("createName").value.trim();
+        const limit = Number(document.getElementById("createLimit").value);
+        const error = document.getElementById("createError");
+
+        if (!name || limit <= 0) {
+            error.textContent = "Enter a valid budget name and limit.";
+            error.style.display = "block";
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/Budget", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: JSON.stringify({
+                    username: name,
+                    limits: limit
+                })
             });
 
+            if (!response.ok) throw new Error();
 
-        const menu =
-            document.getElementById(`menu-${index}`);
+            closePanel();
+            await loadBudgets();
 
-
-        if (menu) {
-            menu.classList.toggle("show");
+        } catch {
+            error.textContent = "Unable to create budget.";
+            error.style.display = "block";
         }
-
     }
 
+    async function showDetails(id) {
+        try {
+            const response = await fetch(`/api/Budget/${id}`, {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
 
-    function showAllBudgets() {
+            if (!response.ok) throw new Error();
 
-        displayBudgets(allBudgets);
+            const budget = await response.json();
 
-        setActiveCategory(0);
+            const name = budget.username || "Unnamed Budget";
+            const limit = Number(budget.limits) || 0;
+            const date = budget.date
+                ? new Date(budget.date).toLocaleDateString()
+                : "Unknown";
 
+            openPanel("Budget Details", `
+                <div class="budget-detail">
+
+                    <div class="budget-detail-icon">
+                        <i class="bi bi-piggy-bank-fill"></i>
+                    </div>
+
+                    <h3>${escapeHtml(name)}</h3>
+
+                    <div class="budget-detail-block">
+                        <span>Budget Limit</span>
+                        <strong>$${limit.toFixed(2)}</strong>
+                    </div>
+
+                    <div class="budget-detail-block">
+                        <span>Created</span>
+                        <strong>${date}</strong>
+                    </div>
+
+                </div>
+            `);
+
+        } catch {
+            openPanel("Budget Details", `
+                <div class="budget-panel-error">
+                    Unable to load budget.
+                </div>
+            `);
+        }
     }
 
+    async function showEditPanel(id) {
+        try {
+            const response = await fetch(`/api/Budget/${id}`, {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
 
-    function filterBudgets(type) {
+            if (!response.ok) throw new Error();
 
-        if (type === "active") {
+            const budget = await response.json();
 
-            displayBudgets(allBudgets);
+            openPanel("Edit Budget", `
+                <form id="editBudgetForm">
 
+                    <div class="budget-form-group">
+                        <label>Budget Name</label>
+                        <input id="editName"
+                               class="budget-input"
+                               value="${escapeHtml(budget.username)}"
+                               required>
+                    </div>
+
+                    <div class="budget-form-group">
+                        <label>Budget Limit</label>
+                        <input id="editLimit"
+                               type="number"
+                               min="1"
+                               step="0.01"
+                               class="budget-input"
+                               value="${budget.limits}"
+                               required>
+                    </div>
+
+                    <div id="editError"
+                         class="budget-panel-error"
+                         style="display:none;">
+                    </div>
+
+                    <button class="budget-panel-primary">
+                        <i class="bi bi-save"></i>
+                        Update Budget
+                    </button>
+
+                </form>
+            `);
+
+            document.getElementById("editBudgetForm")
+                .addEventListener("submit", event =>
+                    updateBudget(event, id)
+                );
+
+        } catch {
+            openPanel("Edit Budget", `
+                <div class="budget-panel-error">
+                    Unable to load budget.
+                </div>
+            `);
         }
-
-
-        if (type === "recent") {
-
-            const recent =
-                [...allBudgets]
-                    .sort((a, b) => {
-
-                        const dateA =
-                            new Date(
-                                a.date ??
-                                a.Date ??
-                                a.dateCreated ??
-                                a.DateCreated
-                            );
-
-                        const dateB =
-                            new Date(
-                                b.date ??
-                                b.Date ??
-                                b.dateCreated ??
-                                b.DateCreated
-                            );
-
-                        return dateB - dateA;
-
-                    })
-                    .slice(0, 5);
-
-
-            displayBudgets(recent);
-
-        }
-
-
-        setActiveCategory(
-            type === "active" ? 1 : 2
-        );
-
     }
 
+    async function updateBudget(event, id) {
+        event.preventDefault();
 
-    function setActiveCategory(index) {
+        const name = document.getElementById("editName").value.trim();
+        const limit = Number(document.getElementById("editLimit").value);
+        const error = document.getElementById("editError");
 
-        const buttons =
-            document.querySelectorAll(".budget-category");
-
-
-        buttons.forEach(button => {
-
-            button.classList.remove("active");
-
-        });
-
-
-        if (buttons[index]) {
-
-            buttons[index].classList.add("active");
-
+        if (!name || limit <= 0) {
+            error.textContent = "Enter a valid budget name and limit.";
+            error.style.display = "block";
+            return;
         }
 
+        try {
+            const response = await fetch(`/api/Budget/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: JSON.stringify({
+                    username: name,
+                    limits: limit
+                })
+            });
+
+            if (!response.ok) throw new Error();
+
+            closePanel();
+            await loadBudgets();
+
+        } catch {
+            error.textContent = "Unable to update budget.";
+            error.style.display = "block";
+        }
     }
 
+    function showDeletePanel(id) {
+        openPanel("Delete Budget", `
+            <div class="budget-delete-box">
 
-    document.addEventListener("click", function (event) {
+                <div class="budget-delete-icon">
+                    <i class="bi bi-trash-fill"></i>
+                </div>
 
-        if (!event.target.closest(".budget-menu")) {
+                <h3>Delete Budget?</h3>
 
-            document
-                .querySelectorAll(".budget-dropdown")
-                .forEach(menu => {
+                <p>
+                    Are you sure you want to delete this budget?
+                </p>
 
-                    menu.classList.remove("show");
+                <div class="budget-delete-actions">
 
-                });
+                    <button type="button"
+                            class="budget-panel-cancel"
+                            onclick="closePanel()">
+                        Cancel
+                    </button>
 
+                    <button type="button"
+                            class="budget-panel-danger"
+                            onclick="deleteBudget(${id})">
+                        <i class="bi bi-trash"></i>
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+        `);
+    }
+
+    async function deleteBudget(id) {
+        try {
+            const response = await fetch(`/api/Budget/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            if (!response.ok) throw new Error();
+
+            closePanel();
+            await loadBudgets();
+
+        } catch {
+            openPanel("Delete Budget", `
+                <div class="budget-panel-error">
+                    Unable to delete budget.
+                </div>
+            `);
         }
-
-    });
-
+    }
 
     loadBudgets();
-
 </script>
-
 }

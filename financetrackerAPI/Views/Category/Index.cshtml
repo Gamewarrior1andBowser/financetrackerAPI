@@ -4,16 +4,23 @@
 
 <div class="category-page">
 
+   
     <div class="category-header">
         <div>
-            <h1><i class="bi bi-tags-fill"></i>Categories</h1>
-            <p class="category-subtitle">Manage your income and expense categories.</p>
+            <h1>
+                <i class="bi bi-tags-fill"></i>
+                Categories
+            </h1>
+            <p class="category-subtitle">
+                Manage your income and expense categories.
+            </p>
         </div>
 
         <a asp-controller="CategoryPage"
            asp-action="Create"
            class="category-btn category-primary">
-            <i class="bi bi-plus-lg me-1"></i> Add Category
+            <i class="bi bi-plus-lg"></i>
+            Add Category
         </a>
     </div>
 
@@ -32,16 +39,18 @@
             </table>
         </div>
 
-        <div id="emptyState" class="category-empty" style="display:none;">
+        <div id="emptyState" class="category-empty">
             No categories found.
         </div>
     </div>
+   
 
 </div>
 
 @section Scripts {
     <script src="~/js/authGuard.js"></script>
 
+   
     <script>
         const token = localStorage.getItem("token");
         const table = document.getElementById("categoryTable");
@@ -50,10 +59,14 @@
         async function loadCategories() {
             try {
                 const response = await fetch("/api/Category", {
-                    headers: { Authorization: "Bearer " + token }
+                    headers: {
+                        Authorization: "Bearer " + token
+                    }
                 });
 
-                if (!response.ok) throw new Error();
+                if (!response.ok) {
+                    throw new Error();
+                }
 
                 const categories = await response.json();
 
@@ -62,37 +75,45 @@
                     return;
                 }
 
+                empty.style.display = "none";
+
                 table.innerHTML = categories.map(category => `
-                            <tr>
-                                <td class="category-name">${category.name}</td>
-                                <td>
-                                    <span class="category-type ${category.type.toLowerCase()}">
-                                        ${category.type}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="category-actions">
-                                        <a href="/CategoryPage/Details/${category.categoryID}"
-                                           class="category-action category-view"
-                                           title="View">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
+                        <tr>
+                            <td class="category-name">
+                                ${category.name}
+                            </td>
 
-                                        <a href="/CategoryPage/Edit/${category.categoryID}"
-                                           class="category-action category-edit"
-                                           title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
+                            <td>
+                                <span class="category-type ${category.type.toLowerCase()}">
+                                    ${category.type}
+                                </span>
+                            </td>
 
-                                        <a href="/CategoryPage/Delete/${category.categoryID}"
-                                           class="category-action category-delete"
-                                           title="Delete">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        `).join("");
+                            <td>
+                                <div class="category-actions">
+
+                                    <a href="/CategoryPage/Details/${category.categoryID}"
+                                       class="category-action category-view"
+                                       title="View Category">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    <a href="/CategoryPage/Edit/${category.categoryID}"
+                                       class="category-action category-edit"
+                                       title="Edit Category">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <a href="/CategoryPage/Delete/${category.categoryID}"
+                                       class="category-action category-delete"
+                                       title="Delete Category">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    `).join("");
             }
             catch {
                 empty.textContent = "Unable to load categories.";
@@ -102,4 +123,6 @@
 
         loadCategories();
     </script>
+    
+
 }
