@@ -125,7 +125,7 @@ async function loadDetails() {
     // Category has no Createddate field, so the linked budget's date
     // (set at creation time) is used as the best available proxy.
     document.getElementById("createddate").innerText = budget
-        ? new date(budget.date).toLocaledateString()
+        ? new Date(budget.date).toLocaledateString()
         : "Unknown";
 
     const typeBadge = document.getElementById("catType");
