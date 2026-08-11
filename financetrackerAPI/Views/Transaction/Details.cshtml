@@ -116,9 +116,8 @@
 
 @section Scripts {
 
-    <script>
+const token = localStorage.getItem("token");
 
-        const token = localStorage.getItem("token");
 
         const transactionID =
             @transactionID;
@@ -207,8 +206,17 @@
         }
 
 
-        loadDetails();
+async function confirmDelete() {
 
-    </script>
+    <script src="~/js/authGuard.js"></script>
 
+    if (response.ok) {
+        window.location.href = "/TransactionPage";
+    } else {
+        closeDeletePopup();
+        alert("Unable to delete transaction");
+    }
+}
+
+</script>
 }
