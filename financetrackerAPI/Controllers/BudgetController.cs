@@ -24,9 +24,12 @@ public class BudgetController : ControllerBase
     public IActionResult GetAll()
     {
         var userID = int.Parse(
-            User.FindFirst("id")!.Value
+            User.FindFirst("id").Value
         );
 
+        if (userID == null) {
+            return Unauthorized();
+        }
 
         var budgets = _context.Budgets
             .Where(b => b.userID == userID)
@@ -43,9 +46,12 @@ public class BudgetController : ControllerBase
     public IActionResult GetById(int id)
     {
         var userID = int.Parse(
-            User.FindFirst("id")!.Value
+            User.FindFirst("id").Value
         );
 
+        if (userID == null) {
+            return Unauthorized();
+        }
 
         var budget = _context.Budgets
             .FirstOrDefault(b =>

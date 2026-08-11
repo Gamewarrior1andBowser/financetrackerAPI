@@ -161,9 +161,16 @@
 
 const token = localStorage.getItem("token");
 
+<<<<<<< HEAD
+    
+
+
+   
+=======
 
 
 function showError(message){
+>>>>>>> 3d636a5f23ffd614c57c25bdd8ecf7e02da9a9ed
 
     const box = document.getElementById("createError");
 
@@ -183,6 +190,108 @@ async function loadCategories(){
             "Authorization":"Bearer " + token
         }
 
+<<<<<<< HEAD
+async function getBudgetStatus(categoryID, excludeTransactionID) {
+
+    const [budgetsRes, transactionsRes] = await Promise.all([
+        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
+        fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } })
+    ]);
+
+    const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
+    const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
+
+    const budget = budgets.find(b => b.categoryID === categoryID);
+
+    const spent = transactions
+        .filter(t => t.categoryID === categoryID && t.transactionsID !== excludeTransactionID)
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    if (!budget) {
+        return { hasBudget: false, limit: 0, spent: spent, remaining: null };
+    }
+
+
+
+        async function createTransaction() {
+
+
+            const transaction =
+            {
+
+
+                amount:
+                    Number(document.getElementById("amount").value),
+
+
+
+                categoryID:
+                    Number(document.getElementById("categoryID").value),
+
+
+
+                type:
+                    document.getElementById("type").value,
+
+
+
+                date:
+                    document.getElementById("date").value
+
+
+            };
+
+
+
+
+
+            const response = await fetch("/api/Transactions",
+                {
+
+
+                    method: "POST",
+
+
+
+                    headers:
+                    {
+
+                        "Content-Type": "application/json",
+
+                        "Authorization": "Bearer " + token
+
+                    },
+
+
+
+                    body: JSON.stringify(transaction)
+
+
+                });
+
+
+
+
+
+            if (response.ok) {
+
+                window.location.href = "/TransactionPage";
+
+            }
+
+
+        }
+
+
+
+
+   
+
+
+    <script src="~/js/authGuard.js"></script>
+
+
+=======
     });
 
 
@@ -211,6 +320,7 @@ async function loadCategories(){
 
 
 }
+>>>>>>> 3d636a5f23ffd614c57c25bdd8ecf7e02da9a9ed
 
 
 
