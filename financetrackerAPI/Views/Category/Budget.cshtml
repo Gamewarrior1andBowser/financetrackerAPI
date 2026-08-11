@@ -44,7 +44,7 @@
             }
 
             document.getElementById("budgetName").textContent = category.name + " Budget";
-            document.getElementById("budgetdate").textContent = new date(budget.date).toLocaledateString();
+            document.getElementById("budgetdate").textContent = new Date(budget.date).toLocaledateString();
             document.getElementById("budgetlimits").textContent = budget.limit;
         }
 

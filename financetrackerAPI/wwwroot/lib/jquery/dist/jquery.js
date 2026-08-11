@@ -9,7 +9,7 @@
  * Released under the MIT license
  * https://jquery.org/license
  *
- * date: 2021-03-02T17:08Z
+ * Date: 2021-03-02T17:08Z
  */
 ( function( global, factory ) {
 
@@ -499,7 +499,7 @@ if ( typeof Symbol === "function" ) {
 }
 
 // Populate the class2type map
-jQuery.each( "Boolean Number String Function Array date RegExp Object Error Symbol".split( " " ),
+jQuery.each( "Boolean Number String Function Array Date RegExp Object Error Symbol".split( " " ),
 	function( _i, name ) {
 		class2type[ "[object " + name + "]" ] = name.toLowerCase();
 	} );
@@ -529,7 +529,7 @@ var Sizzle =
  * Released under the MIT license
  * https://js.foundation/
  *
- * date: 2021-02-16
+ * Date: 2021-02-16
  */
 ( function( window ) {
 var i,
@@ -555,7 +555,7 @@ var i,
 	contains,
 
 	// Instance-specific data
-	expando = "sizzle" + 1 * new date(),
+	expando = "sizzle" + 1 * new Date(),
 	preferredDoc = window.document,
 	dirruns = 0,
 	done = 0,
@@ -1139,7 +1139,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		return document;
 	}
 
-	// Update global variables
+	// UpDate global variables
 	document = doc;
 	docElem = document.documentElement;
 	documentIsHTML = !isXML( document );
@@ -4005,7 +4005,7 @@ jQuery.extend( {
 			primary = jQuery.Deferred(),
 
 			// subordinate callback factory
-			updateFunc = function( i ) {
+			upDateFunc = function( i ) {
 				return function( value ) {
 					resolveContexts[ i ] = this;
 					resolveValues[ i ] = arguments.length > 1 ? slice.call( arguments ) : value;
@@ -4017,7 +4017,7 @@ jQuery.extend( {
 
 		// Single- and empty arguments are adopted like Promise.resolve
 		if ( remaining <= 1 ) {
-			adoptValue( singleValue, primary.done( updateFunc( i ) ).resolve, primary.reject,
+			adoptValue( singleValue, primary.done( upDateFunc( i ) ).resolve, primary.reject,
 				!remaining );
 
 			// Use .then() to unwrap secondary thenables (cf. gh-3000)
@@ -4030,7 +4030,7 @@ jQuery.extend( {
 
 		// Multiple arguments are aggregated like Promise.all array elements
 		while ( i-- ) {
-			adoptValue( resolveValues[ i ], updateFunc( i ), primary.reject );
+			adoptValue( resolveValues[ i ], upDateFunc( i ), primary.reject );
 		}
 
 		return primary.promise();
@@ -4771,7 +4771,7 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 
 		while ( maxIterations-- ) {
 
-			// Evaluate and update our best guess (doubling guesses that zero out).
+			// Evaluate and upDate our best guess (doubling guesses that zero out).
 			// Finish if the scale equals or crosses 1 (making the old*new product non-positive).
 			jQuery.style( elem, prop, initialInUnit + unit );
 			if ( ( 1 - scale ) * ( 1 - ( scale = currentValue() / initial || 0.5 ) ) <= 0 ) {
@@ -4784,7 +4784,7 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 		initialInUnit = initialInUnit * 2;
 		jQuery.style( elem, prop, initialInUnit + unit );
 
-		// Make sure we update the tween properties later on
+		// Make sure we upDate the tween properties later on
 		valueParts = valueParts || [];
 	}
 
@@ -5254,7 +5254,7 @@ jQuery.event = {
 			// If selector defined, determine special event api type, otherwise given type
 			type = ( selector ? special.delegateType : special.bindType ) || type;
 
-			// Update special based on newly reset type
+			// UpDate special based on newly reset type
 			special = jQuery.event.special[ type ] || {};
 
 			// handleObj is passed to all event handlers
@@ -5750,7 +5750,7 @@ jQuery.Event = function( src, props ) {
 	}
 
 	// Create a timestamp if incoming event doesn't have one
-	this.timeStamp = src && src.timeStamp || date.now();
+	this.timeStamp = src && src.timeStamp || Date.now();
 
 	// Mark it as fixed
 	this[ jQuery.expando ] = true;
@@ -7288,7 +7288,7 @@ function createFxNow() {
 	window.setTimeout( function() {
 		fxNow = undefined;
 	} );
-	return ( fxNow = date.now() );
+	return ( fxNow = Date.now() );
 }
 
 // Generate parameters to create a standard animation
@@ -7897,7 +7897,7 @@ jQuery.fx.tick = function() {
 		i = 0,
 		timers = jQuery.timers;
 
-	fxNow = date.now();
+	fxNow = Date.now();
 
 	for ( ; i < timers.length; i++ ) {
 		timer = timers[ i ];
@@ -8542,7 +8542,7 @@ jQuery.extend( {
 					option = options[ i ];
 
 					// Support: IE <=9 only
-					// IE8-9 doesn't update selected after form reset (#2551)
+					// IE8-9 doesn't upDate selected after form reset (#2551)
 					if ( ( option.selected || i === index ) &&
 
 							// Don't return options that are disabled or in a disabled optgroup
@@ -8852,7 +8852,7 @@ if ( !support.focusin ) {
 }
 var location = window.location;
 
-var nonce = { guid: date.now() };
+var nonce = { guid: Date.now() };
 
 var rquery = ( /\?/ );
 
@@ -9598,7 +9598,7 @@ jQuery.extend( {
 				delete s.data;
 			}
 
-			// Add or update anti-cache param if needed
+			// Add or upDate anti-cache param if needed
 			if ( s.cache === false ) {
 				cacheURL = cacheURL.replace( rantiCache, "$1" );
 				uncached = ( rquery.test( cacheURL ) ? "&" : "?" ) + "_=" + ( nonce.guid++ ) +
@@ -10801,7 +10801,7 @@ jQuery.isWindow = isWindow;
 jQuery.camelCase = camelCase;
 jQuery.type = toType;
 
-jQuery.now = date.now;
+jQuery.now = Date.now;
 
 jQuery.isNumeric = function( obj ) {
 

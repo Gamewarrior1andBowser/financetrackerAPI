@@ -2,167 +2,104 @@
     ViewData["Title"] = "Categories";
 }
 
+<div class="category-page">
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="category-header">
+        <div>
+            <h1><i class="bi bi-tags-fill"></i>Categories</h1>
+            <p class="category-subtitle">Manage your income and expense categories.</p>
+        </div>
 
-    <h1 class="fw-bold">
-        <i class="bi bi-tags-fill me-2"></i>
-        Categories
-    </h1>
-
-
-    <a asp-controller="CategoryPage"
-       asp-action="Create"
-       class="btn btn-success">
-
-        <i class="bi bi-plus-circle me-1"></i>
-        Add Category
-
-    </a>
-
-</div>
-
-
-
-<div class="card shadow border-0 p-4">
-
-
-    <div class="table-responsive">
-
-
-        <table class="table table-hover">
-
-
-            <thead class="table-primary">
-
-                <tr>
-
-                    <th>Name</th>
-
-                    <th>Type</th>
-
-                    <th>Actions</th>
-
-                </tr>
-
-            </thead>
-
-
-
-            <tbody id="categoryTable">
-
-            </tbody>
-
-
-        </table>
-
-
+        <a asp-controller="CategoryPage"
+           asp-action="Create"
+           class="category-btn category-primary">
+            <i class="bi bi-plus-lg me-1"></i> Add Category
+        </a>
     </div>
 
+    <div class="card category-card">
+        <div class="table-responsive">
+            <table class="table category-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="categoryTable"></tbody>
+            </table>
+        </div>
+
+        <div id="emptyState" class="category-empty" style="display:none;">
+            No categories found.
+        </div>
+    </div>
 
 </div>
 
-
-
 @section Scripts {
+    <script src="~/js/authGuard.js"></script>
 
-<script src="~/js/authGuard.js"></script>
+    <script>
+        const token = localStorage.getItem("token");
+        const table = document.getElementById("categoryTable");
+        const empty = document.getElementById("emptyState");
 
-<script>
+        async function loadCategories() {
+            try {
+                const response = await fetch("/api/Category", {
+                    headers: { Authorization: "Bearer " + token }
+                });
 
-const token = localStorage.getItem("token");
+                if (!response.ok) throw new Error();
 
+                const categories = await response.json();
 
-async function loadCategories()
-{
+                if (!categories.length) {
+                    empty.style.display = "block";
+                    return;
+                }
 
-    const response = await fetch("/api/Category",
-    {
-        headers:
-        {
-            "Authorization": "Bearer " + token
+                table.innerHTML = categories.map(category => `
+                            <tr>
+                                <td class="category-name">${category.name}</td>
+                                <td>
+                                    <span class="category-type ${category.type.toLowerCase()}">
+                                        ${category.type}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="category-actions">
+                                        <a href="/CategoryPage/Details/${category.categoryID}"
+                                           class="category-action category-view"
+                                           title="View">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                        <a href="/CategoryPage/Edit/${category.categoryID}"
+                                           class="category-action category-edit"
+                                           title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        <a href="/CategoryPage/Delete/${category.categoryID}"
+                                           class="category-action category-delete"
+                                           title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join("");
+            }
+            catch {
+                empty.textContent = "Unable to load categories.";
+                empty.style.display = "block";
+            }
         }
-    });
 
-
-    if(!response.ok)
-    {
-        console.log("Unable to load categories");
-        return;
-    }
-
-
-    const categories = await response.json();
-
-
-    const table = document.getElementById("categoryTable");
-
-    table.innerHTML = "";
-
-
-    categories.forEach(category =>
-    {
-
-        table.innerHTML += `
-
-        <tr>
-
-            <td>
-                ${category.name}
-            </td>
-
-
-            <td>
-                ${category.type}
-            </td>
-
-
-            <td>
-
-
-                <a href="/CategoryPage/Details/${category.categoryID}"
-                   class="btn btn-sm btn-info">
-
-                    <i class="bi bi-eye"></i>
-
-                </a>
-
-
-
-                <a href="/CategoryPage/Edit/${category.categoryID}"
-                   class="btn btn-sm btn-warning">
-
-                    <i class="bi bi-pencil"></i>
-
-                </a>
-
-
-
-                <a href="/CategoryPage/Delete/${category.categoryID}"
-                   class="btn btn-sm btn-danger">
-
-                    <i class="bi bi-trash"></i>
-
-                </a>
-
-
-            </td>
-
-
-        </tr>
-
-        `;
-
-
-    });
-
-
-}
-
-
-loadCategories();
-
-
-</script>
-
+        loadCategories();
+    </script>
 }

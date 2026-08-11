@@ -157,6 +157,7 @@
 
 
 
+    <script src="~/js/authGuard.js"></script>
 
 
 
@@ -177,6 +178,7 @@ const token = localStorage.getItem("token");
 
 
 
+        function showError(message) {
 
         async function loadCategories() {
 
@@ -283,65 +285,64 @@ async function getBudgetStatus(categoryID, excludeTransactionID) {
             {
 
 
-                amount:
-                    Number(document.getElementById("amount").value),
+        async function loadCategories() {
 
+            try {
 
+                const response = await fetch("/api/Category", {
 
-                categoryID:
-                    Number(document.getElementById("categoryID").value),
-
-
-
-                type:
-                    document.getElementById("type").value,
-
-
-
-                date:
-                    document.getElementById("date").value
-
-
-            };
-
-
-
-
-
-            const response = await fetch("/api/Transactions",
-                {
-
-
-                    method: "POST",
-
-
-
-                    headers:
-                    {
-
-                        "Content-Type": "application/json",
-
+                    headers: {
                         "Authorization": "Bearer " + token
-
-                    },
-
-
-
-                    body: JSON.stringify(transaction)
-
+                    }
 
                 });
 
 
+                if (!response.ok) {
+
+                    showError("Unable to load categories.");
+
+                    return;
+
+                }
 
 
+                const categories = await response.json();
 
-            if (response.ok) {
+                const dropdown =
+                    document.getElementById("categoryID");
 
-                window.location.href = "/TransactionPage";
+
+                dropdown.innerHTML = `
+                    <option value="">
+                        Select a category
+                    </option>
+                `;
+
+
+                categories.forEach(category => {
+
+                    dropdown.innerHTML += `
+
+                        <option value="${category.categoryID}">
+                            ${category.name}
+                        </option>
+
+                    `;
+
+                });
 
             }
+            catch (error) {
 
+                console.error(
+                    "Error loading categories:",
+                    error
+                );
+
+                showError("Unable to load categories.");
+
+            }
 
         }
 
