@@ -181,75 +181,44 @@
 @section Scripts {
 <script>
 
-
-    const token = localStorage.getItem("token");
-
-    loadCategories();
-
-
-
-    async function loadCategories()
-    {
-
-
-        const response = await fetch("/api/Category",
-            {
-
-                headers:
+const token = localStorage.getItem("token");
+        loadCategories();
+        async function loadCategories() {
+            const response = await fetch("/api/Category",
                 {
-
-                    "Authorization": "Bearer " + token
-
-                }
-
-
-        });
+                    headers:
+                    {
+                        "Authorization": "Bearer " + token
+                    }
+                });
 
         const categories = await response.json();
         const dropdown = document.getElementById("categoryID");
 
-        if (categories.length === 0) {
-            dropdown.innerHTML = `<option value="">No categories available</option>`;
-            return;
-        }
-
-
-        if (!response.ok) {
-
-            document.getElementById("categoryID").innerHTML =
-                "<option>No Categories</option>";
-
-            return;
-
-        }
-
-
-
-        let options = "";
-
-
-
-
-        categories.forEach(category => {
-
-
-            options += `
-
-            <option value="${category.categoryID}">
-
-                ${category.name}
-
-            </option>
-
-            `;
-
-
-        });
-
-        dropdown.innerHTML = options;
-
-        document.getElementById("categoryID").innerHTML = options;
+    if (categories.length === 0) {
+        dropdown.innerHTML = `<option value="">No categories available</option>`;
+        return;
     }
+    if (!response.ok) {
+
+        document.getElementById("categoryID").innerHTML =
+            "<option>No Categories</option>";
+
+        return;
+
+    }
+
+    const categories = await response.json();
+    let options = "";
+    categories.forEach(category => {
+                options += `
+                <option value="${category.categoryID}">
+                    ${category.name}
+                </option>
+                `;
+            });
+    dropdown.innerHTML = options;
+}
 
     function showError(message)
     {
@@ -287,7 +256,8 @@
         }
     }
 
-    async function createTransaction() {
+
+async function createTransaction() {
 
         hideBudgetPopup();
 
