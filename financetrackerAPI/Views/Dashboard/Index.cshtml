@@ -190,7 +190,7 @@ function renderRecentTransactions(transactions) {
     if (transactions.length === 0) return;
 
     const recent = [...transactions]
-        .sort((a, b) => new date(b.date) - new date(a.date))
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
         .slice(0, 5);
 
     const list = document.getElementById("recentTransactionsList");
