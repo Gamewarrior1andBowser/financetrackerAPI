@@ -19,6 +19,22 @@
     </div>
 
 
+
+    <!-- GREETING -->
+<div class="dashboard-greeting">
+
+    <h2>
+        Hello, <span id="greetingName">...</span>
+    </h2>
+
+    <p>
+        Here's what's happening with your finances today.
+    </p>
+
+</div>
+
+
+
     <!-- NAVIGATION -->
     <div class="dashboard-nav">
 
@@ -225,6 +241,7 @@
 
     <script>
 
+
         const token = localStorage.getItem("token");
 
         let dashboardCategories = [];
@@ -234,7 +251,125 @@
 
 
         loadDashboard();
+        
+loadGreeting();
 
+
+/* =========================================
+   GREETING
+========================================= */
+
+function decodeJwtPayload(rawToken) {
+
+    try {
+
+        const base64Url =
+            rawToken.split(".")[1];
+
+        const base64 =
+            base64Url
+                .replace(/-/g, "+")
+                .replace(/_/g, "/");
+
+        const jsonPayload =
+            decodeURIComponent(
+                atob(base64)
+                    .split("")
+                    .map(c =>
+                        "%" +
+                        ("00" + c.charCodeAt(0).toString(16)).slice(-2)
+                    )
+                    .join("")
+            );
+
+        return JSON.parse(jsonPayload);
+
+    }
+    catch (error) {
+
+        console.error(
+            "Failed to decode JWT",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+async function getUserDisplayName() {
+
+    if (!token) return "User";
+
+
+    const payload =
+        decodeJwtPayload(token);
+
+    // Adjust these claim keys to match whatever AuthController.GenerateToken actually issues
+    const claimName =
+        payload?.name ||
+        payload?.given_name ||
+        payload?.unique_name;
+
+
+    if (claimName) return claimName;
+
+
+    try {
+
+        const response =
+            await fetch("/api/User/profile", {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+
+        if (response.ok) {
+
+            const user =
+                await response.json();
+
+            if (user?.name) return user.name;
+
+        }
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Could not fetch user profile for greeting",
+            error
+        );
+
+    }
+
+
+    return "User";
+
+}
+
+
+async function loadGreeting() {
+
+    const greetingEl =
+        document.getElementById(
+            "greetingName"
+        );
+
+
+    if (!greetingEl) return;
+
+
+    const name =
+        await getUserDisplayName();
+
+
+    greetingEl.innerText = name;
+
+}
 
 
         async function loadDashboard() {

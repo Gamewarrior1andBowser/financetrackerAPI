@@ -322,3 +322,26 @@ footer {
     }
 
 
+/* Dashboard greeting banner */
+
+.greeting-banner {
+    padding: 28px 32px;
+    border-radius: 16px;
+    background: linear-gradient(90deg, #4f46a5, #6d5bd0, #4f86c6);
+    box-shadow: 0 4px 18px rgba(40, 45, 80, .16);
+    color: #fff;
+}
+
+    .greeting-banner h2 {
+        font-weight: 800;
+        font-size: 28px;
+    }
+
+    .greeting-banner p {
+        opacity: .9;
+        font-size: 15px;
+    }
+
+    .greeting-banner #greetingName {
+        font-weight: 900;
+    }
