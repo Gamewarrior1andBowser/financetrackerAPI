@@ -11,9 +11,9 @@ html {
 
 body {
     min-height: 100vh;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    margin: 0;
     font-family: "Segoe UI", sans-serif;
     background: #f5f6fa;
     color: #252535;
@@ -43,17 +43,16 @@ header {
 }
 
 .nav-link {
-    color: #fff !important;
-    padding: 10px 18px !important;
     margin: 0 5px;
+    padding: 10px 18px !important;
     border-radius: 25px;
+    color: #fff !important;
     font-weight: 600;
     transition: .2s;
 }
 
     .nav-link:hover {
         background: rgba(255, 255, 255, .16);
-        color: #fff !important;
         transform: translateY(-2px);
     }
 
@@ -95,16 +94,21 @@ header {
 
 /* Cards */
 
-.card {
+.card,
+.dashboard-box {
     background: #fff;
     border: 1px solid #e2e4ea;
     border-radius: 16px;
-    color: #333;
     box-shadow: 0 2px 8px rgba(30, 30, 60, .05);
     transition: .25s;
 }
 
-    .card:hover {
+.card {
+    color: #333;
+}
+
+    .card:hover,
+    .dashboard-box:hover {
         transform: translateY(-4px);
         box-shadow: 0 8px 20px rgba(30, 30, 60, .09);
     }
@@ -119,23 +123,14 @@ header {
 }
 
 .dashboard-box {
-    background: #fff;
     padding: 30px;
-    border: 1px solid #e2e4ea;
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(30, 30, 60, .05);
-    transition: .25s;
 }
-
-    .dashboard-box:hover {
-        transform: translateY(-4px);
-    }
 
 /* Buttons */
 
 .btn {
-    border-radius: 30px;
     padding: 12px 30px;
+    border-radius: 30px;
     font-weight: 700;
     transition: .25s;
 }
@@ -189,8 +184,8 @@ header {
 .auth-page {
     min-height: 80vh;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .auth-card {
@@ -211,8 +206,7 @@ header {
 
     .auth-card .form-control {
         padding: 12px;
-        border: 1px solid #ffd27f;
-        border-radius: 20px;
+        border-color: #ffd27f;
     }
 
         .auth-card .form-control:focus {
@@ -227,7 +221,6 @@ header {
         border-radius: 25px;
         color: #fff;
         font-weight: 700;
-        transition: .25s;
     }
 
         .auth-card button:hover {
@@ -262,8 +255,8 @@ footer {
 
     footer .container {
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         gap: 8px;
     }
 
@@ -274,7 +267,7 @@ footer {
 
 /* Page animation */
 
-.container {
+.page-content {
     animation: pageShow .6s ease;
 }
 
@@ -319,7 +312,7 @@ footer {
     opacity: 0;
     transform: translateY(-8px);
     pointer-events: none;
-    transition: opacity .25s ease, transform .25s ease;
+    transition: .25s;
 }
 
     .password-popup.show {
@@ -328,235 +321,4 @@ footer {
         pointer-events: auto;
     }
 
-
-/* Report page*/
-.reports-page {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px 28px 28px;
-}
-
-.page-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 22px;
-}
-
-    .page-heading h1 {
-        margin: 0;
-        color: #292938;
-        font-size: 27px;
-        font-weight: 700;
-        line-height: 1.25;
-    }
-
-        .page-heading h1 i {
-            margin-right: 8px;
-            color: #5b55b6;
-        }
-
-    .page-heading p {
-        margin: 7px 0 0;
-        color: #666b7a;
-        font-size: 14px;
-        line-height: 1.5;
-    }
-
-.report-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    padding: 10px 14px;
-    background: #fff;
-    border: 1px solid #e0e2e8;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(30, 30, 60, .04);
-}
-
-.toolbar-btn {
-    padding: 8px 13px;
-    background: transparent;
-    border: none;
-    border-radius: 7px;
-    color: #555b6b;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-    .toolbar-btn:hover {
-        background: #f0f1f6;
-        color: #4f46a5;
-    }
-
-    .toolbar-btn i {
-        margin-right: 5px;
-    }
-
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.summary-card,
-.report-card {
-    background: #fff;
-    border: 1px solid #e0e2e8;
-    border-radius: 11px;
-    box-shadow: 0 2px 6px rgba(30, 30, 60, .04);
-}
-
-.summary-card {
-    padding: 19px 20px;
-}
-
-.summary-label {
-    margin-bottom: 8px;
-    color: #777d8c;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: .2px;
-}
-
-.summary-value {
-    color: #292938;
-    font-size: 27px;
-    font-weight: 700;
-    line-height: 1.25;
-}
-
-.summary-change {
-    margin-top: 6px;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.income {
-    color: #32936f;
-}
-
-.expense {
-    color: #d85c63;
-}
-
-.balance {
-    color: #5965c9;
-}
-
-.charts-grid {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 20px;
-}
-
-.report-card {
-    min-height: 420px;
-    padding: 20px;
-}
-
-.report-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-    .report-card-header > i {
-        color: #9999a5;
-        cursor: pointer;
-    }
-
-.report-card-title {
-    margin: 0;
-    color: #30303d;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.report-card-subtitle {
-    margin-top: 4px;
-    color: #777d8c;
-    font-size: 12px;
-    line-height: 1.4;
-}
-
-.reports-chart-container {
-    position: relative;
-    height: 320px;
-}
-
-.category-chart-container {
-    position: relative;
-    height: 235px;
-}
-
-.category-list {
-    margin-top: 18px;
-}
-
-.category-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 9px 0;
-    border-bottom: 1px solid #eeeef3;
-    font-size: 13px;
-}
-
-    .category-item:last-child {
-        border-bottom: none;
-    }
-
-.category-name {
-    color: #555b6b;
-}
-
-.category-amount {
-    color: #33333f;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.category-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    margin-right: 7px;
-    border-radius: 50%;
-}
-
-@media (max-width: 900px) {
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 700px) {
-    .reports-page {
-        padding: 14px 18px 24px;
-    }
-
-    .summary-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .report-toolbar {
-        overflow-x: auto;
-    }
-
-    .toolbar-btn {
-        white-space: nowrap;
-    }
-
-    .page-heading h1 {
-        font-size: 23px;
-    }
-
-    .page-heading p {
-        font-size: 13px;
-    }
-}
 

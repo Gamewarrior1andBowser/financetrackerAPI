@@ -124,9 +124,8 @@ async function loadDetails() {
 
     // Category has no Createddate field, so the linked budget's date
     // (set at creation time) is used as the best available proxy.
-    document.getElementById("createddate").innerText = budget
-        ? new Date(budget.date).toLocaledateString()
-        : "Unknown";
+    document.getElementById("createddate").textContent =
+    budget ? new Date(budget.date).toLocaleDateString() : "Unknown";
 
     const typeBadge = document.getElementById("catType");
     typeBadge.innerText = category.type;
@@ -143,15 +142,21 @@ async function loadDetails() {
     bar.className = "progress-bar " + (percent >= 80 ? "bg-danger" : percent >= 50 ? "bg-warning" : "bg-success");
 
     const warningBox = document.getElementById("budgetWarning");
-    if (percent >= 80) {
-        warningBox.className = "alert alert-danger";
-        warningBox.innerText = "You've used 80% or more of this category's budget. Consider creating a new category for future transactions.";
-        warningBox.style.display = "block";
-    } else if (percent >= 50) {
-        warningBox.className = "alert alert-warning";
-        warningBox.innerText = "You've used over half of this category's budget. Keep an eye on it, or consider creating a new category soon.";
-        warningBox.style.display = "block";
-    }
+            if (percent >= 100) {
+                warningBox.className = "alert alert-danger";
+                warningBox.textContent = "This category has reached or exceeded its budget.";
+                warningBox.style.display = "block";
+            }
+            else if (percent >= 80) {
+                warningBox.className = "alert alert-warning";
+                warningBox.textContent = "You've used 80% or more of this category's budget.";
+                warningBox.style.display = "block";
+            }
+            else if (percent >= 50) {
+                warningBox.className = "alert alert-info";
+                warningBox.textContent = "You've used more than half of this category's budget.";
+                warningBox.style.display = "block";
+            }
 
     document.getElementById("detailsBody").style.display = "block";
 }
