@@ -6,11 +6,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace financetrackerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class v7 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Budget",
+                columns: table => new
+                {
+                    budgetID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    userID = table.Column<int>(type: "int", nullable: false),
+                    username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    limits = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Budget", x => x.budgetID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
@@ -33,6 +49,7 @@ namespace financetrackerAPI.Migrations
                     userID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     creationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -42,35 +59,12 @@ namespace financetrackerAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Budget",
-                columns: table => new
-                {
-                    budgetID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    userID = table.Column<int>(type: "int", nullable: false),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    categoryID = table.Column<int>(type: "int", nullable: false),
-                    limits = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Budget", x => x.budgetID);
-                    table.ForeignKey(
-                        name: "FK_Budget_Categories_categoryID",
-                        column: x => x.categoryID,
-                        principalTable: "Categories",
-                        principalColumn: "categoryID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Transactions",
                 columns: table => new
                 {
                     transactionsID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    amount = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    amount = table.Column<int>(type: "int", precision: 10, scale: 2, nullable: false),
                     userID = table.Column<int>(type: "int", nullable: false),
                     categoryID = table.Column<int>(type: "int", nullable: false),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -85,11 +79,6 @@ namespace financetrackerAPI.Migrations
                         principalColumn: "categoryID",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Budget_categoryID",
-                table: "Budget",
-                column: "categoryID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_categoryID",
