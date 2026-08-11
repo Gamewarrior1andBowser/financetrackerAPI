@@ -1,43 +1,43 @@
 @{
     ViewData["Title"] = "Register";
 }
-
+ 
 <div class="auth-page">
-
+ 
     <div class="auth-card">
-
+ 
         <div class="text-center mb-4">
-
+ 
             <i class="bi bi-person-plus-fill"
                style="font-size:70px; color:#f59e0b;">
-            </i>
-
+</i>
+ 
             <h2 class="mt-3">
                 Create Account
-            </h2>
-
+</h2>
+ 
             <p class="text-muted">
                 Register to start managing your finances
-            </p>
-        </div>
-
+</p>
+</div>
+ 
         <div class="mb-3">
-            <label class="form-label">
-                <i class="bi bi-user-fill me-2"></i>
+<label class="form-label">
+<i class="bi bi-user-fill me-2"></i>
                 Username
-            </label>
-            <input id="username"
+</label>
+<input id="username"
                    type="text"
                    class="form-control"
                    placeholder="Enter your name" />
-        </div>
-
+</div>
+ 
         <div class="mb-3">
-            <label class="form-label">
-                <i class="bi bi-envelope-fill me-2"></i>
+<label class="form-label">
+<i class="bi bi-envelope-fill me-2"></i>
                 Email
-            </label>
-            <input id="email"
+</label>
+<input id="email"
                    type="email"
                    class="form-control"
                    placeholder="Enter your email" />
@@ -47,8 +47,8 @@
             <label class="form-label">
                 <i class="bi bi-lock-fill me-2"></i>
                 Password
-            </label>
-            <input id="password"
+</label>
+<input id="password"
                    type="password"
                    class="form-control"
                    placeholder="Create your password"
@@ -65,55 +65,54 @@
         </div>
 
         <div class="mb-4 position-relative">
-            <label class="form-label">
-                <i class="bi bi-lock-fill me-2"></i>
+<label class="form-label">
+<i class="bi bi-lock-fill me-2"></i>
                 Confirm Password
-            </label>
-            <input id="confirmPassword"
+</label>
+<input id="confirmPassword"
                    type="password"
                    class="form-control"
                    placeholder="Re-enter your password"
                    oninput="checkPasswordMatch()" />
-
+ 
             <div id="passwordMismatch" class="password-popup">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+<i class="bi bi-exclamation-triangle-fill me-2"></i>
                 Passwords do not match
-            </div>
-        </div>
-
+</div>
+</div>
+ 
         <button class="btn w-100"
                 onclick="register()">
-            <i class="bi bi-person-check-fill me-2"></i>
+<i class="bi bi-person-check-fill me-2"></i>
             Register
-        </button>
-
+</button>
+ 
         <hr class="my-4">
-
+ 
         <p class="text-center">
             Already have an account?
-
+ 
             <a asp-controller="AuthPage"
                asp-action="Login">
-
+ 
                 <i class="bi bi-box-arrow-in-right"></i>
                 Login here
-
+ 
             </a>
-        </p>
-
+</p>
+ 
         <p class="text-center">
-            <a asp-controller="Home"
+<a asp-controller="Home"
                asp-action="Index">
-                <i class="bi bi-arrow-left-circle"></i>
-
+<i class="bi bi-arrow-left-circle"></i>
+ 
                 Back to Home
-            </a>
-        </p>
-    </div>
+</a>
+</p>
 </div>
-
+</div>
+ 
 @section Scripts {
-
     <script>
         // Returns true if the password fails our strength rules:
         // - must be at least 8 characters
@@ -166,7 +165,7 @@
                 popup.classList.remove("show");
             }
         }
-
+ 
         async function register() {
             const email = document.getElementById("email").value;
             const username = document.getElementById("username").value;
@@ -185,13 +184,13 @@
             if (password !== confirmPassword) {
                 return; // blocked client-side; mismatch popup already visible
             }
-
+ 
             const response = await fetch("/api/Auth/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-
+ 
                 body: JSON.stringify({
                     email,
                     username,
