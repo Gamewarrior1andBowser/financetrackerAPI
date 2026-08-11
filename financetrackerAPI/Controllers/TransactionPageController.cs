@@ -32,4 +32,10 @@ public class TransactionPageController : Controller
         ViewData["transactionID"] = id;
         return View("~/Views/Transaction/Details.cshtml");
     }
+
+    // GET /TransactionPage/Delete/{id}
+    public IActionResult Delete(int id) {
+        ViewData["transactionID"] = id;
+        return View("~/Views/Transaction/Delete.cshtml");
+    }
 }
