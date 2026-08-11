@@ -153,283 +153,214 @@
 
 @section Scripts {
 
+    <script src="~/js/authGuard.js"></script>
 
-<script src="~/js/authGuard.js"></script>
+    <script>
 
-
-<script>
-
-const token = localStorage.getItem("token");
-
-<<<<<<< HEAD
-    
+        const token = localStorage.getItem("token");
 
 
-   
-=======
+        function showError(message) {
 
+            const box = document.getElementById("createError");
 
-function showError(message){
->>>>>>> 3d636a5f23ffd614c57c25bdd8ecf7e02da9a9ed
+            box.innerText = message;
 
-    const box = document.getElementById("createError");
+            box.style.display = "block";
 
-    box.innerText = message;
-
-    box.style.display = "block";
-
-}
-
-
-
-async function loadCategories(){
-
-    const response = await fetch("/api/Category",{
-
-        headers:{
-            "Authorization":"Bearer " + token
         }
 
-<<<<<<< HEAD
-async function getBudgetStatus(categoryID, excludeTransactionID) {
 
-    const [budgetsRes, transactionsRes] = await Promise.all([
-        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
-        fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } })
-    ]);
 
-    const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
-    const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
+        async function loadCategories() {
 
-    const budget = budgets.find(b => b.categoryID === categoryID);
+            try {
 
-    const spent = transactions
-        .filter(t => t.categoryID === categoryID && t.transactionsID !== excludeTransactionID)
-        .reduce((sum, t) => sum + t.amount, 0);
+                const response = await fetch("/api/Category", {
 
-    if (!budget) {
-        return { hasBudget: false, limit: 0, spent: spent, remaining: null };
-    }
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+
+                });
+
+
+                if (!response.ok) {
+
+                    showError("Unable to load categories.");
+
+                    return;
+
+                }
+
+
+                const categories = await response.json();
+
+                const dropdown =
+                    document.getElementById("categoryID");
+
+
+                dropdown.innerHTML = `
+                    <option value="">
+                        Select a category
+                    </option>
+                `;
+
+
+                categories.forEach(category => {
+
+                    dropdown.innerHTML += `
+
+                        <option value="${category.categoryID}">
+                            ${category.name}
+                        </option>
+
+                    `;
+
+                });
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Error loading categories:",
+                    error
+                );
+
+                showError("Unable to load categories.");
+
+            }
+
+        }
 
 
 
         async function createTransaction() {
 
-
-            const transaction =
-            {
-
-
-                amount:
-                    Number(document.getElementById("amount").value),
+            const amount =
+                Number(
+                    document.getElementById("amount").value
+                );
 
 
-
-                categoryID:
-                    Number(document.getElementById("categoryID").value),
-
-
-
-                type:
-                    document.getElementById("type").value,
+            const categoryID =
+                Number(
+                    document.getElementById("categoryID").value
+                );
 
 
+            const type =
+                document.getElementById("type").value;
 
-                date:
-                    document.getElementById("date").value
 
+            const date =
+                document.getElementById("date").value;
+
+
+
+            if (!amount || amount <= 0) {
+
+                showError(
+                    "Please enter a valid amount."
+                );
+
+                return;
+
+            }
+
+
+
+            if (!categoryID) {
+
+                showError(
+                    "Please select a category."
+                );
+
+                return;
+
+            }
+
+
+
+            const transaction = {
+
+                amount: amount,
+
+                categoryID: categoryID,
+
+                type: type,
+
+                date: date || new Date().toISOString()
 
             };
 
 
 
+            try {
 
+                const response =
+                    await fetch(
+                        "/api/Transactions",
+                        {
 
-            const response = await fetch("/api/Transactions",
-                {
+                            method: "POST",
 
+                            headers: {
 
-                    method: "POST",
+                                "Content-Type":
+                                    "application/json",
 
+                                "Authorization":
+                                    "Bearer " + token
 
+                            },
 
-                    headers:
-                    {
+                            body:
+                                JSON.stringify(transaction)
 
-                        "Content-Type": "application/json",
-
-                        "Authorization": "Bearer " + token
-
-                    },
-
-
-
-                    body: JSON.stringify(transaction)
-
-
-                });
-
-
+                        }
+                    );
 
 
 
-            if (response.ok) {
+                if (response.ok) {
 
-                window.location.href = "/TransactionPage";
+                    window.location.href =
+                        "/TransactionPage";
+
+                }
+                else {
+
+                    const error =
+                        await response.text();
+
+                    showError(
+                        error ||
+                        "Unable to create transaction."
+                    );
+
+                }
 
             }
+            catch (error) {
 
+                console.error(
+                    "Create transaction error:",
+                    error
+                );
+
+                showError(
+                    "Something went wrong while creating the transaction."
+                );
+
+            }
 
         }
 
 
 
+        loadCategories();
 
-   
-
-
-    <script src="~/js/authGuard.js"></script>
-
-
-=======
-    });
-
-
-    const categories = await response.json();
-
-
-    const dropdown = document.getElementById("categoryID");
-
-
-    dropdown.innerHTML = "";
-
-
-    categories.forEach(category=>{
-
-
-        dropdown.innerHTML += `
-
-            <option value="${category.categoryID}">
-                ${category.name}
-            </option>
-
-        `;
-
-
-    });
-
-
-}
->>>>>>> 3d636a5f23ffd614c57c25bdd8ecf7e02da9a9ed
-
-
-
-async function createTransaction(){
-
-
-    const amount =
-        Number(document.getElementById("amount").value);
-
-
-    const categoryID =
-        Number(document.getElementById("categoryID").value);
-
-
-
-    const date =
-        document.getElementById("date").value;
-
-
-
-    if(!amount || amount <= 0){
-
-        showError("Please enter a valid amount.");
-
-        return;
-
-    }
-
-
-
-    if(!categoryID){
-
-        showError("Please select a category.");
-
-        return;
-
-    }
-
-
-
-
-    const transaction = {
-
-
-        amount: amount,
-
-        categoryID: categoryID,
-
-        date: date || new Date().toISOString()
-
-
-
-    };
-
-
-
-
-    const response = await fetch("/api/Transactions",{
-
-
-        method:"POST",
-
-
-        headers:{
-
-
-            "Content-Type":"application/json",
-
-            "Authorization":"Bearer " + token
-
-
-        },
-
-
-        body:JSON.stringify(transaction)
-
-
-    });
-
-
-
-
-    if(response.ok){
-
-
-        window.location.href="/TransactionPage";
-
-
-    }
-
-    else{
-
-
-        const error = await response.text();
-
-        showError(error || "Unable to create transaction.");
-
-    }
-
-
-}
-
-
-
-
-loadCategories();
-
-
-</script>
-
+    </script>
 
 }
