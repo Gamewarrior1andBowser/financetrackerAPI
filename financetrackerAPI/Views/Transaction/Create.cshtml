@@ -164,34 +164,14 @@
 <script>
 
 const token = localStorage.getItem("token");
-
-    <script>
-
-
-        const token = localStorage.getItem("token");
-
-
-
         loadCategories();
-
-
-
-
-
         async function loadCategories() {
-
-
             const response = await fetch("/api/Category",
                 {
-
                     headers:
                     {
-
                         "Authorization": "Bearer " + token
-
                     }
-
-
                 });
 
     const categories = await response.json();
@@ -201,47 +181,24 @@ const token = localStorage.getItem("token");
         dropdown.innerHTML = `<option value="">No categories available</option>`;
         return;
     }
+    if (!response.ok) {
 
+        document.getElementById("categoryID").innerHTML =
+            "<option>No Categories</option>";
 
-            if (!response.ok) {
+        return;
 
-                document.getElementById("categoryID").innerHTML =
-                    "<option>No Categories</option>";
+    }
 
-                return;
-
-            }
-
-
-
-
-
-            const categories = await response.json();
-
-
-
-            let options = "";
-
-
-
-
-            categories.forEach(category => {
-
-
+    const categories = await response.json();
+    let options = "";
+    categories.forEach(category => {
                 options += `
-
                 <option value="${category.categoryID}">
-
                     ${category.name}
-
                 </option>
-
                 `;
-
-
             });
-
-
     dropdown.innerHTML = options;
 }
 
@@ -345,12 +302,6 @@ async function getBudgetStatus(categoryID, excludeTransactionID) {
 
         }
 
-
-
-    </script>
-
-
-    <script src="~/js/authGuard.js"></script>
 
 async function createTransaction() {
 
