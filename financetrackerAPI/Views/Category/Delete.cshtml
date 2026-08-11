@@ -52,7 +52,8 @@
 @section Scripts {
     <script>
         const token = localStorage.getItem("token");
-        const id = @categoryID;
+        // var categoryID = @ViewData["categoryID"];
+        const id = window.location.pathname.split("/").pop();
         const errorBox = document.getElementById("deleteError");
 
         async function loadCategory() {
