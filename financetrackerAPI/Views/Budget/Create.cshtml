@@ -35,7 +35,24 @@
             </div>
 
 
+            <div class="mb-3">
 
+                <label class="form-label">
+                    Category
+                </label>
+
+
+                <select id="categoryID"
+                        class="form-select">
+
+                    <option>
+                        Loading categories...
+                    </option>
+
+                </select>
+
+
+            </div>
 
 
             <div class="mb-4">
@@ -121,110 +138,178 @@
 <script>
 
 
-const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
+
+    loadCategories();
 
 
 
-function showError(message)
-{
-
-    const box = document.getElementById("createError");
-
-    box.innerText = message;
-
-    box.style.display = "block";
-
-}
+    async function loadCategories() {
 
 
+        const response = await fetch("/api/Category",
+            {
+
+                headers:
+                {
+
+                    "Authorization": "Bearer " + token
+
+                }
 
 
-async function createBudget()
-{
+            });
+
+        const categories = await response.json();
+        const dropdown = document.getElementById("categoryID");
+
+        if (categories.length === 0) {
+            dropdown.innerHTML = `<option value="">No categories available</option>`;
+            return;
+        }
 
 
-    const name =
-        document.getElementById("name").value.trim();
+        if (!response.ok) {
+
+            document.getElementById("categoryID").innerHTML =
+                "<option>No Categories</option>";
+
+            return;
+
+        }
 
 
 
-    const limit =
-        Number(document.getElementById("limit").value);
+        let options = "";
 
 
 
 
-    if(!name)
-    {
-        showError("Please enter a budget name.");
-        return;
+        categories.forEach(category => {
+
+
+            options += `
+
+                <option value="${category.categoryID}">
+
+                    ${category.name}
+
+                </option>
+
+                `;
+
+
+        });
+
+        dropdown.innerHTML = options;
+
+        document.getElementById("categoryID").innerHTML = options;
     }
 
 
 
-    if(!limit || limit <= 0)
+    function showError(message)
     {
-        showError("Please enter a valid budget limit.");
-        return;
+
+        const box = document.getElementById("createError");
+
+        box.innerText = message;
+
+        box.style.display = "block";
+
     }
 
 
 
 
-
-    const budget = {
-
-        name: name,
-
-        limit: limit,
-
-        date: new Date().toISOString()
-
-    };
-
-
-
-
-
-    const response = await fetch("/api/Budget",
+    async function createBudget()
     {
 
-        method:"POST",
 
-        headers:
+        const name =
+            document.getElementById("name").value.trim();
+
+
+
+        const limit =
+            Number(document.getElementById("limit").value);
+
+
+
+
+        if(!name)
+        {
+            showError("Please enter a budget name.");
+            return;
+        }
+
+
+
+        if(!limit || limit <= 0)
+        {
+            showError("Please enter a valid budget limit.");
+            return;
+        }
+
+
+
+
+
+        const budget = {
+
+            name: name,
+
+            categoryID: categoryID,
+
+            limit: limit,
+
+            date: new Date().toISOString()
+
+        };
+
+
+
+
+
+        const response = await fetch("/api/Budget",
         {
 
-            "Content-Type":"application/json",
+            method:"POST",
 
-            "Authorization":"Bearer " + token
+            headers:
+            {
 
-        },
+                "Content-Type":"application/json",
 
+                "Authorization":"Bearer " + token
 
-        body: JSON.stringify(budget)
-
-    });
-
-
+            },
 
 
+            body: JSON.stringify(budget)
+
+        });
 
 
-    if(!response.ok)
-    {
 
-        showError("Unable to create budget.");
 
-        return;
+
+
+        if(!response.ok)
+        {
+
+            showError("Unable to create budget.");
+
+            return;
+
+        }
+
+
+
+
+        window.location.href="/BudgetPage";
 
     }
-
-
-
-
-    window.location.href="/BudgetPage";
-
-}
 
 
 
