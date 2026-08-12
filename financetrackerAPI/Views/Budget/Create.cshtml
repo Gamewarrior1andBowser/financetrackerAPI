@@ -32,16 +32,48 @@
             <div class="budget-form-group">
                 <label for="limit">Budget Limit</label>
 
-                <div class="budget-input">
-                    <span>$</span>
+            <div class="mb-3">
 
-                    <input id="limit"
-                           type="number"
-                           min="1"
-                           step="0.01"
-                           placeholder="0.00"
-                           required />
-                </div>
+                <label class="form-label">
+                    Category
+                </label>
+
+
+                <select id="categoryID"
+                        class="form-select">
+
+                    <option>
+                        Loading categories...
+                    </option>
+
+                </select>
+
+
+            </div>
+
+
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Budget limits
+                </label>
+
+
+                <input id="limits"
+                       type="number"
+                       min="1"
+                       step="0.01"
+                       class="form-control"
+                       placeholder="Enter budget limits" />
+
+
+                <small class="text-muted">
+
+                    Set the maximum amount you want to spend for this budget.
+
+                </small>
+
+
             </div>
 
             <div id="createError"
@@ -121,6 +153,7 @@
 
             }
 
+        }
 
             const budget = {
 
