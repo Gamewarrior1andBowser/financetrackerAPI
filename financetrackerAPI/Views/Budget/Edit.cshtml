@@ -3,176 +3,173 @@
     var budgetID = ViewData["budgetID"];
 }
 
+<div class="budget-form-page">
 
+    <div class="budget-form-card">
 
-<h1 class="fw-bold mb-4">
+        <div class="budget-form-header">
+            <div class="budget-form-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
 
-<i class="bi bi-pencil-square me-2"></i>
+            <div>
+                <h1>Edit Budget</h1>
+                <p>Update your budget name and spending limit.</p>
+            </div>
+        </div>
 
-Edit Budget
+        <form id="editBudgetForm">
 
-</h1>
+            <div class="mb-3">
+                <label class="form-label">
+                    Budget Name
+                </label>
 
+                <input id="username"
+                       type="text"
+                       class="form-control"
+                       placeholder="Budget name"
+                       required />
+            </div>
 
+            <div class="mb-3">
+                <label class="form-label">
+                    Budget Limit
+                </label>
 
-<div class="card shadow border-0 p-4">
+                <input id="limits"
+                       type="number"
+                       min="1"
+                       step="0.01"
+                       class="form-control"
+                       placeholder="Budget limit"
+                       required />
+            </div>
 
+            <div id="editError"
+                 class="budget-form-error"
+                 style="display:none;">
+            </div>
 
-<form id="editBudgetForm">
+            <div class="budget-form-actions">
 
+                <button type="submit"
+                        class="btn btn-primary">
+                    <i class="bi bi-save me-1"></i>
+                    Update Budget
+                </button>
 
-<div class="mb-3">
+                <a asp-controller="BudgetPage"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    <i class="bi bi-arrow-left-circle me-1"></i>
+                    Back
+                </a>
 
+            </div>
 
-<label class="form-label">
+        </form>
 
-Budget Name
-
-</label>
-
-
-<input id="budgetName"
-       class="form-control"
-       placeholder="Enter budget name">
-
+    </div>
 
 </div>
-
-
-
-<div class="mb-3">
-
-
-<label class="form-label">
-
-Budget limits
-
-</label>
-
-
-<input id="budgetlimits"
-       type="number"
-       class="form-control"
-       placeholder="Enter limit">
-
-
-</div>
-
-
-
-<button class="btn btn-warning w-100">
-
-<i class="bi bi-save me-2"></i>
-
-Update Budget
-
-</button>
-
-
-
-</form>
-
-
-</div>
-
-
-
-<a asp-controller="BudgetPage"
-   asp-action="Index"
-   class="btn btn-secondary mt-3">
-
-
-<i class="bi bi-arrow-left-circle"></i>
-
-Back
-
-
-</a>
-
-
 
 @section Scripts {
 
+    <script>
 
-<script>
+        const id = @budgetID;
+        const token = localStorage.getItem("token");
 
+        const form = document.getElementById("editBudgetForm");
+        const errorBox = document.getElementById("editError");
 
-const id = @budgetID;
+        async function loadBudget() {
 
+            try {
 
+                const response = await fetch(`/api/Budget/${id}`, {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
 
-async function loadBudget(){
+                if (!response.ok) {
+                    throw new Error();
+                }
 
+                const budget = await response.json();
 
-const response = await fetch(`/api/Budget/${id}`);
+                document.getElementById("username").value =
+                    budget.username || "";
 
+                document.getElementById("limits").value =
+                    budget.limits || 0;
 
-const budget = await response.json();
+            }
+            catch {
 
+                errorBox.textContent =
+                    "Unable to load budget.";
 
-document.getElementById("budgetName").value = budget.name;
+                errorBox.style.display = "block";
+            }
+        }
 
-document.getElementById("budgetlimits").value = budget.limit;
+        form.addEventListener("submit", async function(e) {
 
+            e.preventDefault();
 
-}
+            const username =
+                document.getElementById("username").value.trim();
 
+            const limits =
+                Number(document.getElementById("limits").value);
 
+            if (!username || !limits || limits <= 0) {
+                errorBox.textContent =
+                    "Please enter a valid name and budget limit.";
 
-loadBudget();
+                errorBox.style.display = "block";
+                return;
+            }
 
+            try {
 
+                const response = await fetch(`/api/Budget/${id}`, {
 
-document.getElementById("editBudgetForm")
-.addEventListener("submit", async e=>{
+                    method: "PUT",
 
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
 
-e.preventDefault();
+                    body: JSON.stringify({
+                        username: username,
+                        limits: limits
+                    })
+                });
 
+                if (!response.ok) {
+                    throw new Error();
+                }
 
+                window.location.href = "/BudgetPage";
 
-await fetch(`/api/Budget/${id}`,
-{
+            }
+            catch {
 
+                errorBox.textContent =
+                    "Unable to update budget.";
 
-method:"PUT",
+                errorBox.style.display = "block";
+            }
 
+        });
 
-headers:
-{
+        loadBudget();
 
-"Content-Type":"application/json"
-
-},
-
-
-body:JSON.stringify({
-
-name:
-document.getElementById("budgetName").value,
-
-
-limit:
-Number(document.getElementById("budgetlimits").value),
-
-
-date:new Date()
-
-})
-
-
-});
-
-
-
-window.location.href="/BudgetPage";
-
-
-});
-
-
-
-</script>
-
+    </script>
 
 }

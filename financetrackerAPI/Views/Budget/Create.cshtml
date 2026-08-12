@@ -2,38 +2,35 @@
     ViewData["Title"] = "Add Budget";
 }
 
+<div class="budget-form-page">
 
-<div class="row justify-content-center">
+    <div class="budget-form-card">
 
-    <div class="col-md-6">
+        <div class="budget-form-header">
+            <div class="budget-form-icon">
+                <i class="bi bi-piggy-bank-fill"></i>
+            </div>
 
-        <div class="card shadow border-0 p-4">
+            <div>
+                <h1>Add Budget</h1>
+                <p>Set a spending limit for your budget.</p>
+            </div>
+        </div>
 
+        <form id="createBudgetForm">
 
-            <h2 class="mb-4">
-
-                <i class="bi bi-plus-circle-fill me-2"></i>
-
-                Add Budget
-
-            </h2>
-
-
-
-            <div class="mb-3">
-
-                <label class="form-label">
-                    Budget Name
-                </label>
-
+            <div class="budget-form-group">
+                <label for="name">Budget Name</label>
 
                 <input id="name"
                        type="text"
                        class="form-control"
-                       placeholder="e.g. Groceries, Rent, Travel" />
-
+                       placeholder="e.g. Groceries, Rent, Travel"
+                       required />
             </div>
 
+            <div class="budget-form-group">
+                <label for="limit">Budget Limit</label>
 
             <div class="mb-3">
 
@@ -79,241 +76,139 @@
 
             </div>
 
-
-
-
             <div id="createError"
-                 class="alert alert-danger"
+                 class="budget-form-error"
                  style="display:none;">
             </div>
 
-
-
-
-
-            <div class="d-flex gap-2">
-
-
-                <button class="btn btn-success"
-                        onclick="createBudget()">
-
-
-                    <i class="bi bi-check-circle me-1"></i>
-
-                    Save
-
-
-                </button>
-
-
-
+            <div class="budget-form-actions">
 
                 <a asp-controller="BudgetPage"
                    asp-action="Index"
-                   class="btn btn-secondary">
-
-
-                    <i class="bi bi-arrow-left-circle me-1"></i>
-
+                   class="budget-cancel-btn">
+                    <i class="bi bi-arrow-left"></i>
                     Back
-
-
                 </a>
 
+                <button type="submit"
+                        class="budget-save-btn">
+                    <i class="bi bi-check-circle"></i>
+                    Save Budget
+                </button>
 
             </div>
 
-
-        </div>
+        </form>
 
     </div>
 
 </div>
 
-
-
 @section Scripts {
 
+    <script>
 
-<script>
+        const token = localStorage.getItem("token");
 
-
-    const token = localStorage.getItem("token");
-
-    loadCategories();
-
+        const form = document.getElementById("createBudgetForm");
+        const errorBox = document.getElementById("createError");
 
 
-    async function loadCategories() {
+        function showError(message) {
+
+            errorBox.textContent = message;
+            errorBox.style.display = "block";
+
+        }
 
 
-        const response = await fetch("/api/Category",
-            {
+        form.addEventListener("submit", async function(e) {
 
-                headers:
-                {
+            e.preventDefault();
 
-                    "Authorization": "Bearer " + token
+            errorBox.style.display = "none";
+
+            const name = document
+                .getElementById("name")
+                .value
+                .trim();
+
+            const limit = Number(
+                document.getElementById("limit").value
+            );
+
+
+            if (!name) {
+
+                showError("Please enter a budget name.");
+                return;
+
+            }
+
+
+            if (!limit || limit <= 0) {
+
+                showError("Please enter a valid budget limit.");
+                return;
+
+            }
+
+        }
+
+            const budget = {
+
+                username: name,
+
+                limits: limit
+
+            };
+
+
+            try {
+
+                const response = await fetch("/api/Budget", {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type": "application/json",
+
+                        "Authorization": "Bearer " + token
+
+                    },
+
+                    body: JSON.stringify(budget)
+
+                });
+
+
+                if (!response.ok) {
+
+                    const message = await response.text();
+
+                    console.error(message);
+
+                    showError("Unable to create budget.");
+
+                    return;
 
                 }
 
 
-            });
+                window.location.href = "/BudgetPage";
 
-        const categories = await response.json();
-        const dropdown = document.getElementById("categoryID");
+            }
+            catch (error) {
 
-        if (categories.length === 0) {
-            dropdown.innerHTML = `<option value="">No categories available</option>`;
-            return;
-        }
+                console.error(error);
 
+                showError("Something went wrong. Please try again.");
 
-        if (!response.ok) {
-
-            document.getElementById("categoryID").innerHTML =
-                "<option>No Categories</option>";
-
-            return;
-
-        }
-
-
-
-        let options = "";
-
-
-
-
-        categories.forEach(category => {
-
-
-            options += `
-
-                <option value="${category.categoryID}">
-
-                    ${category.name}
-
-                </option>
-
-                `;
-
+            }
 
         });
 
-        dropdown.innerHTML = options;
-
-        document.getElementById("categoryID").innerHTML = options;
-    }
-
-
-
-    function showError(message)
-    {
-
-        const box = document.getElementById("createError");
-
-        box.innerText = message;
-
-        box.style.display = "block";
-
-    }
-
-
-
-
-    async function createBudget()
-    {
-
-
-        const name =
-            document.getElementById("name").value.trim();
-
-
-
-        const limits =
-            Number(document.getElementById("limits").value);
-
-
-
-
-        if(!name)
-        {
-            showError("Please enter a budget name.");
-            return;
-        }
-
-
-
-        if(!limits || limits <= 0)
-        {
-            showError("Please enter a valid budget limits.");
-            return;
-        }
-
-
-        const categoryID = Number(document.getElementById("categoryID").value);
-
-
-        const budget = {
-
-            username: name,
-
-            categoryID: categoryID,
-
-            limits: limits,
-
-            date: new Date().toISOString()
-
-        };
-
-
-
-
-
-        const response = await fetch("/api/Budget",
-        {
-
-            method:"POST",
-
-            headers:
-            {
-
-                "Content-Type":"application/json",
-
-                "Authorization":"Bearer " + token
-
-            },
-
-
-            body: JSON.stringify(budget)
-
-        });
-
-
-
-
-
-
-        if(!response.ok)
-        {
-
-            showError("Unable to create budget.");
-
-            return;
-
-        }
-
-
-
-
-        window.location.href="/BudgetPage";
-
-    }
-
-
-
-</script>
-
+    </script>
 
 }
