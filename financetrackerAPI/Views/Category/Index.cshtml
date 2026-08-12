@@ -1,25 +1,32 @@
 ﻿@{
-    ViewData["Title"] = "Create Category";
+    ViewData["Title"] = "Categories";
 }
 
+<div class="category-page">
 
-<div class="container">
+   
+    <div class="category-header">
+        <div>
+            <h1>
+                <i class="bi bi-tags-fill"></i>
+                Categories
+            </h1>
+            <p class="category-subtitle">
+                Manage your income and expense categories.
+            </p>
+        </div>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="fw-bold">
-            <i class="bi bi-tags-fill me-2"></i>
-            Categories
-        </h1>
-
-        <a asp-controller="CategoryPage" asp-action="Create" class="btn btn-success">
-            <i class="bi bi-plus-circle me-1"></i>
+        <a asp-controller="CategoryPage"
+           asp-action="Create"
+           class="category-btn category-primary">
+            <i class="bi bi-plus-lg"></i>
             Add Category
         </a>
     </div>
 
-    <div class="card shadow p-4">
+    <div class="card category-card">
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table category-table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -27,113 +34,95 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
+
                 <tbody id="categoryTable"></tbody>
             </table>
         </div>
-    </div>
 
-</div>
-
-
-<div id="deleteOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:2000; align-items:center; justify-content:center;">
-    <div class="card shadow p-4" style="max-width:420px;">
-        <h4 class="mb-3">
-            <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
-            Delete Category
-        </h4>
-        <p>
-            Are you sure you want to delete <strong id="deleteCategoryName"></strong>?
-            This will also permanently delete its budget and every transaction linked to it.
-        </p>
-        <div class="d-flex gap-2 justify-content-end">
-            <button class="btn btn-secondary" onclick="closeDeletePopup()">Cancel</button>
-            <button class="btn btn-danger" onclick="confirmDelete()">
-                <i class="bi bi-trash-fill me-1"></i>
-                Confirm Delete
-            </button>
+        <div id="emptyState" class="category-empty">
+            No categories found.
         </div>
     </div>
+   
+
 </div>
 
 @section Scripts {
-<script>
+    <script src="~/js/authGuard.js"></script>
 
-const token = localStorage.getItem("token");
-let categoryToDelete = null;
+   
+    <script>
+        const token = localStorage.getItem("token");
+        const table = document.getElementById("categoryTable");
+        const empty = document.getElementById("emptyState");
 
-loadCategories();
+        async function loadCategories() {
+            try {
+                const response = await fetch("/api/Category", {
+                    headers: {
+                        Authorization: "Bearer " + token
+                    }
+                });
 
-async function loadCategories() {
+                if (!response.ok) {
+                    throw new Error();
+                }
 
-    const response = await fetch("/api/Category", {
-        headers: { "Authorization": "Bearer " + token }
-    });
+                const categories = await response.json();
 
-    if (!response.ok) {
-        alert("Unable to load categories");
-        return;
-    }
+                if (!categories.length) {
+                    empty.style.display = "block";
+                    return;
+                }
 
-    const categories = await response.json();
-    let rows = "";
+                empty.style.display = "none";
 
-    if (categories.length === 0) {
-        rows = `<tr><td colspan="3" class="text-center text-muted">No categories yet. Create one to get started.</td></tr>`;
-    }
+                table.innerHTML = categories.map(category => `
+                        <tr>
+                            <td class="category-name">
+                                ${category.name}
+                            </td>
 
-    categories.forEach(category => {
-        const badgeClass = category.type.toLowerCase() === "income" ? "bg-success" : "bg-danger";
+                            <td>
+                                <span class="category-type ${category.type.toLowerCase()}">
+                                    ${category.type}
+                                </span>
+                            </td>
 
-        rows += `
-        <tr>
-            <td>${category.name}</td>
-            <td><span class="badge ${badgeClass}">${category.type}</span></td>
-            <td>
-                <a href="/CategoryPage/Details/${category.categoryID}" class="btn btn-info btn-sm me-1">
-                    <i class="bi bi-eye-fill"></i>
-                </a>
-                <a href="/CategoryPage/Edit/${category.categoryID}" class="btn btn-warning btn-sm me-1">
-                    <i class="bi bi-pencil-square"></i>
-                </a>
-                <button class="btn btn-danger btn-sm" onclick="openDeletePopup(${category.categoryID}, '${category.name.replace(/'/g, "\\'")}')">
-                    <i class="bi bi-trash-fill"></i>
-                </button>
-            </td>
-        </tr>
-        `;
-    });
+                            <td>
+                                <div class="category-actions">
 
-    document.getElementById("categoryTable").innerHTML = rows;
-}
+                                    <a href="/CategoryPage/Details/${category.categoryID}"
+                                       class="category-action category-view"
+                                       title="View Category">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
 
-function openDeletePopup(id, name) {
-    categoryToDelete = id;
-    document.getElementById("deleteCategoryName").innerText = name;
-    document.getElementById("deleteOverlay").style.display = "flex";
-}
+                                    <a href="/CategoryPage/Edit/${category.categoryID}"
+                                       class="category-action category-edit"
+                                       title="Edit Category">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
 
-function closeDeletePopup() {
-    categoryToDelete = null;
-    document.getElementById("deleteOverlay").style.display = "none";
-}
+                                    <a href="/CategoryPage/Delete/${category.categoryID}"
+                                       class="category-action category-delete"
+                                       title="Delete Category">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
 
-async function confirmDelete() {
+                                </div>
+                            </td>
+                        </tr>
+                    `).join("");
+            }
+            catch {
+                empty.textContent = "Unable to load categories.";
+                empty.style.display = "block";
+            }
+        }
 
-    if (!categoryToDelete) return;
-
-    const response = await fetch("/api/Category/" + categoryToDelete, {
-        method: "DELETE",
-        headers: { "Authorization": "Bearer " + token }
-    });
-
-    closeDeletePopup();
-
-    if (response.ok) {
         loadCategories();
-    } else {
-        alert("Unable to delete category");
-    }
-}
+    </script>
+    
 
-</script>
 }

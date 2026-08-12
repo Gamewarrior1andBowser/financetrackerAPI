@@ -1,137 +1,97 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Add Category";
+}
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow p-4">
+<div class="category-page">
 
-                <h2 class="mb-4">
-                    <i class="bi bi-plus-circle-fill me-2"></i>
-                    Add Category
-                </h2>
+    <div class="card category-form">
 
-                <div class="mb-3">
-                    <label class="form-label">Category Name</label>
-                    <input id="name" type="text" class="form-control" placeholder="e.g. Groceries" />
-                </div>
+        <h2>
+            <i class="bi bi-plus-circle-fill"></i>
+            Add Category
+        </h2>
 
-                <div class="mb-3">
-                    <label class="form-label">Type</label>
-                    <select id="type" class="form-select" onchange="updateLimitLabel()">
-                        <option value="Expense">Expense</option>
-                        <option value="Income">Income</option>
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label" id="limitLabel">Monthly Spending Limit</label>
-                    <input id="limit" type="number" min="1" step="0.01" class="form-control" placeholder="Enter budget limit" />
-                    <small class="text-muted" id="limitHint">
-                        This sets the budget for this category. It cannot be changed later — only new transactions will be checked against it.
-                    </small>
-                </div>
-
-                <div id="createError" class="alert alert-danger" style="display:none;"></div>
-
-                <div class="d-flex gap-2">
-                    <button class="btn btn-success" onclick="createCategory()">
-                        <i class="bi bi-check-circle me-1"></i>
-                        Save
-                    </button>
-
-                    <a asp-controller="CategoryPage" asp-action="Index" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left-circle me-1"></i>
-                        Back
-                    </a>
-                </div>
-
-            </div>
+        <div class="mb-3">
+            <label class="form-label">Category Name</label>
+            <input id="name"
+                   class="form-control"
+                   type="text"
+                   placeholder="e.g. Groceries" />
         </div>
-    </div>
-</div>
 
+        <div class="mb-3">
+            <label class="form-label">Type</label>
+
+            <select id="type" class="form-select">
+                <option value="Expense">Expense</option>
+                <option value="Income">Income</option>
+            </select>
+        </div>
+
+        <div id="createError" class="category-error"></div>
+
+        <div class="category-buttons">
+            <button class="category-btn category-primary"
+                    onclick="createCategory()">
+                <i class="bi bi-check-lg me-1"></i> Save
+            </button>
+
+            <a asp-controller="CategoryPage"
+               asp-action="Index"
+               class="category-btn category-secondary">
+                Cancel
+            </a>
+        </div>
+
+    </div>
+
+</div>
 
 @section Scripts {
     <script>
+        const errorBox = document.getElementById("createError");
 
-        const token = localStorage.getItem("token");
-
-        function updateLimitLabel() {
-            const type = document.getElementById("type").value;
-            const label = document.getElementById("limitLabel");
-            const hint = document.getElementById("limitHint");
-
-            if (type === "Income") {
-                label.innerText = "Monthly Income Goal";
-                hint.innerText = "This sets the target for this income category. It cannot be changed later.";
-            } else {
-                label.innerText = "Monthly Spending Limit";
-                hint.innerText = "This sets the budget for this category. It cannot be changed later — only new transactions will be checked against it.";
-            }
-        }
-
+        // Try to make the names of the categories unique
         function showError(message) {
-            const box = document.getElementById("createError");
-            box.innerText = message;
-            box.style.display = "block";
+            errorBox.textContent = message;
+            errorBox.style.display = "block";
         }
 
         async function createCategory() {
-
+            const token = localStorage.getItem("token");
             const name = document.getElementById("name").value.trim();
             const type = document.getElementById("type").value;
-            const limit = Number(document.getElementById("limit").value);
+
+            if (!token) {
+                showError("Your session has expired. Please log in again.");
+                return;
+            }
 
             if (!name) {
                 showError("Please enter a category name.");
                 return;
             }
 
-            if (!limit || limit <= 0) {
-                showError("Please enter a budget limit greater than 0.");
-                return;
+            try {
+                const response = await fetch("/api/Category", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token
+                    },
+                    body: JSON.stringify({ name, type })
+                });
+
+                if (!response.ok) {
+                    showError("Unable to create category.");
+                    return;
+                }
+
+                window.location.href = "/CategoryPage";
             }
-
-            const category = { name: name, type: type };
-
-            const categoryResponse = await fetch("/api/Category", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + token
-                },
-                body: JSON.stringify(category)
-            });
-
-            if (!categoryResponse.ok) {
-                showError("Unable to create category.");
-                return;
+            catch {
+                showError("Unable to connect to the server.");
             }
-
-            const createdCategory = await categoryResponse.json();
-
-            const budget = {
-                categoryID: createdCategory.categoryID,
-                limit: limit,
-                date: new Date().toISOString()
-            };
-
-            const budgetResponse = await fetch("/api/Budget", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + token
-                },
-                body: JSON.stringify(budget)
-            });
-
-            if (!budgetResponse.ok) {
-                showError("Category was created, but the budget could not be saved. Please contact support.");
-                return;
-            }
-
-            window.location.href = "/CategoryPage";
         }
-
     </script>
 }

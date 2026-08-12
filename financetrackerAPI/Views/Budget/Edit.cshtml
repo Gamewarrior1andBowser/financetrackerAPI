@@ -1,5 +1,175 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Edit Budget";
+    var budgetID = ViewData["budgetID"];
+}
+
+<div class="budget-form-page">
+
+    <div class="budget-form-card">
+
+        <div class="budget-form-header">
+            <div class="budget-form-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+
+            <div>
+                <h1>Edit Budget</h1>
+                <p>Update your budget name and spending limit.</p>
+            </div>
+        </div>
+
+        <form id="editBudgetForm">
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Budget Name
+                </label>
+
+                <input id="username"
+                       type="text"
+                       class="form-control"
+                       placeholder="Budget name"
+                       required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Budget Limit
+                </label>
+
+                <input id="limits"
+                       type="number"
+                       min="1"
+                       step="0.01"
+                       class="form-control"
+                       placeholder="Budget limit"
+                       required />
+            </div>
+
+            <div id="editError"
+                 class="budget-form-error"
+                 style="display:none;">
+            </div>
+
+            <div class="budget-form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    <i class="bi bi-save me-1"></i>
+                    Update Budget
+                </button>
+
+                <a asp-controller="BudgetPage"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    <i class="bi bi-arrow-left-circle me-1"></i>
+                    Back
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        const id = @budgetID;
+        const token = localStorage.getItem("token");
+
+        const form = document.getElementById("editBudgetForm");
+        const errorBox = document.getElementById("editError");
+
+        async function loadBudget() {
+
+            try {
+
+                const response = await fetch(`/api/Budget/${id}`, {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error();
+                }
+
+                const budget = await response.json();
+
+                document.getElementById("username").value =
+                    budget.username || "";
+
+                document.getElementById("limits").value =
+                    budget.limits || 0;
+
+            }
+            catch {
+
+                errorBox.textContent =
+                    "Unable to load budget.";
+
+                errorBox.style.display = "block";
+            }
+        }
+
+        form.addEventListener("submit", async function(e) {
+
+            e.preventDefault();
+
+            const username =
+                document.getElementById("username").value.trim();
+
+            const limits =
+                Number(document.getElementById("limits").value);
+
+            if (!username || !limits || limits <= 0) {
+                errorBox.textContent =
+                    "Please enter a valid name and budget limit.";
+
+                errorBox.style.display = "block";
+                return;
+            }
+
+            try {
+
+                const response = await fetch(`/api/Budget/${id}`, {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+
+                    body: JSON.stringify({
+                        username: username,
+                        limits: limits
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error();
+                }
+
+                window.location.href = "/BudgetPage";
+
+            }
+            catch {
+
+                errorBox.textContent =
+                    "Unable to update budget.";
+
+                errorBox.style.display = "block";
+            }
+
+        });
+
+        loadBudget();
+
+    </script>
+
 }

@@ -26,8 +26,8 @@
 
 
 
-                    <dt class="col-sm-4">Amount</dt>
-                    <dd class="col-sm-8" id="txAmount"></dd>
+                    <dt class="col-sm-4">amount</dt>
+                    <dd class="col-sm-8" id="txamount"></dd>
 
                 <input type="hidden" id="transactionID" value="@ViewBag.transactionsID" />
 
@@ -37,7 +37,7 @@
 
                 <div class="mb-3">
 
-                    <strong>Date:</strong>
+                    <strong>date:</strong>
 
                     <span id="date"></span>
 
@@ -65,7 +65,7 @@
 
                 <div class="mb-3">
 
-                    <strong>Amount:</strong>
+                    <strong>amount:</strong>
 
                     <span id="amount"></span>
 
@@ -127,12 +127,7 @@
 <script>
 
 const token = localStorage.getItem("token");
-const transactionID = @transactionID;
 
-<script>
-
-
-const token = localStorage.getItem("token");
 
 
 const id = document.getElementById("transactionID").value;
@@ -212,12 +207,9 @@ async function loadDetails()
 }
 
 
-
-</script>
-
 async function confirmDelete() {
 
-<script src="~/js/authGuard.js"></script>
+    <script src="~/js/authGuard.js"></script>
 
     if (response.ok) {
         window.location.href = "/TransactionPage";

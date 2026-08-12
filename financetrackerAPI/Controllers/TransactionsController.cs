@@ -75,9 +75,9 @@ public class TransactionsController : ControllerBase
             {
                 t.transactionsID,
 
-                t.Amount,
+                t.amount,
 
-                t.Date,
+                t.date,
 
                 t.categoryID,
 
@@ -119,9 +119,9 @@ public class TransactionsController : ControllerBase
             {
                 t.transactionsID,
 
-                t.Amount,
+                t.amount,
 
-                t.Date,
+                t.date,
 
                 t.categoryID,
 
@@ -177,11 +177,11 @@ public class TransactionsController : ControllerBase
 
 
 
-        transaction.Amount = updatedTransaction.Amount;
+        transaction.amount = updatedTransaction.amount;
 
         transaction.categoryID = updatedTransaction.categoryID;
 
-        transaction.Date = updatedTransaction.Date;
+        transaction.date = updatedTransaction.date;
 
 
 

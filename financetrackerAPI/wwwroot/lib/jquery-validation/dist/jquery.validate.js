@@ -60,7 +60,7 @@ $.extend( $.fn, {
 				}
 			} );
 
-			// Validate the form on submit
+			// ValiDate the form on submit
 			this.on( "submit.validate", function( event ) {
 				if ( validator.settings.debug ) {
 
@@ -373,8 +373,8 @@ $.extend( $.validator, {
 		remote: "Please fix this field.",
 		email: "Please enter a valid email address.",
 		url: "Please enter a valid URL.",
-		date: "Please enter a valid date.",
-		dateISO: "Please enter a valid date (ISO).",
+		Date: "Please enter a valid Date.",
+		DateISO: "Please enter a valid Date (ISO).",
 		number: "Please enter a valid number.",
 		digits: "Please enter only digits.",
 		equalTo: "Please enter the same value again.",
@@ -444,8 +444,8 @@ $.extend( $.validator, {
 			$( this.currentForm )
 				.on( "focusin.validate focusout.validate keyup.validate",
 					":text, [type='password'], [type='file'], select, textarea, [type='number'], [type='search'], " +
-					"[type='tel'], [type='url'], [type='email'], [type='datetime'], [type='date'], [type='month'], " +
-					"[type='week'], [type='time'], [type='datetime-local'], [type='range'], [type='color'], " +
+					"[type='tel'], [type='url'], [type='email'], [type='Datetime'], [type='Date'], [type='month'], " +
+					"[type='week'], [type='time'], [type='Datetime-local'], [type='range'], [type='color'], " +
 					"[type='radio'], [type='checkbox'], [contenteditable], [type='button']", delegate )
 
 				// Support: Chrome, oldIE
@@ -1188,8 +1188,8 @@ $.extend( $.validator, {
 		required: { required: true },
 		email: { email: true },
 		url: { url: true },
-		date: { date: true },
-		dateISO: { dateISO: true },
+		Date: { Date: true },
+		DateISO: { DateISO: true },
 		number: { number: true },
 		digits: { digits: true },
 		creditcard: { creditcard: true }
@@ -1220,7 +1220,7 @@ $.extend( $.validator, {
 	normalizeAttributeRule: function( rules, type, method, value ) {
 
 		// Convert the value to a number for number inputs, and for text for backwards compability
-		// allows type="date" and others to be compared as strings
+		// allows type="Date" and others to be compared as strings
 		if ( /min|max|step/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
 			value = Number( value );
 
@@ -1236,7 +1236,7 @@ $.extend( $.validator, {
 
 			// Exception: the jquery validate 'range' method
 			// does not test for the html5 'range' type
-			rules[ type === "date" ? "dateISO" : method ] = true;
+			rules[ type === "Date" ? "DateISO" : method ] = true;
 		}
 	},
 
@@ -1437,8 +1437,8 @@ $.extend( $.validator, {
 			return this.optional( element ) || /^(?:(?:(?:https?|ftp):)?\/\/)(?:(?:[^\]\[?\/<~#`!@$^&*()+=}|:";',>{ ]|%[0-9A-Fa-f]{2})+(?::(?:[^\]\[?\/<~#`!@$^&*()+=}|:";',>{ ]|%[0-9A-Fa-f]{2})*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( value );
 		},
 
-		// https://jqueryvalidation.org/date-method/
-		date: ( function() {
+		// https://jqueryvalidation.org/Date-method/
+		Date: ( function() {
 			var called = false;
 
 			return function( value, element ) {
@@ -1446,9 +1446,9 @@ $.extend( $.validator, {
 					called = true;
 					if ( this.settings.debug && window.console ) {
 						console.warn(
-							"The `date` method is deprecated and will be removed in version '2.0.0'.\n" +
+							"The `Date` method is deprecated and will be removed in version '2.0.0'.\n" +
 							"Please don't use it, since it relies on the Date constructor, which\n" +
-							"behaves very differently across browsers and locales. Use `dateISO`\n" +
+							"behaves very differently across browsers and locales. Use `DateISO`\n" +
 							"instead or one of the locale specific methods in `localizations/`\n" +
 							"and `additional-methods.js`."
 						);
@@ -1459,8 +1459,8 @@ $.extend( $.validator, {
 			};
 		}() ),
 
-		// https://jqueryvalidation.org/dateISO-method/
-		dateISO: function( value, element ) {
+		// https://jqueryvalidation.org/DateISO-method/
+		DateISO: function( value, element ) {
 			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test( value );
 		},
 
@@ -1530,7 +1530,7 @@ $.extend( $.validator, {
 				decimals;
 
 			// Works only for text, number and range input types
-			// TODO find a way to support input types date, datetime, datetime-local, month, time and week
+			// TODO find a way to support input types Date, Datetime, Datetime-local, month, time and week
 			if ( notSupported ) {
 				throw new Error( errorMessage );
 			}
@@ -1548,7 +1548,7 @@ $.extend( $.validator, {
 		// https://jqueryvalidation.org/equalTo-method/
 		equalTo: function( value, element, param ) {
 
-			// Bind to the blur event of the target in order to revalidate whenever the target field is updated
+			// Bind to the blur event of the target in order to revalidate whenever the target field is upDated
 			var target = $( param );
 			if ( this.settings.onfocusout && target.not( ".validate-equalTo-blur" ).length ) {
 				target.addClass( "validate-equalTo-blur" ).on( "blur.validate-equalTo", function() {

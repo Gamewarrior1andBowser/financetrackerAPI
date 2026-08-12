@@ -2,205 +2,917 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="container">
+<div class="finance-dashboard">
 
-    <h1 class="fw-bold mb-4">
-        <i class="bi bi-speedometer2 me-2"></i>
-        Dashboard
-    </h1>
+    <!-- TOP -->
+    <div class="dashboard-top">
 
-   
-    <div class="row g-4 mb-4">
-        <div class="col-md-6">
-            <div class="card shadow h-100">
-                <div class="card-header bg-success text-white fw-bold">
-                    <i class="bi bi-arrow-up-circle-fill me-1"></i>
-                    Income
-                </div>
-                <div class="card-body text-center">
-                    <h2 class="fw-bold mb-0" id="incomeTotal">$0.00</h2>
-                    <small class="text-muted">Total from income categories</small>
-                </div>
-            </div>
+        <div class="finance-logo">
+            <i class="bi bi-stack"></i>
+            <span class="finance-dollar">$</span>
         </div>
 
-        <div class="col-md-6">
-            <div class="card shadow h-100">
-                <div class="card-header bg-danger text-white fw-bold">
-                    <i class="bi bi-arrow-down-circle-fill me-1"></i>
-                    Expenses
-                </div>
-                <div class="card-body text-center">
-                    <h2 class="fw-bold mb-0" id="expenseTotal">$0.00</h2>
-                    <small class="text-muted">Total from expense categories</small>
-                </div>
-            </div>
-        </div>
+        <h1>
+            Personal Finance Tracker
+        </h1>
+
     </div>
 
 
-    <div class="row g-4">
+    <!-- NAVIGATION -->
+    <div class="dashboard-nav">
 
-        <div class="col-md-4 d-flex">
-            <div class="card shadow p-3 flex-fill">
-                <h5 class="fw-bold mb-3">
-                    <i class="bi bi-star-fill me-1"></i>
-                    Most Used Category
-                </h5>
-                <div id="mostUsedCategory">
-                    <p class="text-muted mb-0">No transactions yet.</p>
-                </div>
-            </div>
+        <div class="dashboard-nav-left">
+
+            <a asp-controller="TransactionPage"
+               asp-action="Index"
+               class="dashboard-nav-link active">
+
+                <i class="bi bi-cash-stack"></i>
+                Transactions
+
+            </a>
+
+
+            <a href="#dashboardStats"
+               class="dashboard-nav-link">
+
+                <i class="bi bi-bar-chart-line-fill"></i>
+                Stats
+
+            </a>
+
         </div>
 
-        <div class="col-md-4 d-flex">
-            <div class="card shadow p-3 flex-fill">
-                <h5 class="fw-bold mb-3">
-                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                    Budgets Almost Full
-                </h5>
-                <ul class="list-group list-group-flush" id="almostFullList">
-                    <li class="list-group-item text-muted">No budgets are close to their limit.</li>
-                </ul>
-            </div>
+
+        <div class="dashboard-nav-right">
+
+            <a asp-controller="TransactionPage"
+               asp-action="Create"
+               class="new-income-btn">
+
+                <i class="bi bi-plus-circle-fill"></i>
+                New Income
+
+            </a>
+
+
+            <a asp-controller="TransactionPage"
+               asp-action="Create"
+               class="new-expense-btn">
+
+                <i class="bi bi-plus-circle-fill"></i>
+                New Expense
+
+            </a>
+
         </div>
 
-        <div class="col-md-4 d-flex">
-            <div class="card shadow p-3 flex-fill">
-                <h5 class="fw-bold mb-3">
-                    <i class="bi bi-clock-history me-1"></i>
-                    Recent Transactions
-                </h5>
-                <ul class="list-group list-group-flush" id="recentTransactionsList">
-                    <li class="list-group-item text-muted">No transactions yet.</li>
-                </ul>
+    </div>
+
+
+
+    <!-- CHART SECTION -->
+    <div id="dashboardStats"
+         class="dashboard-charts">
+
+
+        <!-- CATEGORY CHART -->
+        <div class="dashboard-chart-card">
+
+            <div class="chart-title">
+
+                <h2>
+                    Spend By Category This Month
+                </h2>
+
             </div>
+
+
+            <div class="chart-container donut-container">
+
+                <canvas id="categoryChart"></canvas>
+
+            </div>
+
+
+            <div id="categoryLegend"
+                 class="chart-legend">
+            </div>
+
+        </div>
+
+
+
+        <!-- TREND CHART -->
+        <div class="dashboard-chart-card trend-card">
+
+            <div class="chart-title">
+
+                <h2>
+                    This Year Income vs. Expenses Trend
+                </h2>
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas id="trendChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- SUMMARY -->
+    <div class="dashboard-summary-row">
+
+        <div class="summary-box">
+
+            <span>
+                Total Income
+            </span>
+
+            <strong id="incomeTotal">
+                $0.00
+            </strong>
+
+        </div>
+
+
+        <div class="summary-box">
+
+            <span>
+                Total Expenses
+            </span>
+
+            <strong id="expenseTotal">
+                $0.00
+            </strong>
+
+        </div>
+
+
+        <div class="summary-box">
+
+            <span>
+                Balance
+            </span>
+
+            <strong id="balanceTotal">
+                $0.00
+            </strong>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- RECENT TRANSACTIONS -->
+    <div class="recent-dashboard-section">
+
+        <div class="recent-header">
+
+            <h2>
+                Recent Transactions
+            </h2>
+
+            <a asp-controller="TransactionPage"
+               asp-action="Index">
+
+                View All
+
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+
+        <div id="recentDashboardTransactions"
+             class="recent-dashboard-list">
+        </div>
+
+
+        <div id="noRecentTransactions"
+             class="dashboard-empty"
+             style="display:none;">
+
+            <i class="bi bi-receipt"></i>
+
+            <p>
+                No transactions yet.
+            </p>
+
         </div>
 
     </div>
 
 </div>
 
+
+
 @section Scripts {
-<script>
 
-const token = localStorage.getItem("token");
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-loadDashboard();
 
-async function loadDashboard() {
+    <script>
 
-    const [categoriesRes, transactionsRes, budgetsRes] = await Promise.all([
-        fetch("/api/Category", { headers: { "Authorization": "Bearer " + token } }),
-        fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } }),
-        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } })
-    ]);
+        const token = localStorage.getItem("token");
 
-    const categories = categoriesRes.ok ? await categoriesRes.json() : [];
-    const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
-    const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
+        let dashboardCategories = [];
+        let dashboardTransactions = [];
+        let categoryChartInstance = null;
+        let trendChartInstance = null;
 
-    const categoryById = {};
-    categories.forEach(c => categoryById[c.categoryID] = c);
 
-    renderHero(transactions, categoryById);
-    renderMostUsedCategory(transactions, categoryById);
-    renderAlmostFullBudgets(budgets, transactions, categoryById);
-    renderRecentTransactions(transactions);
-}
+        loadDashboard();
 
-function renderHero(transactions, categoryById) {
 
-    let income = 0;
-    let expense = 0;
 
-    transactions.forEach(t => {
-        const category = categoryById[t.categoryID];
-        if (!category) return;
+        async function loadDashboard() {
 
-        if (category.type.toLowerCase() === "income") {
-            income += t.amount;
-        } else {
-            expense += t.amount;
+            try {
+
+                const [
+                    categoriesRes,
+                    transactionsRes,
+                    budgetsRes
+                ] = await Promise.all([
+
+                    fetch("/api/Category", {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    }),
+
+                    fetch("/api/Transactions", {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    }),
+
+                    fetch("/api/Budget", {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    })
+
+                ]);
+
+
+                dashboardCategories =
+                    categoriesRes.ok
+                        ? await categoriesRes.json()
+                        : [];
+
+
+                dashboardTransactions =
+                    transactionsRes.ok
+                        ? await transactionsRes.json()
+                        : [];
+
+
+                const budgets =
+                    budgetsRes.ok
+                        ? await budgetsRes.json()
+                        : [];
+
+
+                renderTotals();
+
+                renderCategoryChart();
+
+                renderTrendChart();
+
+                renderRecentTransactions();
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Dashboard loading error:",
+                    error
+                );
+
+            }
+
         }
-    });
 
-    document.getElementById("incomeTotal").innerText = "$" + income.toFixed(2);
-    document.getElementById("expenseTotal").innerText = "$" + expense.toFixed(2);
-}
 
-function renderMostUsedCategory(transactions, categoryById) {
 
-    if (transactions.length === 0) return;
+        /* =========================================
+           TOTALS
+        ========================================= */
 
-    const counts = {};
-    transactions.forEach(t => {
-        counts[t.categoryID] = (counts[t.categoryID] || 0) + 1;
-    });
+        function renderTotals() {
 
-    let topCategoryID = null;
-    let topCount = 0;
+            let income = 0;
+            let expenses = 0;
 
-    Object.keys(counts).forEach(id => {
-        if (counts[id] > topCount) {
-            topCount = counts[id];
-            topCategoryID = Number(id);
+
+            dashboardTransactions.forEach(transaction => {
+
+                const category =
+                    dashboardCategories.find(
+                        c =>
+                            c.categoryID ===
+                            transaction.categoryID
+                    );
+
+
+                if (!category) return;
+
+
+                const amount =
+                    Number(transaction.amount) || 0;
+
+
+                if (
+                    category.type &&
+                    category.type.toLowerCase() === "income"
+                ) {
+
+                    income += amount;
+
+                }
+                else {
+
+                    expenses += amount;
+
+                }
+
+            });
+
+
+            document.getElementById(
+                "incomeTotal"
+            ).innerText =
+                "$" + income.toFixed(2);
+
+
+            document.getElementById(
+                "expenseTotal"
+            ).innerText =
+                "$" + expenses.toFixed(2);
+
+
+            document.getElementById(
+                "balanceTotal"
+            ).innerText =
+                "$" + (income - expenses).toFixed(2);
+
         }
-    });
 
-    const category = categoryById[topCategoryID];
-    const name = category ? category.name : "Unknown category";
 
-    document.getElementById("mostUsedCategory").innerHTML = `
-        <h4 class="fw-bold">${name}</h4>
-        <p class="text-muted mb-0">${topCount} transaction${topCount === 1 ? "" : "s"}</p>
-    `;
-}
 
-function renderAlmostFullBudgets(budgets, transactions, categoryById) {
+        /* =========================================
+           CATEGORY DONUT
+        ========================================= */
 
-    const spentByCategory = {};
-    transactions.forEach(t => {
-        spentByCategory[t.categoryID] = (spentByCategory[t.categoryID] || 0) + t.amount;
-    });
+        function renderCategoryChart() {
 
-    const almostFull = budgets
-        .map(b => {
-            const spent = spentByCategory[b.categoryID] || 0;
-            const percent = b.limit > 0 ? Math.round((spent / b.limit) * 100) : 0;
-            const category = categoryById[b.categoryID];
-            return { name: category ? category.name : "Unknown category", percent: percent };
-        })
-        .filter(b => b.percent >= 80)
-        .sort((a, b) => b.percent - a.percent);
+            const now = new Date();
 
-    if (almostFull.length === 0) return;
+            const currentMonth =
+                now.getMonth();
 
-    const list = document.getElementById("almostFullList");
-    list.innerHTML = almostFull.map(b => `
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            ${b.name}
-            <span class="badge bg-danger rounded-pill">${b.percent}%</span>
-        </li>
-    `).join("");
-}
+            const currentYear =
+                now.getFullYear();
 
-function renderRecentTransactions(transactions) {
 
-    if (transactions.length === 0) return;
+            const categoryTotals = {};
 
-    const recent = [...transactions]
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 5);
 
-    const list = document.getElementById("recentTransactionsList");
-    list.innerHTML = recent.map(t => `
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span>${t.categoryName ?? "No Category"}</span>
-            <span class="fw-bold">$${t.amount.toFixed(2)}</span>
-        </li>
-    `).join("");
-}
+            dashboardTransactions.forEach(transaction => {
 
-</script>
+                const transactionDate =
+                    new Date(transaction.date);
+
+
+                if (
+                    transactionDate.getMonth() !== currentMonth ||
+                    transactionDate.getFullYear() !== currentYear
+                ) {
+
+                    return;
+
+                }
+
+
+                const category =
+                    dashboardCategories.find(
+                        c =>
+                            c.categoryID ===
+                            transaction.categoryID
+                    );
+
+
+                if (!category) return;
+
+
+                if (
+                    category.type &&
+                    category.type.toLowerCase() === "income"
+                ) {
+
+                    return;
+
+                }
+
+
+                const categoryName =
+                    category.name ||
+                    transaction.categoryName ||
+                    "Other";
+
+
+                categoryTotals[categoryName] =
+                    (categoryTotals[categoryName] || 0) +
+                    Number(transaction.amount || 0);
+
+            });
+
+
+            const labels =
+                Object.keys(categoryTotals);
+
+
+            const values =
+                Object.values(categoryTotals);
+
+
+            const canvas =
+                document.getElementById(
+                    "categoryChart"
+                );
+
+
+            if (categoryChartInstance) {
+
+                categoryChartInstance.destroy();
+
+            }
+
+
+            categoryChartInstance =
+                new Chart(canvas, {
+
+                    type: "doughnut",
+
+                    data: {
+
+                        labels: labels,
+
+                        datasets: [{
+
+                            data: values,
+
+                            borderWidth: 3,
+
+                            borderColor: "#ffffff"
+
+                        }]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        cutout: "62%",
+
+                        plugins: {
+
+                            legend: {
+                                display: false
+                            },
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    label: function(context) {
+
+                                        return "$" +
+                                            Number(
+                                                context.raw
+                                            ).toFixed(2);
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                });
+
+
+            renderCategoryLegend(
+                labels,
+                values
+            );
+
+        }
+
+
+
+        function renderCategoryLegend(
+            labels,
+            values
+        ) {
+
+            const legend =
+                document.getElementById(
+                    "categoryLegend"
+                );
+
+
+            if (labels.length === 0) {
+
+                legend.innerHTML = `
+                            <span class="no-chart-data">
+                                No expenses this month
+                            </span>
+                        `;
+
+                return;
+
+            }
+
+
+            const total =
+                values.reduce(
+                    (sum, value) =>
+                        sum + value,
+                    0
+                );
+
+
+            legend.innerHTML =
+                labels.map((label, index) => {
+
+                    const percentage =
+                        total > 0
+                            ? (
+                                values[index] /
+                                total *
+                                100
+                            ).toFixed(1)
+                            : 0;
+
+
+                    return `
+
+                                <div class="legend-item">
+
+                                    <span class="legend-dot"></span>
+
+                                    <span>
+                                        ${label}
+                                    </span>
+
+                                    <small>
+                                        $${values[index].toFixed(2)}
+                                        (${percentage}%)
+                                    </small>
+
+                                </div>
+
+                            `;
+
+                }).join("");
+
+        }
+
+
+
+        /* =========================================
+           YEAR TREND
+        ========================================= */
+
+        function renderTrendChart() {
+
+            const currentYear =
+                new Date().getFullYear();
+
+
+            const monthLabels = [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec"
+            ];
+
+
+            const incomeData =
+                new Array(12).fill(0);
+
+
+            const expenseData =
+                new Array(12).fill(0);
+
+
+            dashboardTransactions.forEach(transaction => {
+
+                const date =
+                    new Date(transaction.date);
+
+
+                if (
+                    date.getFullYear() !==
+                    currentYear
+                ) {
+
+                    return;
+
+                }
+
+
+                const month =
+                    date.getMonth();
+
+
+                const category =
+                    dashboardCategories.find(
+                        c =>
+                            c.categoryID ===
+                            transaction.categoryID
+                    );
+
+
+                if (!category) return;
+
+
+                const amount =
+                    Number(transaction.amount) || 0;
+
+
+                if (
+                    category.type &&
+                    category.type.toLowerCase() === "income"
+                ) {
+
+                    incomeData[month] += amount;
+
+                }
+                else {
+
+                    expenseData[month] += amount;
+
+                }
+
+            });
+
+
+            const canvas =
+                document.getElementById(
+                    "trendChart"
+                );
+
+
+            if (trendChartInstance) {
+
+                trendChartInstance.destroy();
+
+            }
+
+
+            trendChartInstance =
+                new Chart(canvas, {
+
+                    type: "line",
+
+                    data: {
+
+                        labels: monthLabels,
+
+                        datasets: [
+
+                            {
+
+                                label: "Income",
+
+                                data: incomeData,
+
+                                borderWidth: 2,
+
+                                tension: 0.35,
+
+                                fill: true
+
+                            },
+
+                            {
+
+                                label: "Expense",
+
+                                data: expenseData,
+
+                                borderWidth: 2,
+
+                                tension: 0.35,
+
+                                fill: true
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        interaction: {
+
+                            intersect: false,
+
+                            mode: "index"
+
+                        },
+
+                        plugins: {
+
+                            legend: {
+
+                                position: "bottom"
+
+                            }
+
+                        },
+
+                        scales: {
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    callback: function(value) {
+
+                                        return "$" +
+                                            Number(value)
+                                                .toLocaleString();
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                });
+
+        }
+
+
+
+        /* =========================================
+           RECENT TRANSACTIONS
+        ========================================= */
+
+        function renderRecentTransactions() {
+
+            const container =
+                document.getElementById(
+                    "recentDashboardTransactions"
+                );
+
+
+            const empty =
+                document.getElementById(
+                    "noRecentTransactions"
+                );
+
+
+            if (
+                !dashboardTransactions ||
+                dashboardTransactions.length === 0
+            ) {
+
+                container.innerHTML = "";
+
+                empty.style.display = "block";
+
+                return;
+
+            }
+
+
+            empty.style.display = "none";
+
+
+            const recent =
+                [...dashboardTransactions]
+                    .sort(
+                        (a, b) =>
+                            new Date(b.date) -
+                            new Date(a.date)
+                    )
+                    .slice(0, 5);
+
+
+            container.innerHTML =
+                recent.map(transaction => {
+
+                    const amount =
+                        Number(
+                            transaction.amount
+                        ) || 0;
+
+
+                    const category =
+                        transaction.categoryName ??
+                        "No Category";
+
+
+                    const date =
+                        new Date(
+                            transaction.date
+                        ).toLocaleDateString(
+                            "en-CA",
+                            {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric"
+                            }
+                        );
+
+
+                    return `
+
+                                <div class="dashboard-transaction-row">
+
+                                    <div class="dashboard-transaction-left">
+
+                                        <div class="dashboard-transaction-icon">
+
+                                            <i class="bi bi-receipt"></i>
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <strong>
+                                                ${category}
+                                            </strong>
+
+                                            <span>
+                                                ${date}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <strong class="dashboard-transaction-amount">
+
+                                        $${amount.toFixed(2)}
+
+                                    </strong>
+
+                                </div>
+
+                            `;
+
+                }).join("");
+
+        }
+
+    </script>
+
+
+    <script src="~/js/authGuard.js"></script>
+
 }

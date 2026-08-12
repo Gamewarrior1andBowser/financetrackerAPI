@@ -1,23 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace financetrackerAPI.Models {
-
+namespace financetrackerAPI.Models
+{
     [Table("Budget")]
-    public class Budget {
+    public class Budget
+    {
         public int budgetID { get; set; }
-
-        public int userID { get; set; }
-
-        public DateTime Date { get; set; }
-
-        public Category categories { get; set; }
 
         public int categoryID { get; set; }
 
+        public int userID { get; set; }
 
+        public string username { get; set; } = string.Empty;
 
-        [Column("limits")]
-        public int Limit { get; set; }
+        public int limits { get; set; }
+
+        public DateTime date { get; set; } = DateTime.Now;
     }
 }

@@ -3,73 +3,108 @@
     var budgetID = ViewData["budgetID"];
 }
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow p-4">
+<div class="budget-form-page">
 
-                <h2 class="mb-4">
-                    <i class="bi bi-piggy-bank-fill me-2"></i>
-                    Budget Details
-                </h2>
+    <div class="budget-details-card">
 
-                <div id="loadError" class="alert alert-danger" style="display:none;"></div>
+        <div class="budget-details-header">
 
-                <dl class="row" id="detailsBody" style="display:none;">
-                    <dt class="col-sm-4">Category</dt>
-                    <dd class="col-sm-8" id="catName"></dd>
-
-                    <dt class="col-sm-4">Limit</dt>
-                    <dd class="col-sm-8" id="budgetLimit"></dd>
-
-                    <dt class="col-sm-4">Date Set</dt>
-                    <dd class="col-sm-8" id="budgetDate"></dd>
-                </dl>
-
-                <a asp-controller="BudgetPage" asp-action="Index" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left-circle me-1"></i>
-                    Back to Budgets
-                </a>
-
+            <div class="budget-form-icon">
+                <i class="bi bi-piggy-bank-fill"></i>
             </div>
+
+            <div>
+                <h1>Budget Details</h1>
+                <p>View information about this budget.</p>
+            </div>
+
         </div>
+
+        <div id="budgetDetails">
+
+            <div class="budget-detail-row">
+                <span>Budget Name</span>
+                <strong id="budgetName">Loading...</strong>
+            </div>
+
+            <div class="budget-detail-row">
+                <span>Budget Limit</span>
+                <strong id="budgetLimit">Loading...</strong>
+            </div>
+
+            <div class="budget-detail-row">
+                <span>Date Created</span>
+                <strong id="budgetDate">Loading...</strong>
+            </div>
+
+        </div>
+
+        <div id="detailsError"
+             class="budget-form-error"
+             style="display:none;">
+        </div>
+
+        <a asp-controller="BudgetPage"
+           asp-action="Index"
+           class="btn btn-secondary mt-4">
+            <i class="bi bi-arrow-left-circle me-1"></i>
+            Back
+        </a>
+
     </div>
+
 </div>
 
 @section Scripts {
-<script>
 
-const token = localStorage.getItem("token");
-const budgetID = @budgetID;
+    <script>
 
-loadDetails();
+        const id = @budgetID;
+        const token = localStorage.getItem("token");
 
-async function loadDetails() {
+        async function loadBudget() {
 
-    const budgetRes = await fetch("/api/Budget/" + budgetID, {
-        headers: { "Authorization": "Bearer " + token }
-    });
+            try {
 
-    if (!budgetRes.ok) {
-        document.getElementById("loadError").innerText = "Unable to load budget.";
-        document.getElementById("loadError").style.display = "block";
-        return;
-    }
+                const response =
+                    await fetch(`/api/Budget/${id}`, {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    });
 
-    const budget = await budgetRes.json();
+                if (!response.ok) {
+                    throw new Error();
+                }
 
-    const categoryRes = await fetch("/api/Category/" + budget.categoryID, {
-        headers: { "Authorization": "Bearer " + token }
-    });
+                const budget = await response.json();
 
-    const categoryName = categoryRes.ok ? (await categoryRes.json()).name : "Unknown category";
+                document.getElementById("budgetName").textContent =
+                    budget.username || "Unnamed Budget";
 
-    document.getElementById("catName").innerText = categoryName;
-    document.getElementById("budgetLimit").innerText = "$" + budget.limit.toFixed(2);
-    document.getElementById("budgetDate").innerText = new Date(budget.date).toLocaleDateString();
+                document.getElementById("budgetLimit").textContent =
+                    "$" + Number(budget.limits || 0).toFixed(2);
 
-    document.getElementById("detailsBody").style.display = "flex";
-}
+                document.getElementById("budgetDate").textContent =
+                    budget.date
+                        ? new Date(budget.date).toLocaleDateString()
+                        : "Unknown";
 
-</script>
+            }
+            catch {
+
+                const error =
+                    document.getElementById("detailsError");
+
+                error.textContent =
+                    "Unable to load budget details.";
+
+                error.style.display = "block";
+            }
+        }
+
+        loadBudget();
+
+    </script>
+
 }
