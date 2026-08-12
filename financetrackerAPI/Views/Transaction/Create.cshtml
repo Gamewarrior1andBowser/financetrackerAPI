@@ -231,7 +231,22 @@
                 }
 
 
-                if (!categoryID) {
+
+
+    const transaction = {
+
+
+        amount: amount,
+
+        categoryID: categoryID,
+
+        date: date || new Date().toISOString()
+
+
+
+    };
+
+
 
                     error.textContent =
                         "Please select a category.";

@@ -831,14 +831,9 @@
             empty.style.display = "none";
 
 
-            const recent =
-                [...dashboardTransactions]
-                    .sort(
-                        (a, b) =>
-                            new Date(b.date) -
-                            new Date(a.date)
-                    )
-                    .slice(0, 5);
+    const recent = [...transactions]
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 5);
 
 
             container.innerHTML =
