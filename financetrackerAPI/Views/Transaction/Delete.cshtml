@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Delete Transaction";
+    var transactionID = ViewBag.catagoryID;
+}
+
+<div class="transaction-page">
+
+    <div class="card transaction-delete-card">
+
+        <h2>
+            <i class="bi bi-trash-fill me-2"></i>
+            Delete Transaction
+        </h2>
+
+        <p>
+            This action cannot be undone. The Transaction and its
+            related data may also be removed.
+        </p>
+
+        <div class="transaction-delete-info">
+            <div>
+                <small>Transaction</small><br />
+                <strong id="name">Loading...</strong>
+            </div>
+
+            <div class="mt-2">
+                <small>Type</small><br />
+                <strong id="type">—</strong>
+            </div>
+        </div>
+
+        <div id="deleteError" class="transaction-error"></div>
+
+        <div class="transaction-buttons">
+            <button class="transaction-btn transaction-danger"
+                    onclick="deleteTransaction()">
+                <i class="bi bi-trash me-1"></i>
+                Delete Transaction
+            </button>
+
+            <a asp-controller="TransactionPage"
+               asp-action="Index"
+               class="transaction-btn transaction-secondary">
+                Cancel
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        const token = localStorage.getItem("token");
+        const id = @transactionID;
+        const errorBox = document.getElementById("deleteError");
+
+        async function loadTransaction() {
+            try {
+                const response = await fetch(`/api/Transaction/${id}`, {
+                    headers: { Authorization: "Bearer " + token }
+                });
+
+                if (!response.ok) throw new Error();
+
+                const transaction = await response.json();
+
+                document.getElementById("name").textContent = transaction.name;
+                document.getElementById("type").textContent = transaction.type;
+            }
+            catch {
+                errorBox.textContent = "Unable to load transaction.";
+                errorBox.style.display = "block";
+            }
+        }
+
+        async function deleteTransaction() {
+            const response = await fetch(`/api/Transaction/${id}`, {
+                method: "DELETE",
+                headers: { Authorization: "Bearer " + token }
+            });
+
+            if (response.ok) {
+                window.location.href = "/TransactionPage";
+                return;
+            }
+
+            errorBox.textContent = "Unable to delete transaction.";
+            errorBox.style.display = "block";
+        }
+
+        loadTransaction();
+    </script>
+}

@@ -1,43 +1,38 @@
-﻿/* =========================================================
-   BUDGET PAGE
-   ========================================================= */
+﻿/* CATEGORY PAGE */
 
-.budget-page {
+.category-page {
     max-width: 1400px;
     margin: 0 auto;
     padding: 28px 32px 45px;
 }
 
+/* HEADER */
 
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.budget-header {
+.category-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 28px;
 }
 
-.budget-title {
+.category-title {
     margin: 0;
     color: #292938;
     font-size: 30px;
     font-weight: 800;
 }
 
-    .budget-title i {
+    .category-title i {
         color: #5b55b6;
     }
 
-.budget-description {
+.category-description {
     margin: 6px 0 0;
     color: #666b7a;
     font-size: 14px;
 }
 
-.budget-add-btn {
+.category-add-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -47,25 +42,21 @@
     border-radius: 30px;
     background: linear-gradient(45deg, #5b55b6, #6d5bd0);
     color: #fff;
-    text-decoration: none;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     transition: .2s ease;
 }
 
-    .budget-add-btn:hover {
+    .category-add-btn:hover {
         color: #fff;
         transform: translateY(-2px);
         box-shadow: 0 7px 18px rgba(91, 85, 182, .22);
     }
 
+/* CONTENT */
 
-/* =========================================================
-   MAIN CONTENT
-   ========================================================= */
-
-.budget-content {
+.category-content {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 22px;
@@ -73,31 +64,25 @@
     transition: .25s ease;
 }
 
-    .budget-content:has(.budget-panel.open) {
+    .category-content:has(.category-panel.open) {
         grid-template-columns: minmax(0, 1fr) 390px;
     }
 
-.budget-main {
+.category-main {
     min-width: 0;
 }
 
+/* GRID */
 
-/* =========================================================
-   BUDGET GRID
-   ========================================================= */
-
-.budget-grid {
+.category-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
 }
 
+/* CARD */
 
-/* =========================================================
-   BUDGET CARD
-   ========================================================= */
-
-.budget-card {
+.category-card {
     background: #fff;
     border: 1px solid #e0e2e8;
     border-radius: 14px;
@@ -106,21 +91,16 @@
     transition: .2s ease;
 }
 
-    .budget-card:hover {
+    .category-card:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 20px rgba(30, 30, 60, .10);
     }
 
-.budget-card-body {
+.category-card-body {
     padding: 20px;
 }
 
-
-/* =========================================================
-   PIGGY BANK ICON
-   ========================================================= */
-
-.budget-card-icon {
+.category-card-icon {
     width: 42px;
     height: 42px;
     display: flex;
@@ -133,16 +113,17 @@
     font-size: 19px;
 }
 
-    .budget-card-icon i {
-        color: #5b55b6;
+    .category-card-icon.income {
+        background: #eaf7f1;
+        color: #27845f;
     }
 
+    .category-card-icon.expense {
+        background: #fff0f1;
+        color: #c94f59;
+    }
 
-/* =========================================================
-   BUDGET NAME
-   ========================================================= */
-
-.budget-card-body h2 {
+.category-card-body h2 {
     margin: 0 0 17px;
     color: #292938;
     font-size: 22px;
@@ -150,72 +131,32 @@
     word-break: break-word;
 }
 
-
-/* =========================================================
-   LIMIT
-   ========================================================= */
-
-.budget-limit {
+.category-card-type {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
 }
 
-    .budget-limit span {
+    .category-card-type span {
         color: #777d8c;
         font-size: 13px;
     }
 
-    .budget-limit strong {
-        color: #292938;
-        font-size: 17px;
+    .category-card-type strong {
+        font-size: 14px;
     }
 
+        .category-card-type strong.income {
+            color: #27845f;
+        }
 
-/* =========================================================
-   PROGRESS
-   ========================================================= */
+        .category-card-type strong.expense {
+            color: #c94f59;
+        }
 
-.budget-progress {
-    margin-bottom: 13px;
-}
+/* ACTIONS */
 
-    .budget-progress .progress {
-        height: 7px;
-        background: #e9ebef;
-        border-radius: 20px;
-        overflow: hidden;
-    }
-
-    .budget-progress .progress-bar {
-        background: linear-gradient(90deg, #5b55b6, #6d5bd0);
-        border-radius: 20px;
-    }
-
-
-/* =========================================================
-   DATE
-   ========================================================= */
-
-.budget-date {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #777d8c;
-    font-size: 12px;
-}
-
-    .budget-date i {
-        color: #5b55b6;
-    }
-
-
-/* =========================================================
-   VIEW / EDIT / DELETE BUTTONS
-   ========================================================= */
-
-.budget-card-actions {
+.category-card-actions {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
@@ -224,7 +165,7 @@
     background: #fafafd;
 }
 
-.budget-card-btn {
+.category-card-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -232,64 +173,57 @@
     min-height: 36px;
     padding: 7px 10px;
     border-radius: 8px;
-    text-decoration: none;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
     transition: .2s ease;
 }
 
-
 /* VIEW */
 
-.budget-view-btn {
+.category-view-btn {
     border: 1px solid #b9dcff;
     background: #eaf5ff;
     color: #1671c9;
 }
 
-    .budget-view-btn:hover {
+    .category-view-btn:hover {
         background: #1671c9;
         border-color: #1671c9;
         color: #fff;
     }
 
-
 /* EDIT */
 
-.budget-edit-btn {
+.category-edit-btn {
     border: 1px solid #ffd58a;
     background: #fff5df;
     color: #d98200;
 }
 
-    .budget-edit-btn:hover {
+    .category-edit-btn:hover {
         background: #d98200;
         border-color: #d98200;
         color: #fff;
     }
 
-
 /* DELETE */
 
-.budget-delete-btn {
+.category-delete-btn {
     border: 1px solid #ffbfc5;
     background: #fff0f2;
     color: #d93645;
 }
 
-    .budget-delete-btn:hover {
+    .category-delete-btn:hover {
         background: #d93645;
         border-color: #d93645;
         color: #fff;
     }
 
+/* PANEL */
 
-/* =========================================================
-   RIGHT SIDE PANEL
-   ========================================================= */
-
-.budget-panel {
+.category-panel {
     display: none;
     min-width: 0;
     background: #fff;
@@ -299,12 +233,12 @@
     overflow: hidden;
 }
 
-    .budget-panel.open {
+    .category-panel.open {
         display: block;
-        animation: budgetPanelShow .25s ease;
+        animation: categoryPanelShow .25s ease;
     }
 
-@keyframes budgetPanelShow {
+@keyframes categoryPanelShow {
     from {
         opacity: 0;
         transform: translateX(15px);
@@ -316,12 +250,9 @@
     }
 }
 
+/* PANEL HEADER */
 
-/* =========================================================
-   PANEL HEADER
-   ========================================================= */
-
-.budget-panel-header {
+.category-panel-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -329,20 +260,20 @@
     border-bottom: 1px solid #eeeef3;
 }
 
-    .budget-panel-header h2 {
+    .category-panel-header h2 {
         margin: 0;
         color: #292938;
         font-size: 20px;
         font-weight: 700;
     }
 
-    .budget-panel-header p {
+    .category-panel-header p {
         margin: 5px 0 0;
         color: #777d8c;
         font-size: 12px;
     }
 
-.budget-panel-close {
+.category-panel-close {
     width: 34px;
     height: 34px;
     border: none;
@@ -353,26 +284,18 @@
     transition: .2s ease;
 }
 
-    .budget-panel-close:hover {
+    .category-panel-close:hover {
         background: #e7e7ee;
         color: #292938;
     }
 
-
-/* =========================================================
-   PANEL CONTENT
-   ========================================================= */
-
-.budget-panel-content {
+.category-panel-content {
     padding: 22px;
 }
 
+/* DETAILS */
 
-/* =========================================================
-   DETAILS
-   ========================================================= */
-
-.budget-detail-icon {
+.category-detail-icon {
     width: 55px;
     height: 55px;
     display: flex;
@@ -385,33 +308,121 @@
     font-size: 23px;
 }
 
-.budget-detail-block {
+    .category-detail-icon.income {
+        background: #eaf7f1;
+        color: #27845f;
+    }
+
+    .category-detail-icon.expense {
+        background: #fff0f1;
+        color: #c94f59;
+    }
+
+.category-detail h3 {
+    margin: 0 0 10px;
+    color: #292938;
+    font-size: 22px;
+}
+
+.category-detail-block {
     padding: 15px 0;
     border-bottom: 1px solid #eeeef3;
 }
 
-    .budget-detail-block span {
+    .category-detail-block span {
         display: block;
         margin-bottom: 5px;
         color: #777d8c;
         font-size: 12px;
     }
 
-    .budget-detail-block strong {
+    .category-detail-block strong {
         color: #292938;
         font-size: 17px;
     }
 
+        .category-detail-block strong.income {
+            color: #27845f;
+        }
 
-/* =========================================================
-   FORM
-   ========================================================= */
+        .category-detail-block strong.expense {
+            color: #c94f59;
+        }
 
-.budget-form-group {
+/* PROGRESS */
+
+.category-progress {
+    margin-top: 20px;
+}
+
+.category-progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+}
+
+    .category-progress-header span {
+        color: #777d8c;
+        font-size: 12px;
+    }
+
+    .category-progress-header strong {
+        color: #292938;
+        font-size: 13px;
+    }
+
+.category-progress-bar {
+    height: 8px;
+    background: #e9ebef;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+    .category-progress-bar div {
+        height: 100%;
+        background: linear-gradient(90deg, #5b55b6, #6d5bd0);
+        border-radius: 20px;
+    }
+
+        .category-progress-bar div.warning {
+            background: #e5a51a;
+        }
+
+        .category-progress-bar div.danger {
+            background: #d93645;
+        }
+
+/* WARNINGS */
+
+.category-warning {
+    margin-top: 18px;
+    padding: 12px;
+    border-radius: 9px;
+    font-size: 12px;
+}
+
+    .category-warning.info {
+        background: #eaf5ff;
+        color: #1671c9;
+    }
+
+    .category-warning.warning {
+        background: #fff5df;
+        color: #b86d00;
+    }
+
+    .category-warning.danger {
+        background: #fff0f2;
+        color: #d93645;
+    }
+
+/* FORM */
+
+.category-form-group {
     margin-bottom: 18px;
 }
 
-    .budget-form-group label {
+    .category-form-group label {
         display: block;
         margin-bottom: 7px;
         color: #555b6b;
@@ -419,23 +430,24 @@
         font-weight: 600;
     }
 
-.budget-input {
+.category-input {
     width: 100%;
     padding: 11px 13px;
     box-sizing: border-box;
     border: 1px solid #e0e2e8;
     border-radius: 10px;
     outline: none;
+    background: #fff;
     font-size: 14px;
     transition: .2s ease;
 }
 
-    .budget-input:focus {
+    .category-input:focus {
         border-color: #9b91df;
         box-shadow: 0 0 0 3px rgba(91, 85, 182, .12);
     }
 
-.budget-panel-primary {
+.category-panel-primary {
     width: 100%;
     padding: 12px;
     border: none;
@@ -447,22 +459,19 @@
     transition: .2s ease;
 }
 
-    .budget-panel-primary:hover {
+    .category-panel-primary:hover {
         transform: translateY(-1px);
         box-shadow: 0 6px 15px rgba(91, 85, 182, .2);
     }
 
+/* DELETE */
 
-/* =========================================================
-   DELETE PANEL
-   ========================================================= */
-
-.budget-delete-box {
+.category-delete-box {
     padding: 20px 5px;
     text-align: center;
 }
 
-.budget-delete-icon {
+.category-delete-icon {
     width: 60px;
     height: 60px;
     display: flex;
@@ -475,13 +484,13 @@
     font-size: 23px;
 }
 
-.budget-delete-box h3 {
+.category-delete-box h3 {
     margin: 0 0 8px;
     color: #292938;
     font-size: 19px;
 }
 
-.budget-delete-box p {
+.category-delete-box p {
     max-width: 280px;
     margin: 0 auto 24px;
     color: #777d8c;
@@ -489,14 +498,14 @@
     line-height: 1.5;
 }
 
-.budget-delete-actions {
+.category-delete-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
 
-.budget-panel-cancel,
-.budget-panel-danger {
+.category-panel-cancel,
+.category-panel-danger {
     padding: 11px;
     border-radius: 9px;
     font-size: 13px;
@@ -505,51 +514,47 @@
     transition: .2s ease;
 }
 
-.budget-panel-cancel {
+.category-panel-cancel {
     border: 1px solid #dfe1e8;
     background: #fff;
     color: #555b6b;
 }
 
-    .budget-panel-cancel:hover {
+    .category-panel-cancel:hover {
         background: #f5f5f7;
     }
 
-.budget-panel-danger {
+.category-panel-danger {
     border: none;
     background: #d93645;
     color: #fff;
 }
 
-    .budget-panel-danger:hover {
+    .category-panel-danger:hover {
         background: #c52d3b;
     }
 
+/* ERROR */
 
-/* =========================================================
-   PANEL ERROR
-   ========================================================= */
-
-.budget-panel-error {
-    padding: 35px 15px;
+.category-panel-error {
+    padding: 25px 15px;
     text-align: center;
+    color: #be123c;
+    font-size: 13px;
+}
+
+.category-error {
+    padding: 20px;
+    text-align: center;
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    border-radius: 12px;
     color: #be123c;
 }
 
-    .budget-panel-error i {
-        font-size: 30px;
-    }
+/* EMPTY */
 
-    .budget-panel-error p {
-        margin-top: 10px;
-    }
-
-
-/* =========================================================
-   EMPTY STATE
-   ========================================================= */
-
-.budget-empty {
+.category-empty {
     padding: 60px 20px;
     text-align: center;
     background: #fff;
@@ -557,7 +562,7 @@
     border-radius: 14px;
 }
 
-.budget-empty-icon {
+.category-empty-icon {
     width: 58px;
     height: 58px;
     display: flex;
@@ -570,83 +575,64 @@
     font-size: 23px;
 }
 
-.budget-empty h3 {
+.category-empty h3 {
     margin: 0 0 7px;
     color: #292938;
     font-size: 19px;
 }
 
-.budget-empty p {
+.category-empty p {
     margin-bottom: 18px;
     color: #777d8c;
     font-size: 13px;
 }
 
-
-/* =========================================================
-   ERROR
-   ========================================================= */
-
-.budget-error {
-    padding: 20px;
-    text-align: center;
-    background: #fff1f2;
-    border: 1px solid #fecdd3;
-    border-radius: 12px;
-    color: #be123c;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+/* RESPONSIVE */
 
 @media (max-width: 1050px) {
 
-    .budget-content:has(.budget-panel.open) {
+    .category-content:has(.category-panel.open) {
         grid-template-columns: minmax(0, 1fr) 340px;
     }
 
-    .budget-grid {
+    .category-grid {
         grid-template-columns: 1fr;
     }
 }
 
-
 @media (max-width: 750px) {
 
-    .budget-page {
+    .category-page {
         padding: 22px 16px 35px;
     }
 
-    .budget-header {
+    .category-header {
         align-items: flex-start;
         flex-direction: column;
         gap: 16px;
     }
 
-    .budget-add-btn {
+    .category-add-btn {
         width: 100%;
     }
 
-    .budget-content,
-    .budget-content:has(.budget-panel.open) {
+    .category-content,
+    .category-content:has(.category-panel.open) {
         display: block;
     }
 
-    .budget-panel.open {
+    .category-panel.open {
         margin-top: 20px;
     }
 }
 
-
 @media (max-width: 450px) {
 
-    .budget-card-actions {
+    .category-card-actions {
         grid-template-columns: 1fr;
     }
 
-    .budget-title {
+    .category-title {
         font-size: 26px;
     }
 }

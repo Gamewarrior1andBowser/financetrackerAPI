@@ -2,40 +2,54 @@
     ViewData["Title"] = "Add Budget";
 }
 
+<div class="budget-form-page">
 
-<div class="row justify-content-center">
+    <div class="budget-form-card">
 
-    <div class="col-md-6">
+        <div class="budget-form-header">
+            <div class="budget-form-icon">
+                <i class="bi bi-piggy-bank-fill"></i>
+            </div>
 
-        <div class="card shadow border-0 p-4">
+            <div>
+                <h1>Add Budget</h1>
+                <p>Set a spending limit for your budget.</p>
+            </div>
+        </div>
 
+        <form id="createBudgetForm">
 
-            <h2 class="mb-4">
-
-                <i class="bi bi-plus-circle-fill me-2"></i>
-
-                Add Budget
-
-            </h2>
-
-
-
-            <div class="mb-3">
-
-                <label class="form-label">
-                    Budget Name
-                </label>
-
+            <div class="budget-form-group">
+                <label for="name">Budget Name</label>
 
                 <input id="name"
                        type="text"
                        class="form-control"
-                       placeholder="e.g. Groceries, Rent, Travel" />
-
+                       placeholder="e.g. Groceries, Rent, Travel"
+                       required />
             </div>
 
+            <div class="budget-form-group">
+                <label for="limit">Budget Limit</label>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Category
+                </label>
 
 
+                <select id="categoryID"
+                        class="form-select">
+
+                    <option>
+                        Loading categories...
+                    </option>
+
+                </select>
+
+
+            </div>
 
 
             <div class="mb-4">
@@ -45,12 +59,12 @@
                 </label>
 
 
-                <input id="limit"
+                <input id="limits"
                        type="number"
                        min="1"
                        step="0.01"
                        class="form-control"
-                       placeholder="Enter budget limit" />
+                       placeholder="Enter budget limits" />
 
 
                 <small class="text-muted">
@@ -62,173 +76,198 @@
 
             </div>
 
-
-
-
             <div id="createError"
-                 class="alert alert-danger"
+                 class="budget-form-error"
                  style="display:none;">
             </div>
 
-
-
-
-
-            <div class="d-flex gap-2">
-
-
-                <button class="btn btn-success"
-                        onclick="createBudget()">
-
-
-                    <i class="bi bi-check-circle me-1"></i>
-
-                    Save
-
-
-                </button>
-
-
-
+            <div class="budget-form-actions">
 
                 <a asp-controller="BudgetPage"
                    asp-action="Index"
-                   class="btn btn-secondary">
-
-
-                    <i class="bi bi-arrow-left-circle me-1"></i>
-
+                   class="budget-cancel-btn">
+                    <i class="bi bi-arrow-left"></i>
                     Back
-
-
                 </a>
 
+                <button type="submit"
+                        class="budget-save-btn">
+                    <i class="bi bi-check-circle"></i>
+                    Save Budget
+                </button>
 
             </div>
 
-
-        </div>
+        </form>
 
     </div>
 
 </div>
 
-
-
 @section Scripts {
 
-
-<script>
-
-
-const token = localStorage.getItem("token");
+    <script>
 
 
+    const token = localStorage.getItem("token");
 
-function showError(message)
-{
-
-    const box = document.getElementById("createError");
-
-    box.innerText = message;
-
-    box.style.display = "block";
-
-}
+    loadCategories();
 
 
 
-
-async function createBudget()
-{
+    async function loadCategories() {
 
 
-    const name =
-        document.getElementById("name").value.trim();
+        const response = await fetch("/api/Category",
+            {
+
+                headers:
+                {
+
+                    "Authorization": "Bearer " + token
+
+                }
+
+
+            });
+
+        const categories = await response.json();
+        const dropdown = document.getElementById("categoryID");
+
+        if (categories.length === 0) {
+            dropdown.innerHTML = `<option value="">No categories available</option>`;
+            return;
+        }
+
+
+        if (!response.ok) {
+
+            document.getElementById("categoryID").innerHTML =
+                "<option>No Categories</option>";
+
+            return;
+
+        }
 
 
 
-    const limit =
-        Number(document.getElementById("limit").value);
+        let options = "";
 
 
 
 
-    if(!name)
-    {
-        showError("Please enter a budget name.");
-        return;
+        categories.forEach(category => {
+            options += `<option value="${category.categoryID}">${category.name}</option>`;
+        });
+
+        dropdown.innerHTML = options;
+
+        document.getElementById("categoryID").innerHTML = options;
     }
 
 
 
-    if(!limit || limit <= 0)
+    function showError(message)
     {
-        showError("Please enter a valid budget limit.");
-        return;
+
+        const box = document.getElementById("createError");
+
+        box.innerText = message;
+
+        box.style.display = "block";
+
     }
 
 
 
 
-
-    const budget = {
-
-        name: name,
-
-        limit: limit,
-
-        date: new Date().toISOString()
-
-    };
-
-
-
-
-
-    const response = await fetch("/api/Budget",
+    async function createBudget()
     {
 
-        method:"POST",
+        e.preventDefault();
 
-        headers:
+        const name =
+            document.getElementById("name").value.trim();
+
+        const name = document
+            .getElementById("name")
+            .value
+            .trim();
+
+        const limit = Number(
+            document.getElementById("limit").value
+        );
+
+        const limits =
+            Number(document.getElementById("limits").value);
+
+            
+        let valid = true;
+            [nameInput, limitInput].forEach(input => input.classList.remove('is-invalid'));
+
+        if(!name)
+        {
+            showError("Please enter a budget name.");
+            return;
+        }
+
+
+        if(!limits || limits <= 0)
+        {
+            showError("Please enter a valid budget limits.");
+            return;
+        }
+
+
+        const categoryID = Number(document.getElementById("categoryID").value);
+
+
+        const budget = {
+
+            username: name,
+
+            categoryID: categoryID,
+
+            limits: limits,
+
+            date: new Date().toISOString()
+
+        };
+
+        const response = await fetch("/api/Budget",
         {
 
-            "Content-Type":"application/json",
+            method:"POST",
 
-            "Authorization":"Bearer " + token
+            headers:
+            {
 
-        },
+                "Content-Type":"application/json",
 
+                "Authorization":"Bearer " + token
 
-        body: JSON.stringify(budget)
-
-    });
-
-
+            },
 
 
+            body: JSON.stringify(budget)
+
+        });
 
 
-    if(!response.ok)
-    {
+        if(!response.ok)
+        {
 
-        showError("Unable to create budget.");
+            showError("Unable to create budget.");
 
-        return;
+            return;
+
+        }
+
+
+
+
+        window.location.href="/BudgetPage";
 
     }
-
-
-
-
-    window.location.href="/BudgetPage";
-
-}
-
-
-
-</script>
-
-
+    </script>
 }

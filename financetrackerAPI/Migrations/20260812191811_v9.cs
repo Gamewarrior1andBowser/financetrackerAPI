@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace financetrackerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class v7 : Migration
+    public partial class v9 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,9 +17,10 @@ namespace financetrackerAPI.Migrations
                 {
                     budgetID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    categoryID = table.Column<int>(type: "int", nullable: false),
                     userID = table.Column<int>(type: "int", nullable: false),
                     username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    limits = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    limits = table.Column<int>(type: "int", nullable: false),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -33,7 +34,7 @@ namespace financetrackerAPI.Migrations
                 {
                     categoryID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     userID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -67,7 +68,9 @@ namespace financetrackerAPI.Migrations
                     amount = table.Column<int>(type: "int", precision: 10, scale: 2, nullable: false),
                     userID = table.Column<int>(type: "int", nullable: false),
                     categoryID = table.Column<int>(type: "int", nullable: false),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

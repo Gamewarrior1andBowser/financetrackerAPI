@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Delete Category";
+    var categoryID = ViewData["categoryID"];
 }
 
 <div class="container">
@@ -26,7 +27,7 @@
 
                     <label class="form-label">
 
-                        Category Name
+                        Category name
 
                     </label>
 
@@ -101,7 +102,7 @@
 
         const token = localStorage.getItem("token");
 
-        const id = @ViewBag.catagoryID;
+        const id = catagoryID;
 
 
 

@@ -33,7 +33,7 @@ public class CategoryController : ControllerBase
 
         int userID = int.Parse(userClaim.Value);
 
-        if (string.IsNullOrEmpty(category.Name))
+        if (string.IsNullOrEmpty(category.name))
         {
             return BadRequest("Category name is required");
         }
@@ -133,6 +133,7 @@ public class CategoryController : ControllerBase
             return NotFound("Category not found");
         }
 
+<<<<<<< HEAD
         Category? existingCategory = await _context.Categories
             .FirstOrDefaultAsync(c =>
                 c.userID == userID &&
@@ -155,6 +156,9 @@ public class CategoryController : ControllerBase
         }
 
         category.Name = updatedCategory.Name;
+=======
+        category.name = updatedCategory.name;
+>>>>>>> 4b9bb91593095df735f73ed6ba24576dbbb4a24f
         category.Type = updatedCategory.Type;
 
         await _context.SaveChangesAsync();

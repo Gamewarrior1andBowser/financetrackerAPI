@@ -10,7 +10,7 @@
 
                 <h2 class="mb-4">
                     <i class="bi bi-tag-fill me-2"></i>
-                    <span id="catName">Category Details</span>
+                    <span id="catname">Category Details</span>
                 </h2>
 
                 <div id="loadError" class="alert alert-danger" style="display:none;"></div>
@@ -70,7 +70,7 @@
             Delete Category
         </h4>
         <p>
-            Are you sure you want to delete <strong id="deleteCategoryName"></strong>?
+            Are you sure you want to delete <strong id="deleteCategoryname"></strong>?
             This will also permanently delete its budget and every transaction linked to it.
         </p>
         <div class="d-flex gap-2 justify-content-end">
@@ -88,7 +88,7 @@
 
 const token = localStorage.getItem("token");
 const categoryID = @categoryID;
-let categoryName = "";
+let categoryname = "";
 
 loadDetails();
 
@@ -117,10 +117,10 @@ async function loadDetails() {
     const limit = budget ? budget.limit : 0;
     const percent = limit > 0 ? Math.round((totalSpent / limit) * 100) : 0;
 
-    categoryName = category.name;
+    categoryname = category.name;
 
-    document.getElementById("catName").innerText = category.name;
-    document.getElementById("deleteCategoryName").innerText = category.name;
+    document.getElementById("catname").innerText = category.name;
+    document.getElementById("deleteCategoryname").innerText = category.name;
 
     // Category has no Createddate field, so the linked budget's date
     // (set at creation time) is used as the best available proxy.
@@ -130,7 +130,7 @@ async function loadDetails() {
 
     const typeBadge = document.getElementById("catType");
     typeBadge.innerText = category.type;
-    typeBadge.className = "badge " + (category.type.toLowerCase() === "income" ? "bg-success" : "bg-danger");
+    typeBadge.classname = "badge " + (category.type.toLowerCase() === "income" ? "bg-success" : "bg-danger");
 
     document.getElementById("txCount").innerText = categoryTransactions.length;
     document.getElementById("txTotal").innerText = "$" + totalSpent.toFixed(2);
@@ -140,18 +140,24 @@ async function loadDetails() {
     const barWidth = Math.min(percent, 100);
     bar.style.width = barWidth + "%";
     bar.innerText = percent + "%";
-    bar.className = "progress-bar " + (percent >= 80 ? "bg-danger" : percent >= 50 ? "bg-warning" : "bg-success");
+    bar.classname = "progress-bar " + (percent >= 80 ? "bg-danger" : percent >= 50 ? "bg-warning" : "bg-success");
 
     const warningBox = document.getElementById("budgetWarning");
-    if (percent >= 80) {
-        warningBox.className = "alert alert-danger";
-        warningBox.innerText = "You've used 80% or more of this category's budget. Consider creating a new category for future transactions.";
-        warningBox.style.display = "block";
-    } else if (percent >= 50) {
-        warningBox.className = "alert alert-warning";
-        warningBox.innerText = "You've used over half of this category's budget. Keep an eye on it, or consider creating a new category soon.";
-        warningBox.style.display = "block";
-    }
+            if (percent >= 100) {
+                warningBox.classname = "alert alert-danger";
+                warningBox.textContent = "This category has reached or exceeded its budget.";
+                warningBox.style.display = "block";
+            }
+            else if (percent >= 80) {
+                warningBox.classname = "alert alert-warning";
+                warningBox.textContent = "You've used 80% or more of this category's budget.";
+                warningBox.style.display = "block";
+            }
+            else if (percent >= 50) {
+                warningBox.classname = "alert alert-info";
+                warningBox.textContent = "You've used more than half of this category's budget.";
+                warningBox.style.display = "block";
+            }
 
     document.getElementById("detailsBody").style.display = "block";
 }

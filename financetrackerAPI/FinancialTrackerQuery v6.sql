@@ -15,7 +15,9 @@ CREATE TABLE Transactions (
 	amount int NOT NULL,
 	[date] [date] NOT NULL,
 	userID int NOT NULL,
-	categoryID int NULL
+	categoryID int NULL,
+	notes nvarchar (255) NULL,
+    [type] [nvarchar] (255) NULL
 );
 
 CREATE TABLE Categories (
