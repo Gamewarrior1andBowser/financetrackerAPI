@@ -127,87 +127,87 @@
             }
 
 
-        empty.style.display = "none";
+            emptyBudget.style.display = "none";
 
 
-        budgets.forEach((budget, index) => {
+            budgets.forEach((budget, index) => {
 
-            const id =
-                budget.budgetID ??
-                budget.BudgetID ??
-                budget.id;
-
-
-            const name =
-                budget.name ??
-                budget.username ??
-                "Unnamed Budget";
+                const id =
+                    budget.budgetID ??
+                    budget.BudgetID ??
+                    budget.id;
 
 
-            const limit =
-                budget.limit ??
-                budget.limits ??
-                0;
+                const name =
+                    budget.name ??
+                    budget.username ??
+                    "Unnamed Budget";
 
-            budgetList.innerHTML = budgets.map(budget => {
-                const name = budget.username || "Unnamed Budget";
-                const limit = Number(budget.limits) || 0;
-                const date = budget.date
-                    ? new Date(budget.date).toLocaleDateString()
-                    : "Unknown";
 
-                return `
-                    <article class="budget-card">
+                const limit =
+                    budget.limit ??
+                    budget.limits ??
+                    0;
 
-                        <div class="budget-card-body">
+                budgetList.innerHTML = budgets.map(budget => {
+                    const name = budget.username || "Unnamed Budget";
+                    const limit = Number(budget.limits) || 0;
+                    const date = budget.date
+                        ? new Date(budget.date).toLocaleDateString()
+                        : "Unknown";
 
-                            <div class="budget-card-icon">
-                                <i class="bi bi-piggy-bank-fill"></i>
+                    return `
+                        <article class="budget-card">
+
+                            <div class="budget-card-body">
+
+                                <div class="budget-card-icon">
+                                    <i class="bi bi-piggy-bank-fill"></i>
+                                </div>
+
+                                <h2>${escapeHtml(name)}</h2>
+
+                                <div class="budget-limit">
+                                    <span>Budget Limit</span>
+                                    <strong>$${limit.toFixed(2)}</strong>
+                                </div>
+
+                                <div class="budget-date">
+                                    <i class="bi bi-calendar3"></i>
+                                    Created ${date}
+                                </div>
+
                             </div>
 
-                            <h2>${escapeHtml(name)}</h2>
+                            <div class="budget-card-actions">
 
-                            <div class="budget-limit">
-                                <span>Budget Limit</span>
-                                <strong>$${limit.toFixed(2)}</strong>
+                                <button type="button"
+                                        class="budget-card-btn budget-view-btn"
+                                        onclick="showDetails(${budget.budgetID})">
+                                    <i class="bi bi-eye"></i>
+                                    View Details
+                                </button>
+
+                                <button type="button"
+                                        class="budget-card-btn budget-edit-btn"
+                                        onclick="showEditPanel(${budget.budgetID})">
+                                    <i class="bi bi-pencil"></i>
+                                    Edit
+                                </button>
+
+                                <button type="button"
+                                        class="budget-card-btn budget-delete-btn"
+                                        onclick="showDeletePanel(${budget.budgetID})">
+                                    <i class="bi bi-trash"></i>
+                                    Delete
+                                </button>
+
                             </div>
 
-                            <div class="budget-date">
-                                <i class="bi bi-calendar3"></i>
-                                Created ${date}
-                            </div>
-
-                        </div>
-
-                        <div class="budget-card-actions">
-
-                            <button type="button"
-                                    class="budget-card-btn budget-view-btn"
-                                    onclick="showDetails(${budget.budgetID})">
-                                <i class="bi bi-eye"></i>
-                                View Details
-                            </button>
-
-                            <button type="button"
-                                    class="budget-card-btn budget-edit-btn"
-                                    onclick="showEditPanel(${budget.budgetID})">
-                                <i class="bi bi-pencil"></i>
-                                Edit
-                            </button>
-
-                            <button type="button"
-                                    class="budget-card-btn budget-delete-btn"
-                                    onclick="showDeletePanel(${budget.budgetID})">
-                                <i class="bi bi-trash"></i>
-                                Delete
-                            </button>
-
-                        </div>
-
-                    </article>
-                `;
-            }).join("");
-
+                        </article>
+                    `;
+                }).join("");
+            });
         } catch (error) {
             console.error(error);
             budgetError.style.display = "block";
