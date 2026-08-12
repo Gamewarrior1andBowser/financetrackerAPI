@@ -164,244 +164,150 @@
 @section Scripts {
 <script>
 
-const token = localStorage.getItem("token");
 
-   
+    const token = localStorage.getItem("token");
 
-
-        const token = localStorage.getItem("token");
+    loadCategories();
 
 
 
-        loadCategories();
+    async function loadCategories()
+    {
 
 
-
-
-        function showError(message) {
-
-        async function loadCategories() {
-
-
-            const response = await fetch("/api/Category",
-                {
-
-                    headers:
-                    {
-
-                        "Authorization": "Bearer " + token
-
-                    }
-
-
-                });
-
-    const categories = await response.json();
-    const dropdown = document.getElementById("categoryID");
-
-    if (categories.length === 0) {
-        dropdown.innerHTML = `<option value="">No categories available</option>`;
-        return;
-    }
-
-
-            if (!response.ok) {
-
-                document.getElementById("categoryID").innerHTML =
-                    "<option>No Categories</option>";
-
-                return;
-
-            }
-
-
-
-
-
-            const categories = await response.json();
-
-
-
-            let options = "";
-
-
-
-
-            categories.forEach(category => {
-
-
-                options += `
-
-                <option value="${category.categoryID}">
-
-                    ${category.name}
-
-                </option>
-
-                `;
-
-
-            });
-
-
-    dropdown.innerHTML = options;
-}
-
-
-            document.getElementById("categoryID").innerHTML = options;
-
-function hideBudgetPopup() {
-    document.getElementById("budgetPopup").style.display = "none";
-}
-
-        }
-
-async function getBudgetStatus(categoryID, excludeTransactionID) {
-
-    const [budgetsRes, transactionsRes] = await Promise.all([
-        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
-        fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } })
-    ]);
-
-    const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
-    const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
-
-    const budget = budgets.find(b => b.categoryID === categoryID);
-
-    const spent = transactions
-        .filter(t => t.categoryID === categoryID && t.transactionsID !== excludeTransactionID)
-        .reduce((sum, t) => sum + t.amount, 0);
-
-    if (!budget) {
-        return { hasBudget: false, limit: 0, spent: spent, remaining: null };
-    }
-
-
-
-        async function createTransaction() {
-
-
-            const transaction =
+        const response = await fetch("/api/Category",
             {
 
+                headers:
+                {
 
-        async function loadCategories() {
-
-            try {
-
-                const response = await fetch("/api/Category", {
-
-                    headers: {
-                        "Authorization": "Bearer " + token
-                    }
-
-                });
-
-
-                if (!response.ok) {
-
-                    showError("Unable to load categories.");
-
-                    return;
+                    "Authorization": "Bearer " + token
 
                 }
 
 
-                const categories = await response.json();
+        });
 
-                const dropdown =
-                    document.getElementById("categoryID");
+        const categories = await response.json();
+        const dropdown = document.getElementById("categoryID");
 
-
-                dropdown.innerHTML = `
-                    <option value="">
-                        Select a category
-                    </option>
-                `;
+        if (categories.length === 0) {
+            dropdown.innerHTML = `<option value="">No categories available</option>`;
+            return;
+        }
 
 
-                categories.forEach(category => {
+        if (!response.ok) {
 
-                    dropdown.innerHTML += `
+            document.getElementById("categoryID").innerHTML =
+                "<option>No Categories</option>";
 
-                        <option value="${category.categoryID}">
-                            ${category.name}
-                        </option>
-
-                    `;
-
-                });
-
-            }
-            catch (error) {
-
-                console.error(
-                    "Error loading categories:",
-                    error
-                );
-
-                showError("Unable to load categories.");
-
-            }
+            return;
 
         }
 
 
 
-    
+        let options = "";
 
 
-  
 
-async function createTransaction() {
 
-    hideBudgetPopup();
+        categories.forEach(category => {
 
-    const categoryID = Number(document.getElementById("categoryID").value);
-    const amount = Number(document.getElementById("amount").value);
 
-    if (!categoryID) {
-        showBudgetPopup("Please create a category first.");
-        return;
+            options += `
+
+            <option value="${category.categoryID}">
+
+                ${category.name}
+
+            </option>
+
+            `;
+
+
+        });
+
+        dropdown.innerHTML = options;
+
+        document.getElementById("categoryID").innerHTML = options;
     }
 
-    if (!amount || amount <= 0) {
-        showBudgetPopup("Please enter an amount greater than 0.");
-        return;
+    function hideBudgetPopup() {
+        document.getElementById("budgetPopup").style.display = "none";
     }
 
-    const status = await getBudgetStatus(categoryID, null);
+    async function getBudgetStatus(categoryID, excludeTransactionID) {
 
-    if (status.hasBudget && amount > status.remaining) {
-        showBudgetPopup(
-            "This transaction cannot go through because it would put this category over its budget. " +
-            "Please enter an amount less than or equal to $" + Math.max(status.remaining, 0).toFixed(2) + "."
-        );
-        return;
+        const [budgetsRes, transactionsRes] = await Promise.all([
+            fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
+            fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } })
+        ]);
+
+        const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
+        const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
+
+        const budget = budgets.find(b => b.categoryID === categoryID);
+
+        const spent = transactions
+            .filter(t => t.categoryID === categoryID && t.transactionsID !== excludeTransactionID)
+            .reduce((sum, t) => sum + t.amount, 0);
+
+        if (!budget) {
+            return { hasBudget: false, limit: 0, spent: spent, remaining: null };
+        }
     }
 
-    const transaction = {
-        amount: amount,
-        categoryID: categoryID,
-        date: document.getElementById("date").value
-    };
+    async function createTransaction() {
 
-    const response = await fetch("/api/Transactions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        body: JSON.stringify(transaction)
-    });
+        hideBudgetPopup();
 
-    if (response.ok) {
-        window.location.href = "/TransactionPage";
-    } else {
-        const error = await response.text();
-        showBudgetPopup(error || "Unable to create transaction.");
+        const categoryID = Number(document.getElementById("categoryID").value);
+        const amount = Number(document.getElementById("amount").value);
+
+        if (!categoryID) {
+            showBudgetPopup("Please create a category first.");
+            return;
+        }
+
+        if (!amount || amount <= 0) {
+            showBudgetPopup("Please enter an amount greater than 0.");
+            return;
+        }
+
+        const status = await getBudgetStatus(categoryID, null);
+
+        if (status.hasBudget && amount > status.remaining) {
+            showBudgetPopup(
+                "This transaction cannot go through because it would put this category over its budget. " +
+                "Please enter an amount less than or equal to $" + Math.max(status.remaining, 0).toFixed(2) + "."
+            );
+            return;
+        }
+
+        const transaction = {
+            amount: amount,
+            categoryID: categoryID,
+            date: document.getElementById("date").value
+        };
+
+        const response = await fetch("/api/Transactions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify(transaction)
+        });
+
+        if (response.ok) {
+            window.location.href = "/TransactionPage";
+        } else {
+            const error = await response.text();
+            showBudgetPopup(error || "Unable to create transaction.");
+        }
     }
-}
 
 </script>
 }
