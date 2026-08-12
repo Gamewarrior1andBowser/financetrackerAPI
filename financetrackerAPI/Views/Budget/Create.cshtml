@@ -108,25 +108,98 @@
 
     <script>
 
-        const token = localStorage.getItem("token");
 
-        const form = document.getElementById("createBudgetForm");
-        const errorBox = document.getElementById("createError");
+    const token = localStorage.getItem("token");
+
+    loadCategories();
 
 
-        function showError(message) {
 
-            errorBox.textContent = message;
-            errorBox.style.display = "block";
+    async function loadCategories() {
+
+
+        const response = await fetch("/api/Category",
+            {
+
+                headers:
+                {
+
+                    "Authorization": "Bearer " + token
+
+                }
+
+
+            });
+
+        const categories = await response.json();
+        const dropdown = document.getElementById("categoryID");
+
+        if (categories.length === 0) {
+            dropdown.innerHTML = `<option value="">No categories available</option>`;
+            return;
+        }
+
+
+        if (!response.ok) {
+
+            document.getElementById("categoryID").innerHTML =
+                "<option>No Categories</option>";
+
+            return;
 
         }
 
 
-        form.addEventListener("submit", async function(e) {
+
+        let options = "";
+
+
+
+
+        categories.forEach(category => {
+
+
+            options += `
+
+                <option value="${category.categoryID}">
+
+                    ${category.name}
+
+                </option>
+
+                `;
+
+
+        });
+
+        dropdown.innerHTML = options;
+
+        document.getElementById("categoryID").innerHTML = options;
+    }
+
+
+
+    function showError(message)
+    {
+
+        const box = document.getElementById("createError");
+
+        box.innerText = message;
+
+        box.style.display = "block";
+
+    }
+
+
+
+
+    async function createBudget()
+    {
 
             e.preventDefault();
 
-            errorBox.style.display = "none";
+        const name =
+            document.getElementById("name").value.trim();
 
             const name = document
                 .getElementById("name")
@@ -137,78 +210,91 @@
                 document.getElementById("limit").value
             );
 
+        const limits =
+            Number(document.getElementById("limits").value);
 
             if (!name) {
 
-                showError("Please enter a budget name.");
-                return;
+            
+            let valid = true;
+            [nameInput, limitInput].forEach(input => input.classList.remove('is-invalid'));
 
-            }
+        if(!name)
+        {
+            showError("Please enter a budget name.");
+            return;
+        }
 
 
             if (!limit || limit <= 0) {
 
-                showError("Please enter a valid budget limit.");
-                return;
-
-            }
+        if(!limits || limits <= 0)
+        {
+            showError("Please enter a valid budget limits.");
+            return;
+        }
 
         }
 
-            const budget = {
+        const categoryID = Number(document.getElementById("categoryID").value);
 
-                username: name,
 
-                limits: limit
+        const budget = {
 
-            };
+            username: name,
+
+            categoryID: categoryID,
+
+            limits: limits,
+
+            date: new Date().toISOString()
+
+        };
 
 
             try {
 
-                const response = await fetch("/api/Budget", {
+        const response = await fetch("/api/Budget",
+        {
 
-                    method: "POST",
+            method:"POST",
 
-                    headers: {
+            headers:
+            {
 
-                        "Content-Type": "application/json",
+                "Content-Type":"application/json",
 
-                        "Authorization": "Bearer " + token
+                "Authorization":"Bearer " + token
 
-                    },
+            },
 
-                    body: JSON.stringify(budget)
 
-                });
+            body: JSON.stringify(budget)
+
+        });
 
 
                 if (!response.ok) {
 
                     const message = await response.text();
 
-                    console.error(message);
+        if(!response.ok)
+        {
 
-                    showError("Unable to create budget.");
+            showError("Unable to create budget.");
 
-                    return;
+            return;
 
-                }
+        }
+
+
+
+
+        window.location.href="/BudgetPage";
+
+    }
 
 
                 window.location.href = "/BudgetPage";
-
-            }
-            catch (error) {
-
-                console.error(error);
-
-                showError("Something went wrong. Please try again.");
-
-            }
-
-        });
-
-    </script>
 
 }

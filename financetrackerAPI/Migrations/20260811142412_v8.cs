@@ -67,7 +67,9 @@ namespace financetrackerAPI.Migrations
                     amount = table.Column<int>(type: "int", precision: 10, scale: 2, nullable: false),
                     userID = table.Column<int>(type: "int", nullable: false),
                     categoryID = table.Column<int>(type: "int", nullable: false),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+
                 },
                 constraints: table =>
                 {

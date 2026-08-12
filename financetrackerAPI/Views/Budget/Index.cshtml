@@ -126,7 +126,28 @@
                 return;
             }
 
-            emptyBudget.style.display = "none";
+
+        empty.style.display = "none";
+
+
+        budgets.forEach((budget, index) => {
+
+            const id =
+                budget.budgetID ??
+                budget.BudgetID ??
+                budget.id;
+
+
+            const name =
+                budget.name ??
+                budget.username ??
+                "Unnamed Budget";
+
+
+            const limit =
+                budget.limit ??
+                budget.limits ??
+                0;
 
             budgetList.innerHTML = budgets.map(budget => {
                 const name = budget.username || "Unnamed Budget";
