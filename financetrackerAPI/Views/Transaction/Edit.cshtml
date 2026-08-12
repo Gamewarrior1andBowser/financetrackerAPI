@@ -3,471 +3,351 @@
     var transactionID = ViewData["transactionID"];
 }
 
-<div class="container">
+<div class="transaction-page">
 
+    <div class="transaction-header">
 
-    <div class="row justify-content-center">
+        <div>
+            <h1 class="transaction-title">
+                <i class="bi bi-pencil-square"></i>
+                Edit Transaction
+            </h1>
 
+            <p class="transaction-description">
+                Update your transaction.
+            </p>
+        </div>
 
-        <div class="col-md-6">
+    </div>
 
+    <div class="transaction-card transaction-form-card">
 
-            <div class="card shadow border-0 p-4">
+        <form id="editTransactionForm">
 
+            <input type="hidden"
+                   id="transactionID"
+                   value="@transactionID">
 
-                <h2 class="mb-4 fw-bold">
+            <div class="transaction-form-group">
 
-                    <i class="bi bi-pencil-square me-2"></i>
-                    Edit Transaction
-                </h2>
+                <label>Amount</label>
 
-
-
-
-
-                <input type="hidden" id="transactionID" value="@ViewBag.transactionsID" />
-
-
-
-
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        amount
-                    </label>
-
-
-                    <input id="amount"
-                           type="number"
-                           step="0.01"
-                           class="form-control" />
-
-                </div>
-
-
-
-
-
-
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Category
-                    </label>
-
-
-                    <select id="categoryID"
-                            class="form-select">
-                    </select>
-
-
-                </div>
-
-
-
-
-
-
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Type
-                    </label>
-
-
-                    <select id="type"
-                            class="form-select">
-
-
-                        <option value="Expense">
-                            Expense
-                        </option>
-
-
-                        <option value="Income">
-                            Income
-                        </option>
-
-
-                    </select>
-
-
-                </div>
-
-
-
-
-
-
-
-                <div class="mb-4">
-
-                    <label class="form-label">
-                        date
-                    </label>
-
-
-                    <input id="date"
-                           type="date"
-                           class="form-control" />
-
-
-                </div>
-
-                <div id="budgetPopup" class="alert alert-danger" style="display:none;"></div>
-
-
-
-                <div class="d-flex gap-2">
-
-
-                    <button class="btn btn-warning"
-                            onclick="updateTransaction()">
-
-
-                        <i class="bi bi-save me-1"></i>
-
-                        Update
-
-
-                    </button>
-
-
-
-
-
-                    <a asp-controller="TransactionPage"
-                       asp-action="Index"
-                       class="btn btn-secondary">
-
-
-                        Back
-
-
-                    </a>
-
-
-                </div>
-
-
+                <input id="amount"
+                       type="number"
+                       min="0.01"
+                       step="0.01"
+                       class="transaction-input"
+                       required>
 
             </div>
-        </div>
+
+            <div class="transaction-form-group">
+
+                <label>Category</label>
+
+                <select id="categoryID"
+                        class="transaction-input"
+                        required>
+                </select>
+
+            </div>
+
+            <div class="transaction-form-group">
+
+                <label>Type</label>
+
+                <select id="type"
+                        class="transaction-input">
+
+                    <option value="Expense">
+                        Expense
+                    </option>
+
+                    <option value="Income">
+                        Income
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="transaction-form-group">
+
+                <label>Date</label>
+
+                <input id="date"
+                       type="date"
+                       class="transaction-input">
+
+            </div>
+
+            <div class="transaction-form-group">
+
+                <label>
+                    Notes
+                    <span class="transaction-optional">
+                        Optional
+                    </span>
+                </label>
+
+                <textarea id="notes"
+                          class="transaction-input transaction-textarea"
+                          placeholder="Add a note if you want..."></textarea>
+
+            </div>
+
+            <div id="editError"
+                 class="transaction-panel-error"
+                 style="display:none;">
+            </div>
+
+            <div class="transaction-form-actions">
+
+                <button type="submit"
+                        class="transaction-panel-primary">
+
+                    <i class="bi bi-save"></i>
+                    Update Transaction
+
+                </button>
+
+                <a asp-controller="TransactionPage"
+                   asp-action="Index"
+                   class="transaction-panel-cancel">
+
+                    <i class="bi bi-arrow-left"></i>
+                    Back
+
+                </a>
+
+            </div>
+
+        </form>
+
     </div>
+
 </div>
 
 
-
-
-
-
-
 @section Scripts {
-<script>
-
-const token = localStorage.getItem("token");
-const transactionID = @transactionID;
 
     <script>
 
-
         const token = localStorage.getItem("token");
 
-
-        const id = document.getElementById("transactionID").value;
-
-
-
-        loadTransaction();
-
-        loadCategories();
+        const transactionID =
+            document.getElementById("transactionID").value;
 
 
+        async function loadCategories(selectedID) {
+
+            const dropdown =
+                document.getElementById("categoryID");
 
 
+            const response =
+                await fetch("/api/Category", {
 
-
-        async function loadTransaction() {
-
-
-            const response = await fetch("/api/Transactions/" + id,
-                {
-
-                    headers:
-                    {
-
+                    headers: {
                         "Authorization": "Bearer " + token
-
                     }
 
                 });
 
 
-
-
-            if (!response.ok) {
+            if (!response.ok)
                 return;
-            }
 
 
+            const categories =
+                await response.json();
 
 
-            const transaction = await response.json();
+            dropdown.innerHTML = `
+                <option value="">
+                    Select a category
+                </option>
+            `;
 
 
+            categories.forEach(category => {
+
+                dropdown.innerHTML += `
+
+                    <option value="${category.categoryID}"
+                        ${Number(category.categoryID) === Number(selectedID)
+                        ? "selected"
+                        : ""}>
+
+                        ${category.name}
+
+                    </option>
+
+                `;
+
+            });
+
+        }
+
+
+        async function loadTransaction() {
+
+            const response =
+                await fetch(
+                    "/api/Transactions/" + transactionID,
+                    {
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok)
+                return;
+
+
+            const transaction =
+                await response.json();
 
 
             document.getElementById("amount").value =
                 transaction.amount;
 
 
-
             document.getElementById("type").value =
-                transaction.type;
-
+                transaction.type || "Expense";
 
 
             document.getElementById("date").value =
-                transaction.date.substring(0, 10);
+                transaction.date
+                    ? transaction.date.substring(0, 10)
+                    : "";
 
 
-
-            document.getElementById("categoryID").value =
-                transaction.categoryID;
-
-
-        }
+            document.getElementById("notes").value =
+                transaction.notes || "";
 
 
-
-
-
-
-
-
-
-        async function loadCategories() {
-
-
-            const response = await fetch("/api/Category",
-                {
-
-                    headers:
-                    {
-
-                        "Authorization": "Bearer " + token
-
-                    }
-
-                });
-
-
-
-
-            if (!response.ok) {
-                return;
-            }
-
-
-
-
-
-            const categories = await response.json();
-
-
-
-            let options = "";
-
-
-
-
-            categories.forEach(category => {
-
-
-                options += `
-
-                <option value="${category.categoryID}">
-
-                    ${category.name}
-
-                </option>
-
-                `;
-
-    if (categories.length === 0) {
-        dropdown.innerHTML = `<option value="">No categories available</option>`;
-        return;
-    }
-
-    let options = "";
-    categories.forEach(category => {
-        options += `<option value="${category.categoryID}">${category.name}</option>`;
-    });
-
-    dropdown.innerHTML = options;
-}
-
-async function loadTransaction() {
-
-    const response = await fetch("/api/Transactions/" + transactionID, {
-        headers: { "Authorization": "Bearer " + token }
-    });
-
-            document.getElementById("categoryID").innerHTML = options;
-
+            await loadCategories(
+                transaction.categoryID
+            );
 
         }
 
 
-function hideBudgetPopup() {
-    document.getElementById("budgetPopup").style.display = "none";
-}
+        document
+            .getElementById("editTransactionForm")
+            .addEventListener("submit", async function(event) {
 
+                event.preventDefault();
 
-    const [budgetsRes, transactionsRes] = await Promise.all([
-        fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
-        fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } })
-    ]);
 
-    const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
-    const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
+                const amount =
+                    Number(
+                        document.getElementById("amount").value
+                    );
 
 
+                const categoryID =
+                    Number(
+                        document.getElementById("categoryID").value
+                    );
 
 
-        async function updateTransaction() {
+                const type =
+                    document.getElementById("type").value;
 
 
-            const transaction =
-            {
+                const date =
+                    document.getElementById("date").value;
 
 
-                amount:
-                    Number(document.getElementById("amount").value),
+                const notes =
+                    document.getElementById("notes")
+                        .value
+                        .trim();
 
 
+                const error =
+                    document.getElementById("editError");
 
-                categoryID:
-                    Number(document.getElementById("categoryID").value),
 
+                if (!amount || amount <= 0) {
 
+                    error.textContent =
+                        "Please enter a valid amount.";
 
-                type:
-                    document.getElementById("type").value,
+                    error.style.display = "block";
 
+                    return;
 
+                }
 
-                date:
-                    document.getElementById("date").value
 
+                if (!categoryID) {
 
-            };
+                    error.textContent =
+                        "Please select a category.";
 
+                    error.style.display = "block";
 
+                    return;
 
+                }
 
 
-            const response = await fetch("/api/Transactions/" + id,
-                {
+                const response =
+                    await fetch(
+                        "/api/Transactions/" + transactionID,
+                        {
 
+                            method: "PUT",
 
-                    method: "PUT",
+                            headers: {
 
+                                "Content-Type":
+                                    "application/json",
 
+                                "Authorization":
+                                    "Bearer " + token
 
-                    headers:
-                    {
+                            },
 
-                        "Content-Type": "application/json",
+                            body: JSON.stringify({
 
-                        "Authorization": "Bearer " + token
+                                amount,
+                                categoryID,
+                                type,
+                                date,
+                                notes: notes || null
 
-                    },
+                            })
 
+                        }
+                    );
 
 
-                    body: JSON.stringify(transaction)
+                if (response.ok) {
 
+                    window.location.href =
+                        "/TransactionPage";
 
-                });
+                } else {
 
+                    error.textContent =
+                        "Unable to update transaction.";
 
+                    error.style.display = "block";
 
+                }
 
+            });
 
-            if (response.ok) {
 
-                window.location.href = "/TransactionPage";
+        loadTransaction();
 
-            }
-
-
-        }
-
-    const spent = transactions
-        .filter(t => t.categoryID === categoryID && t.transactionsID !== excludeTransactionID)
-        .reduce((sum, t) => sum + t.amount, 0);
-
-    if (!budget) {
-        return { hasBudget: false, limit: 0, spent: spent, remaining: null };
-    }
-
-    return { hasBudget: true, limit: budget.limit, spent: spent, remaining: budget.limit - spent };
-}
-
-async function saveTransaction() {
-
-    hideBudgetPopup();
-
-    const categoryID = Number(document.getElementById("categoryID").value);
-    const amount = Number(document.getElementById("amount").value);
-
-    if (!categoryID) {
-        showBudgetPopup("Please select a category.");
-        return;
-    }
-
-    if (!amount || amount <= 0) {
-        showBudgetPopup("Please enter an amount greater than 0.");
-        return;
-    }
-
-    const status = await getBudgetStatus(categoryID, transactionID);
-
-    if (status.hasBudget && amount > status.remaining) {
-        showBudgetPopup(
-            "This value is more than what's allowed for this category's budget. " +
-            "Please enter an amount less than or equal to $" + Math.max(status.remaining, 0).toFixed(2) + "."
-        );
-        return;
-    }
-
-    const updatedTransaction = {
-        amount: amount,
-        categoryID: categoryID,
-        date: document.getElementById("date").value
-    };
-
-    const response = await fetch("/api/Transactions/" + transactionID, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        body: JSON.stringify(updatedTransaction)
-    });
-
-    if (response.ok) {
-        window.location.href = "/TransactionPage";
-    } else {
-        showBudgetPopup("Unable to save changes.");
-    }
-}
-
-    <script src="~/js/authGuard.js"></script>
-
+    </script>
 
 }

@@ -126,83 +126,116 @@
                 return;
             }
 
+
             emptyBudget.style.display = "none";
 
-            budgetList.innerHTML = budgets.map(budget => {
-                const name = budget.username || "Unnamed Budget";
-                const limit = Number(budget.limits) || 0;
-                const date = budget.date
-                    ? new Date(budget.date).toLocaleDateString()
-                    : "Unknown";
 
-                return `
-                    <article class="budget-card">
+            budgets.forEach((budget, index) => {
 
-                        <div class="budget-card-body">
+                const id =
+                    budget.budgetID ??
+                    budget.BudgetID ??
+                    budget.id;
 
-                            <div class="budget-card-icon">
-                                <i class="bi bi-piggy-bank-fill"></i>
+
+                const name =
+                    budget.name ??
+                    budget.username ??
+                    "Unnamed Budget";
+
+
+                const limit =
+                    budget.limit ??
+                    budget.limits ??
+                    0;
+
+                budgetList.innerHTML = budgets.map(budget => {
+                    const name = budget.username || "Unnamed Budget";
+                    const limit = Number(budget.limits) || 0;
+                    const date = budget.date
+                        ? new Date(budget.date).toLocaleDateString()
+                        : "Unknown";
+
+                    return `
+                        <article class="budget-card">
+
+                            <div class="budget-card-body">
+
+                                <div class="budget-card-icon">
+                                    <i class="bi bi-piggy-bank-fill"></i>
+                                </div>
+
+                                <h2>${escapeHtml(name)}</h2>
+
+                                <div class="budget-limit">
+                                    <span>Budget Limit</span>
+                                    <strong>$${limit.toFixed(2)}</strong>
+                                </div>
+
+                                <div class="budget-date">
+                                    <i class="bi bi-calendar3"></i>
+                                    Created ${date}
+                                </div>
+
                             </div>
 
-                            <h2>${escapeHtml(name)}</h2>
+                            <div class="budget-card-actions">
 
-                            <div class="budget-limit">
-                                <span>Budget Limit</span>
-                                <strong>$${limit.toFixed(2)}</strong>
+                                <button type="button"
+                                        class="budget-card-btn budget-view-btn"
+                                        onclick="showDetails(${budget.budgetID})">
+                                    <i class="bi bi-eye"></i>
+                                    View Details
+                                </button>
+
+                                <button type="button"
+                                        class="budget-card-btn budget-edit-btn"
+                                        onclick="showEditPanel(${budget.budgetID})">
+                                    <i class="bi bi-pencil"></i>
+                                    Edit
+                                </button>
+
+                                <button type="button"
+                                        class="budget-card-btn budget-delete-btn"
+                                        onclick="showDeletePanel(${budget.budgetID})">
+                                    <i class="bi bi-trash"></i>
+                                    Delete
+                                </button>
+
                             </div>
 
-                            <div class="budget-date">
-                                <i class="bi bi-calendar3"></i>
-                                Created ${date}
-                            </div>
-
-                        </div>
-
-                        <div class="budget-card-actions">
-
-                            <button type="button"
-                                    class="budget-card-btn budget-view-btn"
-                                    onclick="showDetails(${budget.budgetID})">
-                                <i class="bi bi-eye"></i>
-                                View Details
-                            </button>
-
-                            <button type="button"
-                                    class="budget-card-btn budget-edit-btn"
-                                    onclick="showEditPanel(${budget.budgetID})">
-                                <i class="bi bi-pencil"></i>
-                                Edit
-                            </button>
-
-                            <button type="button"
-                                    class="budget-card-btn budget-delete-btn"
-                                    onclick="showDeletePanel(${budget.budgetID})">
-                                <i class="bi bi-trash"></i>
-                                Delete
-                            </button>
-
-                        </div>
-
-                    </article>
-                `;
-            }).join("");
-
+                        </article>
+                    `;
+                }).join("");
+            });
         } catch (error) {
             console.error(error);
             budgetError.style.display = "block";
         }
     }
 
-    function showCreatePanel() {
+    async function showCreatePanel() {
         openPanel("Add Budget", `
             <form id="createBudgetForm">
 
                 <div class="budget-form-group">
-                    <label>Budget Name</label>
-                    <input id="createName"
+                    <label>Budget name</label>
+                    <input id="createname"
                            class="budget-input"
                            placeholder="e.g. Groceries"
                            required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Category
+                    </label>
+                    <select id="createCategoryID"
+                            class="form-select">
+                        <option>
+                            Loading categories...
+                        </option>
+                    </select>
                 </div>
 
                 <div class="budget-form-group">
@@ -229,6 +262,30 @@
             </form>
         `);
 
+        const response = await fetch("/api/Category", {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        if (!response.ok) {
+            showError("Unable to load categories.");
+            return;
+        }
+
+        const categories = await response.json();
+        const dropdown = document.getElementById("createCategoryID");
+
+        dropdown.innerHTML = '';
+
+        categories.forEach(category => {
+            dropdown.innerHTML += `
+                        <option value="${category.categoryID}">
+                            ${category.name}
+                        </option>
+                    `;
+        });
+
         document.getElementById("createBudgetForm")
             .addEventListener("submit", createBudget);
     }
@@ -236,7 +293,8 @@
     async function createBudget(event) {
         event.preventDefault();
 
-        const name = document.getElementById("createName").value.trim();
+        const name = document.getElementById("createname").value.trim();
+        const categoryID = document.getElementById("createCategoryID").value.trim();
         const limit = Number(document.getElementById("createLimit").value);
         const error = document.getElementById("createError");
 
@@ -255,6 +313,7 @@
                 },
                 body: JSON.stringify({
                     username: name,
+                    categoryID: categoryID,
                     limits: limit
                 })
             });
@@ -281,6 +340,21 @@
             if (!response.ok) throw new Error();
 
             const budget = await response.json();
+            const categoryID = budget.categoryID;
+
+            const responseCategory = await fetch(`/api/Category/${categoryID}`, {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            if (!responseCategory.ok) {
+                showError("Unable to load categories.");
+                return;
+            }
+
+            const categoryData = await responseCategory.json();
+            const category = categoryData.name || "Unknown Category";
 
             const name = budget.username || "Unnamed Budget";
             const limit = Number(budget.limits) || 0;
@@ -296,6 +370,11 @@
                     </div>
 
                     <h3>${escapeHtml(name)}</h3>
+
+                    <div class="budget-detail-block">
+                        <span>Budget Category</span>
+                        <strong>${category}</strong>
+                    </div>
 
                     <div class="budget-detail-block">
                         <span>Budget Limit</span>
@@ -335,8 +414,8 @@
                 <form id="editBudgetForm">
 
                     <div class="budget-form-group">
-                        <label>Budget Name</label>
-                        <input id="editName"
+                        <label>Budget name</label>
+                        <input id="editname"
                                class="budget-input"
                                value="${escapeHtml(budget.username)}"
                                required>
@@ -383,7 +462,7 @@
     async function updateBudget(event, id) {
         event.preventDefault();
 
-        const name = document.getElementById("editName").value.trim();
+        const name = document.getElementById("editname").value.trim();
         const limit = Number(document.getElementById("editLimit").value);
         const error = document.getElementById("editError");
 

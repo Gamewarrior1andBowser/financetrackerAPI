@@ -145,11 +145,21 @@
                         "Authorization": "Bearer " + token
                     },
 
-                    body: JSON.stringify({
-                        username: username,
-                        limits: limits
-                    })
-                });
+
+body:JSON.stringify({
+
+name:
+document.getElementById("budgetName").value,
+
+
+limit:
+Number(document.getElementById("budgetlimits").value),
+
+
+date:new Date()
+
+})
+
 
                 if (!response.ok) {
                     throw new Error();

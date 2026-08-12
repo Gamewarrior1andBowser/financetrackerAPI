@@ -50,7 +50,7 @@ namespace financetrackerAPI.Controllers
             var categoryData = _context.Transactions
                 .Include(t => t.Category)
                 .Where(t => t.Category.Type == "Expense")
-                .GroupBy(t => t.Category.Name)
+                .GroupBy(t => t.Category.name)
                 .Select(c => new
                 {
                     category = c.Key,

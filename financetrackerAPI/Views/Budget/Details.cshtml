@@ -90,8 +90,10 @@
                         ? new Date(budget.date).toLocaleDateString()
                         : "Unknown";
 
-            }
-            catch {
+        document.getElementById("budgetdate")
+        .innerText =
+        new Date(budget.date)
+        .toLocaledateString();
 
                 const error =
                     document.getElementById("detailsError");

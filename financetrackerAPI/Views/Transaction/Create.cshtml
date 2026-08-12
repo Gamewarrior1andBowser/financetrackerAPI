@@ -21,7 +21,9 @@
                     Add Transaction
                 </h2>
 
+    </div>
 
+    <div class="transaction-card transaction-form-card">
 
 
 
@@ -31,6 +33,7 @@
                         Amount
                     </label>
 
+                <label>Amount</label>
 
                     <input id="amount"
                            type="number"
@@ -40,7 +43,9 @@
 
                 </div>
 
+            <div class="transaction-form-group">
 
+                <label>Category</label>
 
 
 
@@ -65,7 +70,9 @@
 
                 </div>
 
+            <div class="transaction-form-group">
 
+                <label>Type</label>
 
 
 
@@ -97,7 +104,9 @@
 
                 </div>
 
+            <div class="transaction-form-group">
 
+                <label>Date</label>
 
 
 
@@ -110,7 +119,16 @@
 
                 <div id="budgetPopup" class="alert alert-danger" style="display:none;"></div>
 
+                <label>
+                    Notes
+                    <span class="transaction-optional">
+                        Optional
+                    </span>
+                </label>
 
+                <textarea id="notes"
+                          class="transaction-input transaction-textarea"
+                          placeholder="Add a note if you want..."></textarea>
 
 
                 <div class="d-flex gap-2">
@@ -145,11 +163,9 @@
 
             </div>
 
-
         </div>
 
-
-    </div>
+</div>
 
 
 </div>
@@ -157,82 +173,49 @@
 
 
 
-    <script src="~/js/authGuard.js"></script>
 
 
 
 @section Scripts {
 <script>
 
-
-    const token = localStorage.getItem("token");
-
-    loadCategories();
-
-
-
-    async function loadCategories()
-    {
-
-
-        const response = await fetch("/api/Category",
-            {
-
-                headers:
+const token = localStorage.getItem("token");
+        loadCategories();
+        async function loadCategories() {
+            const response = await fetch("/api/Category",
                 {
-
-                    "Authorization": "Bearer " + token
-
-                }
-
-
-        });
+                    headers:
+                    {
+                        "Authorization": "Bearer " + token
+                    }
+                });
 
         const categories = await response.json();
         const dropdown = document.getElementById("categoryID");
 
-        if (categories.length === 0) {
-            dropdown.innerHTML = `<option value="">No categories available</option>`;
-            return;
-        }
-
-
-        if (!response.ok) {
-
-            document.getElementById("categoryID").innerHTML =
-                "<option>No Categories</option>";
-
-            return;
-
-        }
-
-
-
-        let options = "";
-
-
-
-
-        categories.forEach(category => {
-
-
-            options += `
-
-            <option value="${category.categoryID}">
-
-                ${category.name}
-
-            </option>
-
-            `;
-
-
-        });
-
-        dropdown.innerHTML = options;
-
-        document.getElementById("categoryID").innerHTML = options;
+    if (categories.length === 0) {
+        dropdown.innerHTML = `<option value="">No categories available</option>`;
+        return;
     }
+    if (!response.ok) {
+
+        document.getElementById("categoryID").innerHTML =
+            "<option>No Categories</option>";
+
+        return;
+
+    }
+
+    let options = "";
+    categories.forEach(category => {
+                options += `
+                <option value="${category.categoryID}">
+                    ${category.name}
+                </option>
+                `;
+            });
+    dropdown.innerHTML = options;
+}
 
     function showError(message)
     {
@@ -270,7 +253,8 @@
         }
     }
 
-    async function createTransaction() {
+
+async function createTransaction() {
 
         hideBudgetPopup();
 
@@ -320,5 +304,6 @@
         }
     }
 
-</script>
+        loadCategories();
+    </script>
 }
