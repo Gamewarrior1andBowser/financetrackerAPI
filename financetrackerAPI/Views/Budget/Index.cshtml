@@ -219,8 +219,8 @@
             <form id="createBudgetForm">
 
                 <div class="budget-form-group">
-                    <label>Budget Name</label>
-                    <input id="createName"
+                    <label>Budget name</label>
+                    <input id="createname"
                            class="budget-input"
                            placeholder="e.g. Groceries"
                            required>
@@ -293,7 +293,7 @@
     async function createBudget(event) {
         event.preventDefault();
 
-        const name = document.getElementById("createName").value.trim();
+        const name = document.getElementById("createname").value.trim();
         const categoryID = document.getElementById("createCategoryID").value.trim();
         const limit = Number(document.getElementById("createLimit").value);
         const error = document.getElementById("createError");
@@ -340,9 +340,9 @@
             if (!response.ok) throw new Error();
 
             const budget = await response.json();
-            const category = budget.categoryID;
+            const categoryID = budget.categoryID;
 
-            const responseCategory = await fetch(`/api/Category/${category}`, {
+            const responseCategory = await fetch(`/api/Category/${categoryID}`, {
                 headers: {
                     "Authorization": "Bearer " + token
                 }
@@ -354,7 +354,7 @@
             }
 
             const categoryData = await responseCategory.json();
-            const categoryName = categoryData.username || "Unknown Category";
+            const category = categoryData.name || "Unknown Category";
 
             const name = budget.username || "Unnamed Budget";
             const limit = Number(budget.limits) || 0;
@@ -373,7 +373,7 @@
 
                     <div class="budget-detail-block">
                         <span>Budget Category</span>
-                        <strong>${categoryName}</strong>
+                        <strong>${category}</strong>
                     </div>
 
                     <div class="budget-detail-block">
@@ -414,8 +414,8 @@
                 <form id="editBudgetForm">
 
                     <div class="budget-form-group">
-                        <label>Budget Name</label>
-                        <input id="editName"
+                        <label>Budget name</label>
+                        <input id="editname"
                                class="budget-input"
                                value="${escapeHtml(budget.username)}"
                                required>
@@ -462,7 +462,7 @@
     async function updateBudget(event, id) {
         event.preventDefault();
 
-        const name = document.getElementById("editName").value.trim();
+        const name = document.getElementById("editname").value.trim();
         const limit = Number(document.getElementById("editLimit").value);
         const error = document.getElementById("editError");
 

@@ -33,7 +33,7 @@ public class CategoryController : ControllerBase
 
         int userID = int.Parse(userClaim.Value);
 
-        if (string.IsNullOrEmpty(category.Name))
+        if (string.IsNullOrEmpty(category.name))
         {
             return BadRequest("Category name is required");
         }
@@ -123,7 +123,7 @@ public class CategoryController : ControllerBase
             return NotFound("Category not found");
         }
 
-        category.Name = updatedCategory.Name;
+        category.name = updatedCategory.name;
         category.Type = updatedCategory.Type;
 
         await _context.SaveChangesAsync();
