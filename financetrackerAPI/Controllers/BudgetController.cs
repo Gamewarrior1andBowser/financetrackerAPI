@@ -58,18 +58,8 @@ public class BudgetController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(Budget budget)
     {
-        var claim = User.FindFirst("id");
 
-        if (claim == null)
-            return Unauthorized();
-
-        var userID = int.Parse(claim.Value);
-
-        if (string.IsNullOrWhiteSpace(budget.username))
-            return BadRequest("Budget name is required.");
-
-        if (budget.limits <= 0)
-            return BadRequest("Budget limit must be greater than zero.");
+        var userID = int.Parse(User.FindFirst("id").Value);
 
         budget.userID = userID;
         budget.date = DateTime.Now;

@@ -59,12 +59,12 @@
                 </label>
 
 
-                <input id="limit"
+                <input id="limits"
                        type="number"
                        min="1"
                        step="0.01"
                        class="form-control"
-                       placeholder="Enter budget limit" />
+                       placeholder="Enter budget limits" />
 
 
                 <small class="text-muted">
@@ -210,8 +210,8 @@
                 document.getElementById("limit").value
             );
 
-        const limit =
-            Number(document.getElementById("limit").value);
+        const limits =
+            Number(document.getElementById("limits").value);
 
             if (!name) {
 
@@ -228,23 +228,23 @@
 
             if (!limit || limit <= 0) {
 
-        if(!limit || limit <= 0)
+        if(!limits || limits <= 0)
         {
-            showError("Please enter a valid budget limit.");
+            showError("Please enter a valid budget limits.");
             return;
         }
 
 
-
+        const categoryID = Number(document.getElementById("categoryID").value);
 
 
         const budget = {
 
-            name: name,
+            username: name,
 
             categoryID: categoryID,
 
-            limit: limit,
+            limits: limits,
 
             date: new Date().toISOString()
 
