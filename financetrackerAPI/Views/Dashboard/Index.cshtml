@@ -1,227 +1,106 @@
-﻿@{
+﻿ @{
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="finance-dashboard">
 
-    <!-- TOP -->
-    <div class="dashboard-top">
 
-        <div class="finance-logo">
-            <i class="bi bi-stack"></i>
-            <span class="finance-dollar">$</span>
+<div class="finance-dashboard page-content">
+
+    <!-- HERO -->
+    <div class="dashboard-hero">
+        <div class="hero-text">
+            <div class="hero-badge"><i class="bi bi-stack"></i> Personal Finance Tracker</div>
+            <h2>Hello, <span id="greetingName">...</span></h2>
+            <p>Here's what's happening with your finances today.</p>
         </div>
-
-        <h1>
-            Personal Finance Tracker
-        </h1>
-
+        <div class="hero-actions">
+            <a asp-controller="TransactionPage" asp-action="Create" class="btn-new-income">
+                <i class="bi bi-plus-circle-fill"></i> New Income
+            </a>
+            <a asp-controller="TransactionPage" asp-action="Create" class="btn-new-expense">
+                <i class="bi bi-plus-circle-fill"></i> New Expense
+            </a>
+        </div>
     </div>
 
-
-    <!-- NAVIGATION -->
-    <div class="dashboard-nav">
-
-        <div class="dashboard-nav-left">
-
-            <a asp-controller="TransactionPage"
-               asp-action="Index"
-               class="dashboard-nav-link active">
-
-                <i class="bi bi-cash-stack"></i>
-                Transactions
-
-            </a>
-
-
-            <a href="#dashboardStats"
-               class="dashboard-nav-link">
-
-                <i class="bi bi-bar-chart-line-fill"></i>
-                Stats
-
-            </a>
-
-        </div>
-
-
-        <div class="dashboard-nav-right">
-
-            <a asp-controller="TransactionPage"
-               asp-action="Create"
-               class="new-income-btn">
-
-                <i class="bi bi-plus-circle-fill"></i>
-                New Income
-
-            </a>
-
-
-            <a asp-controller="TransactionPage"
-               asp-action="Create"
-               class="new-expense-btn">
-
-                <i class="bi bi-plus-circle-fill"></i>
-                New Expense
-
-            </a>
-
-        </div>
-
+    <!-- SUBNAV -->
+    <div class="dashboard-subnav">
+        <a asp-controller="TransactionPage" asp-action="Index" class="active">
+            <i class="bi bi-cash-stack"></i> Transactions
+        </a>
+        <a href="#dashboardStats">
+            <i class="bi bi-bar-chart-line-fill"></i> Stats
+        </a>
     </div>
-
-
-
-    <!-- CHART SECTION -->
-    <div id="dashboardStats"
-         class="dashboard-charts">
-
-
-        <!-- CATEGORY CHART -->
-        <div class="dashboard-chart-card">
-
-            <div class="chart-title">
-
-                <h2>
-                    Spend By Category This Month
-                </h2>
-
-            </div>
-
-
-            <div class="chart-container donut-container">
-
-                <canvas id="categoryChart"></canvas>
-
-            </div>
-
-
-            <div id="categoryLegend"
-                 class="chart-legend">
-            </div>
-
-        </div>
-
-
-
-        <!-- TREND CHART -->
-        <div class="dashboard-chart-card trend-card">
-
-            <div class="chart-title">
-
-                <h2>
-                    This Year Income vs. Expenses Trend
-                </h2>
-
-            </div>
-
-
-            <div class="chart-container">
-
-                <canvas id="trendChart"></canvas>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
 
     <!-- SUMMARY -->
-    <div class="dashboard-summary-row">
+    <div class="summary-cards">
+        <div class="summary-card income">
+            <div class="summary-card-head">
+                <span>Total Income</span>
+                <span class="summary-icon"><i class="bi bi-graph-up-arrow"></i></span>
+            </div>
+            <strong id="incomeTotal">$0.00</strong>
+        </div>
+        <div class="summary-card expense">
+            <div class="summary-card-head">
+                <span>Total Expenses</span>
+                <span class="summary-icon"><i class="bi bi-graph-down-arrow"></i></span>
+            </div>
+            <strong id="expenseTotal">$0.00</strong>
+        </div>
+        <div class="summary-card balance">
+            <div class="summary-card-head">
+                <span>Balance</span>
+                <span class="summary-icon"><i class="bi bi-wallet2"></i></span>
+            </div>
+            <strong id="balanceTotal">$0.00</strong>
+        </div>
+    </div>
 
-        <div class="summary-box">
+    <!-- CHARTS -->
+    <div id="dashboardStats" class="chart-grid">
 
-            <span>
-                Total Income
-            </span>
-
-            <strong id="incomeTotal">
-                $0.00
-            </strong>
-
+        <div class="chart-card">
+            <h2>Spend by Category This Month</h2>
+            <div class="chart-container donut-container">
+                <canvas id="categoryChart"></canvas>
+            </div>
+            <div id="categoryLegend" class="chart-legend"></div>
         </div>
 
-
-        <div class="summary-box">
-
-            <span>
-                Total Expenses
-            </span>
-
-            <strong id="expenseTotal">
-                $0.00
-            </strong>
-
-        </div>
-
-
-        <div class="summary-box">
-
-            <span>
-                Balance
-            </span>
-
-            <strong id="balanceTotal">
-                $0.00
-            </strong>
-
+        <div class="chart-card">
+            <h2>This Year — Income vs. Expenses Trend</h2>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
         </div>
 
     </div>
 
-
-
     <!-- RECENT TRANSACTIONS -->
-    <div class="recent-dashboard-section">
-
+    <div class="chart-card recent-dashboard-section">
         <div class="recent-header">
-
-            <h2>
-                Recent Transactions
-            </h2>
-
-            <a asp-controller="TransactionPage"
-               asp-action="Index">
-
-                View All
-
-                <i class="bi bi-arrow-right"></i>
-
+            <h2>Recent Transactions</h2>
+            <a asp-controller="TransactionPage" asp-action="Index">
+                View All <i class="bi bi-arrow-right"></i>
             </a>
-
         </div>
 
+        <div id="recentDashboardTransactions" class="recent-dashboard-list"></div>
 
-        <div id="recentDashboardTransactions"
-             class="recent-dashboard-list">
-        </div>
-
-
-        <div id="noRecentTransactions"
-             class="dashboard-empty"
-             style="display:none;">
-
+        <div id="noRecentTransactions" class="dashboard-empty" style="display:none;">
             <i class="bi bi-receipt"></i>
-
-            <p>
-                No transactions yet.
-            </p>
-
+            <p>No transactions yet.</p>
         </div>
-
     </div>
 
 </div>
-
-
 
 @section Scripts {
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 
     <script>
 
@@ -235,6 +114,124 @@
 
         loadDashboard();
 
+        loadGreeting();
+
+
+        /* =========================================
+           GREETING
+        ========================================= */
+
+        function decodeJwtPayload(rawToken) {
+
+            try {
+
+                const base64Url =
+                    rawToken.split(".")[1];
+
+                const base64 =
+                    base64Url
+                        .replace(/-/g, "+")
+                        .replace(/_/g, "/");
+
+                const jsonPayload =
+                    decodeURIComponent(
+                        atob(base64)
+                            .split("")
+                            .map(c =>
+                                "%" +
+                                ("00" + c.charCodeAt(0).toString(16)).slice(-2)
+                            )
+                            .join("")
+                    );
+
+                return JSON.parse(jsonPayload);
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Failed to decode JWT",
+                    error
+                );
+
+                return null;
+
+            }
+
+        }
+
+
+        async function getUserDisplayName() {
+
+            if (!token) return "User";
+
+
+            const payload =
+                decodeJwtPayload(token);
+
+            // Adjust these claim keys to match whatever AuthController.GenerateToken actually issues
+            const claimName =
+                payload?.name ||
+                payload?.given_name ||
+                payload?.unique_name;
+
+
+            if (claimName) return claimName;
+
+
+            try {
+
+                const response =
+                    await fetch("/api/User/profile", {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    });
+
+
+                if (response.ok) {
+
+                    const user =
+                        await response.json();
+
+                    if (user?.name) return user.name;
+
+                }
+
+            }
+            catch (error) {
+
+                console.warn(
+                    "Could not fetch user profile for greeting",
+                    error
+                );
+
+            }
+
+
+            return "User";
+
+        }
+
+
+        async function loadGreeting() {
+
+            const greetingEl =
+                document.getElementById(
+                    "greetingName"
+                );
+
+
+            if (!greetingEl) return;
+
+
+            const name =
+                await getUserDisplayName();
+
+
+            greetingEl.innerText = name;
+
+        }
 
 
         async function loadDashboard() {
@@ -475,6 +472,12 @@
 
                             data: values,
 
+                            backgroundColor: [
+                                "#4f46a5", "#6d5bd0", "#4f86c6",
+                                "#f59e0b", "#fbbf24", "#9b91df",
+                                "#7c74d1", "#3f8fd1"
+                            ],
+
                             borderWidth: 3,
 
                             borderColor: "#ffffff"
@@ -544,10 +547,10 @@
             if (labels.length === 0) {
 
                 legend.innerHTML = `
-                            <span class="no-chart-data">
-                                No expenses this month
-                            </span>
-                        `;
+                                    <span class="no-chart-data">
+                                        No expenses this month
+                                    </span>
+                                `;
 
                 return;
 
@@ -560,6 +563,12 @@
                         sum + value,
                     0
                 );
+
+            const palette = [
+                "#4f46a5", "#6d5bd0", "#4f86c6",
+                "#f59e0b", "#fbbf24", "#9b91df",
+                "#7c74d1", "#3f8fd1"
+            ];
 
 
             legend.innerHTML =
@@ -577,22 +586,23 @@
 
                     return `
 
-                                <div class="legend-item">
+                                        <div class="legend-item">
 
-                                    <span class="legend-dot"></span>
+                                            <span class="legend-dot" style="background:${palette[index % palette.length]}"></span>
 
-                                    <span>
-                                        ${label}
-                                    </span>
+                                            <span>
+                                                ${label}
+                                            </span>
 
-                                    <small>
-                                        $${values[index].toFixed(2)}
-                                        (${percentage}%)
-                                    </small>
+                                            <strong>
+                                                $${values[index].toFixed(2)}
+                                            </strong>
 
-                                </div>
+                                            (${percentage}%)
 
-                            `;
+                                        </div>
+
+                                    `;
 
                 }).join("");
 
@@ -716,6 +726,9 @@
 
                                 data: incomeData,
 
+                                borderColor: "#4f46a5",
+                                backgroundColor: "rgba(79,70,165,.12)",
+
                                 borderWidth: 2,
 
                                 tension: 0.35,
@@ -729,6 +742,9 @@
                                 label: "Expense",
 
                                 data: expenseData,
+
+                                borderColor: "#f59e0b",
+                                backgroundColor: "rgba(245,158,11,.12)",
 
                                 borderWidth: 2,
 
@@ -865,41 +881,41 @@
 
                     return `
 
-                                <div class="dashboard-transaction-row">
+                                        <div class="dashboard-transaction-row">
 
-                                    <div class="dashboard-transaction-left">
+                                            <div class="dashboard-transaction-left">
 
-                                        <div class="dashboard-transaction-icon">
+                                                <div class="dashboard-transaction-icon">
 
-                                            <i class="bi bi-receipt"></i>
+                                                    <i class="bi bi-receipt"></i>
 
-                                        </div>
+                                                </div>
 
 
-                                        <div>
+                                                <div>
 
-                                            <strong>
-                                                ${category}
+                                                    <strong>
+                                                        ${category}
+                                                    </strong>
+
+                                                    <span>
+                                                        ${date}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <strong class="dashboard-transaction-amount">
+
+                                                $${amount.toFixed(2)}
+
                                             </strong>
 
-                                            <span>
-                                                ${date}
-                                            </span>
-
                                         </div>
 
-                                    </div>
-
-
-                                    <strong class="dashboard-transaction-amount">
-
-                                        $${amount.toFixed(2)}
-
-                                    </strong>
-
-                                </div>
-
-                            `;
+                                    `;
 
                 }).join("");
 
@@ -911,3 +927,6 @@
     <script src="~/js/authGuard.js"></script>
 
 }
+
+
+ 
