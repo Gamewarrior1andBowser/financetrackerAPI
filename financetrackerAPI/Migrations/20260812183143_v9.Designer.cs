@@ -12,7 +12,7 @@ using financetrackerAPI.Data;
 namespace financetrackerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260812175826_v9")]
+    [Migration("20260812183143_v9")]
     partial class v9
     {
         /// <inheritdoc />
@@ -62,11 +62,11 @@ namespace financetrackerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("categoryID"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
