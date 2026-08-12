@@ -4,688 +4,802 @@
 
 <div class="transaction-page">
 
-    <!-- HEADER -->
     <div class="transaction-header">
-
         <div>
-
-            <p class="transaction-subtitle">
-                Personal Finance
-            </p>
-
+            <p class="transaction-subtitle">Personal Finance</p>
             <h1 class="transaction-title">
-                Transactions
+                <i class="bi bi-receipt me-2"></i>Transactions
             </h1>
-
             <p class="transaction-description">
                 Track your income, expenses, and recent financial activity.
             </p>
-
         </div>
 
-
-        <a asp-controller="TransactionPage"
-           asp-action="Create"
-           class="transaction-add-btn">
-
+        <button class="transaction-add-btn" onclick="openCreate()">
             <i class="bi bi-plus-circle me-2"></i>
             Add Transaction
-
-        </a>
-
+        </button>
     </div>
 
+    <div class="transaction-content">
 
-    <!-- MAIN LAYOUT -->
-    <div class="transaction-layout">
-
-
-        <!-- LEFT SIDEBAR -->
-        <aside class="transaction-sidebar">
-
-
-            <div class="transaction-sidebar-section">
-
-                <h6 class="transaction-sidebar-title">
-                    Transactions
-                </h6>
-
-
-                <div class="transaction-filter-list">
-
-                    <button class="transaction-filter active"
-                            onclick="showAllTransactions()">
-
-                        <i class="bi bi-grid-fill"></i>
-
-                        <span>All Transactions</span>
-
-                    </button>
-
-
-                    <button class="transaction-filter"
-                            onclick="showIncome()">
-
-                        <i class="bi bi-arrow-down-circle"></i>
-
-                        <span>Income</span>
-
-                    </button>
-
-
-                    <button class="transaction-filter"
-                            onclick="showExpenses()">
-
-                        <i class="bi bi-arrow-up-circle"></i>
-
-                        <span>Expenses</span>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- QUICK LINKS -->
-            <div class="transaction-sidebar-section">
-
-                <h6 class="transaction-sidebar-title">
-                    Quick Links
-                </h6>
-
-
-                <div class="transaction-quick-links">
-
-
-                    <a asp-controller="Dashboard"
-                       asp-action="Index"
-                       class="transaction-quick-link">
-
-                        <i class="bi bi-house-door-fill"></i>
-
-                        Home
-
-                    </a>
-
-
-                    <a asp-controller="BudgetPage"
-                       asp-action="Index"
-                       class="transaction-quick-link">
-
-                        <i class="bi bi-piggy-bank-fill"></i>
-
-                        Budgets
-
-                    </a>
-
-
-                    <a asp-controller="CategoryPage"
-                       asp-action="Index"
-                       class="transaction-quick-link">
-
-                        <i class="bi bi-tags-fill"></i>
-
-                        Categories
-
-                    </a>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- SUMMARY -->
-            <div class="transaction-summary">
-
-                <div class="transaction-summary-icon">
-
-                    <i class="bi bi-cash-stack"></i>
-
-                </div>
-
-
-                <div>
-
-                    <small>
-                        Total Transactions
-                    </small>
-
-                    <strong id="totalTransactions">
-                        0
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-        </aside>
-
-
-
-        <!-- CENTER -->
         <main class="transaction-main">
 
-
             <div class="transaction-section-heading">
-
                 <div>
-
-                    <h2>
-                        Recent Transactions
-                    </h2>
-
-                    <span>
-                        Your latest financial activity
-                    </span>
-
+                    <h2>Recent Transactions</h2>
+                    <span>Your latest financial activity</span>
                 </div>
 
-
-                <span class="transaction-count"
-                      id="transactionCount">
-
+                <span class="transaction-count" id="transactionCount">
                     0 transactions
-
                 </span>
-
             </div>
 
+            <div id="transactionCards" class="transaction-grid"></div>
 
-
-            <!-- TRANSACTION CARDS -->
-            <div id="transactionCards"
-                 class="transaction-card-grid">
-
-            </div>
-
-
-
-            <!-- EMPTY STATE -->
             <div id="emptyTransactions"
                  class="transaction-empty"
                  style="display:none;">
 
                 <div class="transaction-empty-icon">
-
                     <i class="bi bi-receipt"></i>
-
                 </div>
 
+                <h3>No transactions yet</h3>
 
-                <h3>
-                    No transactions yet
-                </h3>
+                <p>Add your first transaction to start tracking your finances.</p>
 
-
-                <p>
-                    Add your first transaction to start tracking your finances.
-                </p>
-
-
-                <a asp-controller="TransactionPage"
-                   asp-action="Create"
-                   class="transaction-add-btn">
-
+                <button class="transaction-add-btn"
+                        onclick="openCreate()">
                     <i class="bi bi-plus-circle me-1"></i>
-
                     Add Transaction
-
-                </a>
-
+                </button>
             </div>
-
 
         </main>
 
+        <aside id="transactionPanel" class="transaction-panel">
 
-
-        <!-- RIGHT NOTES -->
-        <aside class="transaction-notes">
-
-
-            <h6 class="transaction-notes-title">
-                Notes
-            </h6>
-
-
-
-            <div class="transaction-note transaction-note-yellow">
-
-                <div class="transaction-note-icon">
-
-                    <i class="bi bi-lightbulb-fill"></i>
-
-                </div>
-
-
+            <div class="transaction-panel-header">
                 <div>
-
-                    <strong>
-                        Track Everything
-                    </strong>
-
-                    <p>
-                        Add your daily transactions so you always know where
-                        your money is going.
-                    </p>
-
+                    <h2 id="panelTitle">Transaction</h2>
+                    <p id="panelSubtitle"></p>
                 </div>
 
+                <button class="transaction-panel-close"
+                        onclick="closePanel()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
 
-
-
-            <div class="transaction-note transaction-note-gray">
-
-                <div class="transaction-note-icon">
-
-                    <i class="bi bi-info-circle-fill"></i>
-
-                </div>
-
-
-                <div>
-
-                    <strong>
-                        Stay Organized
-                    </strong>
-
-                    <p>
-                        Use categories to keep your financial activity
-                        organized.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-
-            <div class="transaction-note transaction-note-blue">
-
-                <div class="transaction-note-icon">
-
-                    <i class="bi bi-wallet2"></i>
-
-                </div>
-
-
-                <div>
-
-                    <strong>
-                        Review Your Spending
-                    </strong>
-
-                    <p>
-                        Check your recent transactions regularly to understand
-                        your spending habits.
-                    </p>
-
-                </div>
-
-            </div>
-
+            <div id="panelContent" class="transaction-panel-content"></div>
 
         </aside>
 
-
     </div>
+
+    <aside class="transaction-notes">
+
+        <div class="transaction-notes-header">
+            <div>
+                <h3>
+                    <i class="bi bi-sticky-fill me-2"></i>Notes
+                </h3>
+                <span>Your personal reminders</span>
+            </div>
+
+            <button class="transaction-note-add"
+                    onclick="addNote()">
+                <i class="bi bi-plus"></i>
+            </button>
+        </div>
+
+        <div id="notesList"></div>
+
+    </aside>
 
 </div>
 
-
-
 @section Scripts {
 
-<script>
+    <script src="~/js/authGuard.js"></script>
 
-    const token = localStorage.getItem("token");
+    <script>
 
-    let allTransactions = [];
+        const token = localStorage.getItem("token");
 
+        let transactions = [];
+        let categories = [];
+        let editingID = null;
 
-    loadTransactions();
+        const headers = {
+            "Authorization": "Bearer " + token
+        };
 
+        loadTransactions();
+        loadCategories();
+        loadNotes();
 
+        async function loadTransactions() {
 
-    async function loadTransactions() {
+            try {
 
-        try {
+                const response = await fetch("/api/Transactions", {
+                    headers
+                });
 
-            const response = await fetch(
-                "/api/Transactions",
-                {
-                    headers: {
-                        "Authorization": "Bearer " + token
-                    }
-                }
-            );
+                if (!response.ok) return;
 
+                transactions = await response.json();
+                renderTransactions();
 
-            if (!response.ok) {
+            } catch (error) {
 
-                document.getElementById("transactionCards").innerHTML = "";
+                console.error(error);
 
+            }
+        }
+
+        async function loadCategories() {
+
+            try {
+
+                const response = await fetch("/api/Category", {
+                    headers
+                });
+
+                if (!response.ok) return;
+
+                categories = await response.json();
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+        }
+
+        function getID(transaction) {
+            return transaction.transactionID ??
+                transaction.transactionsID ??
+                transaction.TransactionID ??
+                transaction.id;
+        }
+
+        function getCategory(transaction) {
+            return transaction.categoryName ??
+                transaction.CategoryName ??
+                categories.find(c =>
+                    Number(c.categoryID) === Number(transaction.categoryID)
+                )?.name ??
+                "No Category";
+        }
+
+        function getDate(transaction) {
+            return transaction.date ??
+                transaction.Date;
+        }
+
+        function renderTransactions() {
+
+            const container = document.getElementById("transactionCards");
+            const empty = document.getElementById("emptyTransactions");
+            const count = document.getElementById("transactionCount");
+
+            container.innerHTML = "";
+
+            count.textContent =
+                `${transactions.length} ${transactions.length === 1
+                    ? "transaction"
+                    : "transactions"
+                }`;
+
+            if (!transactions.length) {
+                empty.style.display = "block";
                 return;
             }
 
+            empty.style.display = "none";
 
-            allTransactions = await response.json();
+            transactions.forEach(transaction => {
 
-            displayTransactions(allTransactions);
+                const id = getID(transaction);
+                const amount = Number(transaction.amount ?? transaction.Amount ?? 0);
+                const type = transaction.type ?? transaction.Type ?? "Expense";
+                const category = getCategory(transaction);
+                const date = getDate(transaction);
 
-        }
-        catch (error) {
+                const formattedDate = date
+                    ? new Date(date).toLocaleDateString("en-CA", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric"
+                    })
+                    : "Not available";
 
-            console.error(error);
+                const card = document.createElement("div");
 
-        }
+                card.className = "transaction-card";
 
-    }
+                card.innerHTML = `
+                    <div class="transaction-card-body">
 
+                        <div class="transaction-card-top">
 
+                            <div class="transaction-icon">
+                                <i class="bi bi-receipt"></i>
+                            </div>
 
-    function displayTransactions(transactions) {
+                            <span class="transaction-type ${type.toLowerCase()}">
+                                ${type}
+                            </span>
 
-        const container =
-            document.getElementById("transactionCards");
+                        </div>
 
-        const empty =
-            document.getElementById("emptyTransactions");
+                        <h3>${category}</h3>
 
-        const count =
-            document.getElementById("transactionCount");
+                        <div class="transaction-card-info">
 
-        const total =
-            document.getElementById("totalTransactions");
+                            <span>
+                                <i class="bi bi-calendar3"></i>
+                                ${formattedDate}
+                            </span>
 
+                            <strong class="${type.toLowerCase() === "income"
+                        ? "transaction-income"
+                        : "transaction-expense"}">
+                                ${type.toLowerCase() === "income" ? "+" : "-"}
+                                $${Math.abs(amount).toFixed(2)}
+                            </strong>
 
-        container.innerHTML = "";
-
-
-        count.textContent =
-            `${transactions.length} ${
-                transactions.length === 1
-                    ? "transaction"
-                    : "transactions"
-            }`;
-
-
-        total.textContent =
-            transactions.length;
-
-
-        if (transactions.length === 0) {
-
-            empty.style.display = "block";
-
-            return;
-
-        }
-
-
-        empty.style.display = "none";
-
-
-        transactions.forEach(transaction => {
-
-
-            const id =
-                transaction.transactionID ??
-                transaction.TransactionID ??
-                transaction.id;
-
-
-            const date =
-                transaction.date ??
-                transaction.Date;
-
-
-            const category =
-                transaction.categoryName ??
-                transaction.CategoryName ??
-                "No Category";
-
-
-            const amount =
-                Number(
-                    transaction.amount ??
-                    transaction.Amount ??
-                    0
-                );
-
-
-            let formattedDate =
-                "Not available";
-
-
-            if (date) {
-
-                formattedDate =
-                    new Date(date).toLocaleDateString(
-                        "en-CA",
-                        {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric"
-                        }
-                    );
-
-            }
-
-
-            const card =
-                document.createElement("div");
-
-
-            card.className =
-                "transaction-card";
-
-
-            card.innerHTML = `
-
-                <div class="transaction-card-left">
-
-                    <div class="transaction-icon">
-
-                        <i class="bi bi-receipt"></i>
+                        </div>
 
                     </div>
 
+                    <div class="transaction-card-actions">
 
-                    <div class="transaction-info">
-
-                        <h3>
-                            ${category}
-                        </h3>
-
-
-                        <span>
-
-                            <i class="bi bi-calendar3"></i>
-
-                            ${formattedDate}
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="transaction-card-right">
-
-
-                    <strong class="transaction-amount">
-
-                        $${amount.toFixed(2)}
-
-                    </strong>
-
-
-                    <div class="transaction-actions">
-
-
-                        <a href="/TransactionPage/Details/${id}"
-                           class="transaction-action details"
-                           title="View Details">
-
+                        <button class="transaction-card-btn transaction-view-btn"
+                                onclick="openDetails(${id})">
                             <i class="bi bi-eye"></i>
-
-                        </a>
-
-
-                        <a href="/TransactionPage/Edit/${id}"
-                           class="transaction-action edit"
-                           title="Edit">
-
-                            <i class="bi bi-pencil"></i>
-
-                        </a>
-
-
-                        <button
-                            class="transaction-action delete"
-                            onclick="deleteTransaction(${id})"
-                            title="Delete">
-
-                            <i class="bi bi-trash"></i>
-
+                            View
                         </button>
 
+                        <button class="transaction-card-btn transaction-edit-btn"
+                                onclick="openEdit(${id})">
+                            <i class="bi bi-pencil"></i>
+                            Edit
+                        </button>
+
+                        <button class="transaction-card-btn transaction-delete-btn"
+                                onclick="openDelete(${id})">
+                            <i class="bi bi-trash"></i>
+                            Delete
+                        </button>
 
                     </div>
+                `;
 
-                </div>
-
-            `;
-
-
-            container.appendChild(card);
-
-        });
-
-    }
-
-
-
-    function showAllTransactions() {
-
-        displayTransactions(allTransactions);
-
-        setActiveFilter(0);
-
-    }
-
-
-
-    function showIncome() {
-
-        const income =
-            allTransactions.filter(transaction => {
-
-                const amount =
-                    Number(
-                        transaction.amount ??
-                        transaction.Amount ??
-                        0
-                    );
-
-                return amount > 0;
+                container.appendChild(card);
 
             });
-
-
-        displayTransactions(income);
-
-        setActiveFilter(1);
-
-    }
-
-
-
-    function showExpenses() {
-
-        const expenses =
-            allTransactions.filter(transaction => {
-
-                const amount =
-                    Number(
-                        transaction.amount ??
-                        transaction.Amount ??
-                        0
-                    );
-
-                return amount < 0;
-
-            });
-
-
-        displayTransactions(expenses);
-
-        setActiveFilter(2);
-
-    }
-
-
-
-    function setActiveFilter(index) {
-
-        const buttons =
-            document.querySelectorAll(
-                ".transaction-filter"
-            );
-
-
-        buttons.forEach(button => {
-
-            button.classList.remove("active");
-
-        });
-
-
-        if (buttons[index]) {
-
-            buttons[index].classList.add("active");
-
         }
 
-    }
+        function openPanel(title, subtitle, content) {
 
+            document.getElementById("panelTitle").textContent = title;
+            document.getElementById("panelSubtitle").textContent = subtitle;
+            document.getElementById("panelContent").innerHTML = content;
 
+            document.getElementById("transactionPanel")
+                .classList.add("open");
+        }
 
-    async function deleteTransaction(id) {
+        function closePanel() {
 
-        const response =
-            await fetch(
-                "/api/Transactions/" + id,
+            document.getElementById("transactionPanel")
+                .classList.remove("open");
+
+            editingID = null;
+        }
+
+        function openCreate() {
+
+            editingID = null;
+
+            openPanel(
+                "Add Transaction",
+                "Create a new transaction",
+                `
+                <div class="transaction-detail-icon">
+                    <i class="bi bi-plus-circle"></i>
+                </div>
+
+                <div class="transaction-form-group">
+                    <label>Amount</label>
+                    <input id="panelAmount"
+                           class="transaction-input"
+                           type="number"
+                           step="0.01"
+                           min="0.01"
+                           placeholder="Enter amount">
+                </div>
+
+                <div class="transaction-form-group">
+                    <label>Category</label>
+                    <select id="panelCategory"
+                            class="transaction-input">
+                        ${categoryOptions()}
+                    </select>
+                </div>
+
+                <div class="transaction-form-group">
+                    <label>Type</label>
+                    <select id="panelType"
+                            class="transaction-input">
+                        <option value="Expense">Expense</option>
+                        <option value="Income">Income</option>
+                    </select>
+                </div>
+
+                <div class="transaction-form-group">
+                    <label>Date</label>
+                    <input id="panelDate"
+                           class="transaction-input"
+                           type="date"
+                           value="${today()}">
+                </div>
+
+                <div id="panelError"
+                     class="transaction-panel-error"
+                     style="display:none;"></div>
+
+                <button class="transaction-panel-primary"
+                        onclick="createTransaction()">
+                    <i class="bi bi-check-circle me-1"></i>
+                    Save Transaction
+                </button>
+                `
+            );
+        }
+
+        function categoryOptions(selected = "") {
+
+            let html = `<option value="">Select a category</option>`;
+
+            categories.forEach(category => {
+
+                html += `
+                    <option value="${category.categoryID}"
+                        ${Number(selected) === Number(category.categoryID)
+                        ? "selected"
+                        : ""}>
+                        ${category.name}
+                    </option>
+                `;
+
+            });
+
+            return html;
+        }
+
+        function today() {
+            return new Date().toISOString().substring(0, 10);
+        }
+
+        async function openDetails(id) {
+
+            const transaction = await getTransaction(id);
+
+            if (!transaction) return;
+
+            const amount = Number(transaction.amount ?? 0);
+            const type = transaction.type ?? "Expense";
+            const date = getDate(transaction);
+
+            openPanel(
+                "Transaction Details",
+                "View transaction information",
+                `
+                <div class="transaction-detail-icon">
+                    <i class="bi bi-receipt"></i>
+                </div>
+
+                <div class="transaction-detail-block">
+                    <span>Category</span>
+                    <strong>${getCategory(transaction)}</strong>
+                </div>
+
+                <div class="transaction-detail-block">
+                    <span>Amount</span>
+                    <strong class="${type.toLowerCase() === "income"
+                    ? "transaction-income"
+                    : "transaction-expense"}">
+                        ${type.toLowerCase() === "income" ? "+" : "-"}
+                        $${Math.abs(amount).toFixed(2)}
+                    </strong>
+                </div>
+
+                <div class="transaction-detail-block">
+                    <span>Type</span>
+                    <strong>${type}</strong>
+                </div>
+
+                <div class="transaction-detail-block">
+                    <span>Date</span>
+                    <strong>
+                        ${date
+                    ? new Date(date).toLocaleDateString("en-CA")
+                    : "Not available"}
+                    </strong>
+                </div>
+
+                <div class="transaction-panel-buttons">
+                    <button class="transaction-panel-secondary"
+                            onclick="openEdit(${id})">
+                        <i class="bi bi-pencil me-1"></i>
+                        Edit
+                    </button>
+
+                    <button class="transaction-panel-danger"
+                            onclick="openDelete(${id})">
+                        <i class="bi bi-trash me-1"></i>
+                        Delete
+                    </button>
+                </div>
+                `
+            );
+        }
+
+        async function openEdit(id) {
+
+            const transaction = await getTransaction(id);
+
+            if (!transaction) return;
+
+            editingID = id;
+
+            openPanel(
+                "Edit Transaction",
+                "Update transaction information",
+                `
+                <div class="transaction-detail-icon">
+                    <i class="bi bi-pencil-square"></i>
+                </div>
+
+                <div class="transaction-form-group">
+                    <label>Amount</label>
+                    <input id="panelAmount"
+                           class="transaction-input"
+                           type="number"
+                           step="0.01"
+                           min="0.01"
+                           value="${Math.abs(Number(transaction.amount ?? 0))}">
+                </div>
+
+                <div class="transaction-form-group">
+                    <label>Category</label>
+                    <select id="panelCategory"
+                            class="transaction-input">
+                        ${categoryOptions(transaction.categoryID)}
+                    </select>
+                </div>
+
+                <div class="transaction-form-group">
+                    <label>Type</label>
+                    <select id="panelType"
+                            class="transaction-input">
+                        <option value="Expense"
+                            ${(transaction.type ?? "") === "Expense" ? "selected" : ""}>
+                            Expense
+                        </option>
+
+                        <option value="Income"
+                            ${(transaction.type ?? "") === "Income" ? "selected" : ""}>
+                            Income
+                        </option>
+                    </select>
+                </div>
+
+                <div class="transaction-form-group">
+                    <label>Date</label>
+                    <input id="panelDate"
+                           class="transaction-input"
+                           type="date"
+                           value="${getDate(transaction)
+                    ? getDate(transaction).substring(0, 10)
+                    : ""}">
+                </div>
+
+                <div id="panelError"
+                     class="transaction-panel-error"
+                     style="display:none;"></div>
+
+                <button class="transaction-panel-primary"
+                        onclick="updateTransaction()">
+                    <i class="bi bi-save me-1"></i>
+                    Update Transaction
+                </button>
+                `
+            );
+        }
+
+        async function createTransaction() {
+
+            const amount = Number(document.getElementById("panelAmount").value);
+            const categoryID = Number(document.getElementById("panelCategory").value);
+            const type = document.getElementById("panelType").value;
+            const date = document.getElementById("panelDate").value;
+
+            if (!amount || amount <= 0) {
+                showPanelError("Please enter a valid amount.");
+                return;
+            }
+
+            if (!categoryID) {
+                showPanelError("Please select a category.");
+                return;
+            }
+
+            const response = await fetch("/api/Transactions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: JSON.stringify({
+                    amount,
+                    categoryID,
+                    type,
+                    date: date || new Date().toISOString()
+                })
+            });
+
+            if (!response.ok) {
+                showPanelError("Unable to create transaction.");
+                return;
+            }
+
+            closePanel();
+            await loadTransactions();
+        }
+
+        async function updateTransaction() {
+
+            const amount = Number(document.getElementById("panelAmount").value);
+            const categoryID = Number(document.getElementById("panelCategory").value);
+            const type = document.getElementById("panelType").value;
+            const date = document.getElementById("panelDate").value;
+
+            if (!amount || amount <= 0) {
+                showPanelError("Please enter a valid amount.");
+                return;
+            }
+
+            if (!categoryID) {
+                showPanelError("Please select a category.");
+                return;
+            }
+
+            const response = await fetch(
+                "/api/Transactions/" + editingID,
                 {
-                    method: "DELETE",
-
+                    method: "PUT",
                     headers: {
-                        "Authorization":
-                            "Bearer " + token
-                    }
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify({
+                        amount,
+                        categoryID,
+                        type,
+                        date
+                    })
                 }
             );
 
+            if (!response.ok) {
+                showPanelError("Unable to update transaction.");
+                return;
+            }
 
-        if (response.ok) {
+            closePanel();
+            await loadTransactions();
+        }
 
-            loadTransactions();
+        function openDelete(id) {
+
+            editingID = id;
+
+            openPanel(
+                "Delete Transaction",
+                "This action cannot be undone",
+                `
+                <div class="transaction-delete-box">
+
+                    <div class="transaction-delete-icon">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+
+                    <h3>Delete Transaction?</h3>
+
+                    <p>
+                        Are you sure you want to delete this transaction?
+                    </p>
+
+                    <div class="transaction-delete-actions">
+
+                        <button class="transaction-panel-cancel"
+                                onclick="closePanel()">
+                            Cancel
+                        </button>
+
+                        <button class="transaction-panel-danger"
+                                onclick="confirmDelete()">
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+                `
+            );
+        }
+
+        async function confirmDelete() {
+
+            const response = await fetch(
+                "/api/Transactions/" + editingID,
+                {
+                    method: "DELETE",
+                    headers
+                }
+            );
+
+            if (!response.ok) {
+                showPanelError("Unable to delete transaction.");
+                return;
+            }
+
+            closePanel();
+            await loadTransactions();
+        }
+
+        async function getTransaction(id) {
+
+            try {
+
+                const response = await fetch(
+                    "/api/Transactions/" + id,
+                    {
+                        headers
+                    }
+                );
+
+                if (!response.ok) return null;
+
+                return await response.json();
+
+            } catch (error) {
+
+                console.error(error);
+                return null;
+
+            }
+        }
+
+        function showPanelError(message) {
+
+            const error = document.getElementById("panelError");
+
+            if (!error) return;
+
+            error.textContent = message;
+            error.style.display = "block";
+        }
+
+
+        /* NOTES */
+
+        function loadNotes() {
+
+            let notes = JSON.parse(
+                localStorage.getItem("transactionNotes") || "[]"
+            );
+
+            renderNotes(notes);
+        }
+
+        function renderNotes(notes) {
+
+            const list = document.getElementById("notesList");
+
+            list.innerHTML = "";
+
+            notes.forEach((note, index) => {
+
+                const item = document.createElement("div");
+
+                item.className = "transaction-note";
+
+                item.innerHTML = `
+                    <div class="transaction-note-icon">
+                        <i class="bi bi-sticky-fill"></i>
+                    </div>
+
+                    <div class="transaction-note-content">
+                        <textarea
+                            onchange="updateNote(${index}, this.value)"
+                            placeholder="Write your note...">${escapeHtml(note)}</textarea>
+
+                        <button onclick="deleteNote(${index})"
+                                title="Delete note">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                `;
+
+                list.appendChild(item);
+
+            });
 
         }
 
-    }
+        function addNote() {
 
-</script>
+            const notes = JSON.parse(
+                localStorage.getItem("transactionNotes") || "[]"
+            );
 
+            notes.push("");
 
-<script src="~/js/authGuard.js"></script>
+            localStorage.setItem(
+                "transactionNotes",
+                JSON.stringify(notes)
+            );
+
+            renderNotes(notes);
+        }
+
+        function updateNote(index, value) {
+
+            const notes = JSON.parse(
+                localStorage.getItem("transactionNotes") || "[]"
+            );
+
+            notes[index] = value;
+
+            localStorage.setItem(
+                "transactionNotes",
+                JSON.stringify(notes)
+            );
+        }
+
+        function deleteNote(index) {
+
+            const notes = JSON.parse(
+                localStorage.getItem("transactionNotes") || "[]"
+            );
+
+            notes.splice(index, 1);
+
+            localStorage.setItem(
+                "transactionNotes",
+                JSON.stringify(notes)
+            );
+
+            renderNotes(notes);
+        }
+
+        function escapeHtml(value) {
+
+            const div = document.createElement("div");
+
+            div.textContent = value;
+
+            return div.innerHTML;
+        }
+
+    </script>
 
 }
