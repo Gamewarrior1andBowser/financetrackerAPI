@@ -75,9 +75,10 @@ public class BudgetController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(Budget budget)
     {
-      
 
-        budget.userID = 1;
+        var userID = int.Parse(User.FindFirst("id").Value);
+
+        budget.userID = userID;
         budget.date = DateTime.Now;
 
 

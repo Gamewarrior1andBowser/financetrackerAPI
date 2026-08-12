@@ -7,6 +7,8 @@ namespace financetrackerAPI.Models
     {
         public int budgetID { get; set; }
 
+        public int categoryID { get; set; }
+
         public int userID { get; set; }
 
         public string username { get; set; } = string.Empty;
