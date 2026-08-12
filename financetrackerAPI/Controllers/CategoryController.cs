@@ -46,7 +46,7 @@ public class CategoryController : ControllerBase
         Category? existingCategory = await _context.Categories
             .FirstOrDefaultAsync(c =>
                 c.userID == userID &&
-                c.Name == category.Name);
+                c.name == category.name);
 
         if (existingCategory != null)
         {
@@ -133,11 +133,10 @@ public class CategoryController : ControllerBase
             return NotFound("Category not found");
         }
 
-<<<<<<< HEAD
         Category? existingCategory = await _context.Categories
             .FirstOrDefaultAsync(c =>
                 c.userID == userID &&
-                c.Name == updatedCategory.Name &&
+                c.name == updatedCategory.name &&
                 c.categoryID != id);
 
         if (existingCategory != null)
@@ -145,7 +144,7 @@ public class CategoryController : ControllerBase
             return BadRequest("You already have a category with this name.");
         }
 
-        if (string.IsNullOrEmpty(updatedCategory.Name))
+        if (string.IsNullOrEmpty(updatedCategory.name))
         {
             return BadRequest("Category name is required");
         }
@@ -155,10 +154,8 @@ public class CategoryController : ControllerBase
             return BadRequest("Category type is required");
         }
 
-        category.Name = updatedCategory.Name;
-=======
+        category.name = updatedCategory.name ;
         category.name = updatedCategory.name;
->>>>>>> 4b9bb91593095df735f73ed6ba24576dbbb4a24f
         category.Type = updatedCategory.Type;
 
         await _context.SaveChangesAsync();

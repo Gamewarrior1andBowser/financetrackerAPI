@@ -30,16 +30,10 @@ public class CategoryPageController : Controller
         return View("~/Views/Category/Details.cshtml");
     }
 
-<<<<<<< HEAD
+    // GET /CategoryPage/Delete/{id}
     public IActionResult Delete(int id)
     {
         ViewData["categoryID"] = id;
-
-=======
-    // GET /CategoryPage/Delete/{id}
-    public IActionResult Delete(int id) {
-        ViewData["categoryID"] = id;
->>>>>>> 4b9bb91593095df735f73ed6ba24576dbbb4a24f
         return View("~/Views/Category/Delete.cshtml");
     }
 }

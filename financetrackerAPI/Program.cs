@@ -2,6 +2,7 @@
 using financetrackerAPI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -23,10 +24,17 @@ builder.Services
     .AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme =
-            JwtBearerDefaults.AuthenticationScheme;
+            CookieAuthenticationDefaults.AuthenticationScheme;
 
         options.DefaultChallengeScheme =
-            JwtBearerDefaults.AuthenticationScheme;
+            CookieAuthenticationDefaults.AuthenticationScheme;
+    })
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/AuthPage/Login";
+        options.AccessDeniedPath = "/AuthPage/Login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.SlidingExpiration = false;
     })
     .AddJwtBearer(options =>
     {
