@@ -157,19 +157,7 @@
 
 
         categories.forEach(category => {
-
-
-            options += `
-
-                <option value="${category.categoryID}">
-
-                    ${category.name}
-
-                </option>
-
-                `;
-
-
+            options += `<option value="${category.categoryID}">${category.name}</option>`;
         });
 
         dropdown.innerHTML = options;
@@ -196,27 +184,25 @@
     async function createBudget()
     {
 
-            e.preventDefault();
+        e.preventDefault();
 
         const name =
             document.getElementById("name").value.trim();
 
-            const name = document
-                .getElementById("name")
-                .value
-                .trim();
+        const name = document
+            .getElementById("name")
+            .value
+            .trim();
 
-            const limit = Number(
-                document.getElementById("limit").value
-            );
+        const limit = Number(
+            document.getElementById("limit").value
+        );
 
         const limits =
             Number(document.getElementById("limits").value);
 
-            if (!name) {
-
             
-            let valid = true;
+        let valid = true;
             [nameInput, limitInput].forEach(input => input.classList.remove('is-invalid'));
 
         if(!name)
@@ -226,15 +212,12 @@
         }
 
 
-            if (!limit || limit <= 0) {
-
         if(!limits || limits <= 0)
         {
             showError("Please enter a valid budget limits.");
             return;
         }
 
-        }
 
         const categoryID = Number(document.getElementById("categoryID").value);
 
@@ -250,9 +233,6 @@
             date: new Date().toISOString()
 
         };
-
-
-            try {
 
         const response = await fetch("/api/Budget",
         {
@@ -274,10 +254,6 @@
         });
 
 
-                if (!response.ok) {
-
-                    const message = await response.text();
-
         if(!response.ok)
         {
 
@@ -293,8 +269,5 @@
         window.location.href="/BudgetPage";
 
     }
-
-
-                window.location.href = "/BudgetPage";
-
+    </script>
 }
