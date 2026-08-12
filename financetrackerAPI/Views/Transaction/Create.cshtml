@@ -234,6 +234,17 @@
         document.getElementById("categoryID").innerHTML = options;
     }
 
+    function showError(message)
+    {
+
+        const box = document.getElementById("createError");
+
+        box.innerText = message;
+
+        box.style.display = "block";
+
+    }
+
     function hideBudgetPopup() {
         document.getElementById("budgetPopup").style.display = "none";
     }
