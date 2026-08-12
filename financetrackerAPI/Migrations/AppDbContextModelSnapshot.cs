@@ -96,6 +96,10 @@ namespace financetrackerAPI.Migrations
                     b.Property<string>("notes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("userID")
                         .HasColumnType("int");
 
