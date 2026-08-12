@@ -193,7 +193,7 @@
         }
     }
 
-    function showCreatePanel() {
+    async function showCreatePanel() {
         openPanel("Add Budget", `
             <form id="createBudgetForm">
 
@@ -203,6 +203,18 @@
                            class="budget-input"
                            placeholder="e.g. Groceries"
                            required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Category
+                    </label>
+                    <select id="createCategoryID"
+                            class="form-select">
+                        <option>
+                            Loading categories...
+                        </option>
+                    </select>
                 </div>
 
                 <div class="budget-form-group">
@@ -229,6 +241,30 @@
             </form>
         `);
 
+        const response = await fetch("/api/Category", {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        if (!response.ok) {
+            showError("Unable to load categories.");
+            return;
+        }
+
+        const categories = await response.json();
+        const dropdown = document.getElementById("createCategoryID");
+
+        dropdown.innerHTML = '';
+
+        categories.forEach(category => {
+            dropdown.innerHTML += `
+                        <option value="${category.categoryID}">
+                            ${category.name}
+                        </option>
+                    `;
+        });
+
         document.getElementById("createBudgetForm")
             .addEventListener("submit", createBudget);
     }
@@ -237,6 +273,7 @@
         event.preventDefault();
 
         const name = document.getElementById("createName").value.trim();
+        const categoryID = document.getElementById("createCategoryID").value.trim();
         const limit = Number(document.getElementById("createLimit").value);
         const error = document.getElementById("createError");
 
@@ -255,6 +292,7 @@
                 },
                 body: JSON.stringify({
                     username: name,
+                    categoryID: categoryID,
                     limits: limit
                 })
             });
@@ -281,6 +319,21 @@
             if (!response.ok) throw new Error();
 
             const budget = await response.json();
+            const category = budget.categoryID;
+
+            const responseCategory = await fetch(`/api/Category/${category}`, {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            if (!responseCategory.ok) {
+                showError("Unable to load categories.");
+                return;
+            }
+
+            const categoryData = await responseCategory.json();
+            const categoryName = categoryData.username || "Unknown Category";
 
             const name = budget.username || "Unnamed Budget";
             const limit = Number(budget.limits) || 0;
@@ -296,6 +349,11 @@
                     </div>
 
                     <h3>${escapeHtml(name)}</h3>
+
+                    <div class="budget-detail-block">
+                        <span>Budget Category</span>
+                        <strong>${categoryName}</strong>
+                    </div>
 
                     <div class="budget-detail-block">
                         <span>Budget Limit</span>
