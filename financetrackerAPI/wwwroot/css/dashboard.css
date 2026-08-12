@@ -22,6 +22,7 @@
     --ink: #252535;
     --muted: #6b6b85;
     --line: #e2e4ea;
+    margin: 0 32px;
     display: flex;
     flex-direction: column;
     gap: 22px;
@@ -464,5 +465,13 @@
 
     .chart-grid {
         grid-template-columns: 1fr 1.35fr;
+    }
+
+
+}
+
+@media (max-width: 600px) {
+    .finance-dashboard {
+        margin: 0 16px;
     }
 }
