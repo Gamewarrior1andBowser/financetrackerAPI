@@ -93,6 +93,9 @@ namespace financetrackerAPI.Migrations
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("notes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("userID")
                         .HasColumnType("int");
 

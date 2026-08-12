@@ -12,7 +12,7 @@ using financetrackerAPI.Data;
 namespace financetrackerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260812150244_v9")]
+    [Migration("20260812175826_v9")]
     partial class v9
     {
         /// <inheritdoc />
@@ -95,6 +95,9 @@ namespace financetrackerAPI.Migrations
 
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("notes")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
