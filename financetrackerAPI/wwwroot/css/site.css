@@ -345,3 +345,221 @@ footer {
     .greeting-banner #greetingName {
         font-weight: 900;
     }
+
+
+
+
+/* ============================================================
+                       Vertical shell layout — replaces the horizontal navbar.
+                       Same palette as the rest of the site: purple/indigo gradient
+                       (#4f46a5 → #6d5bd0 → #4f86c6). Scoped under .app-shell so
+                       it doesn't touch existing .navbar-* rules in site.css.
+                    ============================================================ */
+:root {
+    --sidebar-width: 250px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.app-shell {
+    display: flex;
+    flex: 1;
+    min-height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+.app-sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #4f46a5, #6d5bd0 55%, #4f86c6);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 26px 18px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: 4px 0 18px rgba(40,45,80,.14);
+    z-index: 1040;
+}
+
+    .app-sidebar .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #fff !important;
+        font-size: 1.25rem;
+        font-weight: 800;
+        text-decoration: none;
+        padding: 0 6px;
+        margin-bottom: 34px;
+    }
+
+.sidebar-section-label {
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: rgba(255,255,255,.55);
+    padding: 0 10px;
+    margin-bottom: 8px;
+}
+
+#navbarLinks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.app-sidebar .nav-item {
+    width: 100%;
+}
+
+.app-sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px !important;
+    border-radius: 12px;
+    color: rgba(255,255,255,.85) !important;
+    font-weight: 600;
+    font-size: .9rem;
+    transition: .18s ease;
+}
+
+    .app-sidebar .nav-link:hover {
+        background: rgba(255,255,255,.14);
+        color: #fff !important;
+        transform: translateX(2px);
+    }
+
+    .app-sidebar .nav-link.active {
+        background: rgba(255,255,255,.18);
+        color: #fff !important;
+        box-shadow: inset 3px 0 0 #fff;
+    }
+
+/* Register / Logout buttons injected as .btn — restyle to fit the sidebar */
+.app-sidebar .btn {
+    width: 100%;
+    margin: 10px 0 0 !important;
+    border-radius: 12px !important;
+    padding: 11px 14px !important;
+    font-size: .9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.app-sidebar .btn-primary {
+    background: #fff;
+    color: #4f46a5;
+    border: none;
+}
+
+    .app-sidebar .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(0,0,0,.18);
+    }
+
+.app-sidebar .btn-danger {
+    background: rgba(255,255,255,.12);
+    border: 2px solid rgba(255,255,255,.5);
+    color: #fff;
+}
+
+    .app-sidebar .btn-danger:hover {
+        background: rgba(255,255,255,.22);
+    }
+
+.sidebar-footer-note {
+    margin-top: auto;
+    padding: 14px 10px 4px;
+    font-size: .72rem;
+    color: rgba(255,255,255,.5);
+    border-top: 1px solid rgba(255,255,255,.15);
+}
+
+/* ---------- Main content ---------- */
+.app-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-topbar {
+    display: none;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    background: #fff;
+    border-bottom: 1px solid #e2e4ea;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: #4f46a5;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.app-topbar-brand {
+    font-weight: 800;
+    color: #252535;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+main {
+    flex: 1;
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20,18,40,.45);
+    z-index: 1035;
+}
+
+/* ---------- Responsive ---------- */
+@@media (max-width:900px) {
+    .app-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+    }
+
+        .app-sidebar.open {
+            transform: translateX(0);
+        }
+
+    .app-topbar {
+        display: flex;
+    }
+
+    .sidebar-backdrop.open {
+        display: block;
+    }
+}
+

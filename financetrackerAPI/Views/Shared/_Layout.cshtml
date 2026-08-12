@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,67 +11,78 @@
     <link rel="stylesheet" href="~/css/category.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/reports.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/budget.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/transaction.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+
 
     @await RenderSectionAsync("Styles", required: false)
-
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-wallet2 me-2"></i>Finance Tracker
-                </a>
+    <div class="app-shell">
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav"
-                        aria-controls="navbarNav"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        <!-- SIDEBAR -->
+        <aside class="app-sidebar" id="appSidebar">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-wallet2"></i>Finance Tracker
+            </a>
+
+            <div class="sidebar-section-label">Menu</div>
+
+            <ul id="navbarLinks">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-house-door-fill"></i>Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="AuthPage" asp-action="Login">
+                        <i class="bi bi-box-arrow-in-right"></i>Login
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-primary" asp-controller="AuthPage" asp-action="Register">
+                        <i class="bi bi-person-plus-fill"></i>Register
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer-note">&copy; 2026 Finance Tracker</div>
+        </aside>
+
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <!-- MAIN -->
+        <div class="app-main">
+
+            <div class="app-topbar">
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">
+                    <i class="bi bi-list"></i>
                 </button>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto align-items-lg-center" id="navbarLinks">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door-fill me-1"></i>Home
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="AuthPage" asp-action="Login">
-                                <i class="bi bi-box-arrow-in-right me-1"></i>Login
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="btn btn-primary ms-lg-2"
-                               asp-controller="AuthPage"
-                               asp-action="Register">
-                                <i class="bi bi-person-plus-fill me-1"></i>Register
-                            </a>
-                        </li>
-                    </ul>
+                <div class="app-topbar-brand">
+                    <i class="bi bi-wallet2"></i>Finance Tracker
                 </div>
             </div>
-        </nav>
-    </header>
 
-    <main>
-        <div class="page-content">
-            @RenderBody()
+            <main>
+                <div class="page-content">
+                    @RenderBody()
+                </div>
+            </main>
+
+            <footer>
+                <div class="container">
+                    <i class="bi bi-c-circle"></i>
+                    <span>2026 Finance Tracker</span>
+                </div>
+            </footer>
+
         </div>
-    </main>
-    <footer>
-        <div class="container">
-            <i class="bi bi-c-circle"></i>
-            <span>2026 Finance Tracker</span>
-        </div>
-    </footer>
+
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -85,49 +95,73 @@
                 if (!token || !navbar) return;
 
                 navbar.innerHTML = `
-                            <li class="nav-item">
-                                <a class="nav-link" href="/Dashboard">
-                                    <i class="bi bi-speedometer2 me-1"></i>Dashboard
-                                </a>
-                            </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Dashboard">
+                                            <i class="bi bi-speedometer2"></i>Dashboard
+                                        </a>
+                                    </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="/TransactionPage">
-                                    <i class="bi bi-cash-stack me-1"></i>Transactions
-                                </a>
-                            </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/TransactionPage">
+                                            <i class="bi bi-cash-stack"></i>Transactions
+                                        </a>
+                                    </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="/CategoryPage">
-                                    <i class="bi bi-tags-fill me-1"></i>Categories
-                                </a>
-                            </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/CategoryPage">
+                                            <i class="bi bi-tags-fill"></i>Categories
+                                        </a>
+                                    </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="/BudgetPage">
-                                    <i class="bi bi-piggy-bank me-1"></i>Budgets
-                                </a>
-                            </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/BudgetPage">
+                                            <i class="bi bi-piggy-bank"></i>Budgets
+                                        </a>
+                                    </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="/Reports">
-                                    <i class="bi bi-bar-chart-fill me-1"></i>Reports
-                                </a>
-                            </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Reports">
+                                            <i class="bi bi-bar-chart-fill"></i>Reports
+                                        </a>
+                                    </li>
 
-                            <li class="nav-item">
-                                <button class="btn btn-danger ms-lg-2" onclick="logout()">
-                                    <i class="bi bi-box-arrow-right me-1"></i>Logout
-                                </button>
-                            </li>
-                        `;
+                                    <li class="nav-item">
+                                        <button class="btn btn-danger" onclick="logout()">
+                                            <i class="bi bi-box-arrow-right"></i>Logout
+                                        </button>
+                                    </li>
+                                `;
             });
 
             function logout() {
                 localStorage.removeItem("token");
                 window.location.href = "/";
             }
+
+            // Sidebar toggle for mobile
+            document.addEventListener("DOMContentLoaded", () => {
+                const sidebar = document.getElementById("appSidebar");
+                const toggle = document.getElementById("sidebarToggle");
+                const backdrop = document.getElementById("sidebarBackdrop");
+
+                function closeSidebar() {
+                    sidebar.classList.remove("open");
+                    backdrop.classList.remove("open");
+                }
+
+                if (toggle) {
+                    toggle.addEventListener("click", () => {
+                        sidebar.classList.toggle("open");
+                        backdrop.classList.toggle("open");
+                    });
+                }
+
+                if (backdrop) {
+                    backdrop.addEventListener("click", closeSidebar);
+                }
+            });
     </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

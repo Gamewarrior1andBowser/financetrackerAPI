@@ -1,12 +1,13 @@
 ﻿
 /* ============================================================
-               Categories page — scoped under .category-page.
-               Same palette/pattern as Transactions and Budgets: purple
-               (#4f46a5 → #6d5bd0) for income, amber (#f59e0b) for expense.
-            ============================================================ */
-.category-page {
+           Transactions page — scoped under .transaction-page.
+           Same palette as the rest of the site: purple/indigo
+           (#4f46a5 → #6d5bd0) for income, amber (#f59e0b) for expenses.
+        ============================================================ */
+.transaction-page {
     --purple-1: #4f46a5;
     --purple-2: #6d5bd0;
+    --blue-1: #4f86c6;
     --amber: #f59e0b;
     --amber-soft: #fff7e6;
     --purple-soft: #eef2ff;
@@ -21,7 +22,7 @@
 }
 
 /* ---------- Header ---------- */
-.category-header {
+.transaction-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -30,7 +31,7 @@
     padding-top: 8px;
 }
 
-.category-subtitle-eyebrow {
+.transaction-subtitle {
     font-size: .76rem;
     font-weight: 700;
     color: var(--purple-1);
@@ -39,56 +40,44 @@
     margin: 0 0 6px;
 }
 
-.category-header h1 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.transaction-title {
     font-size: 1.9rem;
     font-weight: 800;
     color: var(--ink);
     margin: 0 0 8px;
 }
 
-    .category-header h1 i {
-        color: var(--purple-1);
-        font-size: 1.5rem;
-    }
-
-.category-subtitle {
+.transaction-description {
     font-size: .92rem;
     color: var(--muted);
     margin: 0;
     max-width: 420px;
 }
 
-.category-btn {
+.transaction-add-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 12px 22px;
     border-radius: 30px;
+    background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+    color: #fff;
     font-weight: 700;
     font-size: .88rem;
     text-decoration: none;
     white-space: nowrap;
     transition: .2s ease;
-    border: none;
-}
-
-.category-primary {
-    background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
-    color: #fff;
     box-shadow: 0 6px 16px rgba(79,70,165,.25);
 }
 
-    .category-primary:hover {
+    .transaction-add-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 22px rgba(79,70,165,.32);
         color: #fff;
     }
 
 /* ---------- Toolbar: filters + count ---------- */
-.category-toolbar {
+.transaction-toolbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -101,12 +90,12 @@
     box-shadow: 0 2px 10px rgba(30,30,60,.04);
 }
 
-.category-filter-list {
+.transaction-filter-list {
     display: flex;
     gap: 4px;
 }
 
-.category-filter {
+.transaction-filter {
     display: inline-flex;
     align-items: center;
     gap: 7px;
@@ -121,17 +110,17 @@
     transition: .18s ease;
 }
 
-    .category-filter:hover {
+    .transaction-filter:hover {
         color: var(--purple-1)
     }
 
-    .category-filter.active {
+    .transaction-filter.active {
         background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
         color: #fff;
         box-shadow: 0 4px 12px rgba(79,70,165,.25);
     }
 
-.category-toolbar-meta {
+.transaction-toolbar-meta {
     display: flex;
     align-items: center;
     gap: 14px;
@@ -141,7 +130,7 @@
     white-space: nowrap;
 }
 
-    .category-toolbar-meta strong {
+    .transaction-toolbar-meta strong {
         color: var(--ink)
     }
 
@@ -151,14 +140,14 @@
     background: var(--line)
 }
 
-/* ---------- Category list ---------- */
-.category-card-grid {
+/* ---------- Transaction list ---------- */
+.transaction-card-grid {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.category-row {
+.transaction-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -170,20 +159,20 @@
     transition: .2s ease;
 }
 
-    .category-row:hover {
+    .transaction-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(30,30,60,.08);
         border-color: transparent;
     }
 
-.category-row-left {
+.transaction-card-left {
     display: flex;
     align-items: center;
     gap: 14px;
     min-width: 0;
 }
 
-.category-icon {
+.transaction-icon {
     width: 44px;
     height: 44px;
     flex-shrink: 0;
@@ -196,12 +185,12 @@
     color: var(--amber);
 }
 
-.category-row.income .category-icon {
+.transaction-card.income .transaction-icon {
     background: var(--purple-soft);
     color: var(--purple-1);
 }
 
-.category-info h3 {
+.transaction-info h3 {
     font-size: .94rem;
     font-weight: 700;
     color: var(--ink);
@@ -211,34 +200,33 @@
     text-overflow: ellipsis;
 }
 
-.category-type {
-    display: inline-flex;
+.transaction-info span {
+    display: flex;
     align-items: center;
     gap: 5px;
     font-size: .78rem;
     color: var(--muted);
 }
 
-    .category-type::before {
-        content: "";
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--amber);
-    }
-
-.category-row.income .category-type::before {
-    background: var(--purple-1);
-}
-
-.category-row-right {
+.transaction-card-right {
     display: flex;
     align-items: center;
     gap: 16px;
     flex-shrink: 0;
 }
 
-.category-actions {
+.transaction-amount {
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--amber);
+    white-space: nowrap;
+}
+
+.transaction-card.income .transaction-amount {
+    color: var(--purple-1)
+}
+
+.transaction-actions {
     display: flex;
     gap: 6px;
     opacity: 0;
@@ -246,12 +234,12 @@
     transition: opacity .18s ease, transform .18s ease;
 }
 
-.category-row:hover .category-actions {
+.transaction-card:hover .transaction-actions {
     opacity: 1;
     transform: translateX(0);
 }
 
-.category-action {
+.transaction-action {
     width: 32px;
     height: 32px;
     border-radius: 10px;
@@ -267,28 +255,26 @@
     transition: .15s ease;
 }
 
-    .category-action:hover {
+    .transaction-action:hover {
         border-color: var(--purple-1);
         color: var(--purple-1)
     }
 
-    .category-action.category-delete:hover {
+    .transaction-action.delete:hover {
         border-color: #b91c1c;
         color: #b91c1c
     }
 
 /* ---------- Empty state ---------- */
-.category-empty {
+.transaction-empty {
     text-align: center;
     background: #fff;
     border: 1px dashed var(--line);
     border-radius: 20px;
     padding: 56px 24px;
-    color: var(--muted);
-    font-size: .9rem;
 }
 
-.category-empty-icon {
+.transaction-empty-icon {
     width: 64px;
     height: 64px;
     margin: 0 auto 16px;
@@ -301,29 +287,42 @@
     font-size: 1.7rem;
 }
 
+.transaction-empty h3 {
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 8px
+}
+
+.transaction-empty p {
+    color: var(--muted);
+    margin: 0 0 22px;
+    font-size: .9rem
+}
+
 @@media (max-width:640px) {
-    .category-header {
+    .transaction-header {
         flex-direction: column
     }
 
-    .category-toolbar {
+    .transaction-toolbar {
         border-radius: 18px;
         flex-direction: column;
         align-items: stretch
     }
 
-    .category-toolbar-meta {
+    .transaction-toolbar-meta {
         justify-content: center;
         padding: 8px 0 2px
     }
 
-    .category-row {
+    .transaction-card {
         flex-wrap: wrap
     }
 
-    .category-actions {
+    .transaction-actions {
         opacity: 1;
         transform: none
     }
 }
+
 

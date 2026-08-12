@@ -1,4 +1,4 @@
-﻿@{
+﻿@* @{
     ViewData["Title"] = "Transactions";
 }
 
@@ -687,5 +687,435 @@
 
 
 <script src="~/js/authGuard.js"></script>
+
+} *@
+
+
+
+
+
+
+
+
+
+@{
+    ViewData["Title"] = "Transactions";
+}
+
+
+
+<div class="transaction-page">
+
+    <!-- HEADER -->
+    <div class="transaction-header">
+
+        <div>
+            <p class="transaction-subtitle">Personal Finance</p>
+            <h1 class="transaction-title">Transactions</h1>
+            <p class="transaction-description">
+                Track your income, expenses, and recent financial activity.
+            </p>
+        </div>
+
+        <a asp-controller="TransactionPage" asp-action="Create" class="transaction-add-btn">
+            <i class="bi bi-plus-circle"></i>
+            Add Transaction
+        </a>
+
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="transaction-toolbar">
+
+        <div class="transaction-filter-list">
+            <button class="transaction-filter active" onclick="showAllTransactions()">
+                <i class="bi bi-grid-fill"></i>
+                <span>All</span>
+            </button>
+
+            <button class="transaction-filter" onclick="showIncome()">
+                <i class="bi bi-arrow-down-circle"></i>
+                <span>Income</span>
+            </button>
+
+            <button class="transaction-filter" onclick="showExpenses()">
+                <i class="bi bi-arrow-up-circle"></i>
+                <span>Expenses</span>
+            </button>
+        </div>
+
+        <div class="transaction-toolbar-meta">
+            <span id="transactionCount">0 transactions</span>
+            <div class="toolbar-divider"></div>
+            <span>Total: <strong id="totalTransactions">0</strong></span>
+        </div>
+
+    </div>
+
+    <!-- TRANSACTION LIST -->
+    <div id="transactionCards" class="transaction-card-grid"></div>
+
+    <!-- EMPTY STATE -->
+    <div id="emptyTransactions" class="transaction-empty" style="display:none;">
+        <div class="transaction-empty-icon">
+            <i class="bi bi-receipt"></i>
+        </div>
+        <h3>No transactions yet</h3>
+        <p>Add your first transaction to start tracking your finances.</p>
+        <a asp-controller="TransactionPage" asp-action="Create" class="transaction-add-btn">
+            <i class="bi bi-plus-circle"></i>
+            Add Transaction
+        </a>
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        const token = localStorage.getItem("token");
+
+        let allTransactions = [];
+
+
+        loadTransactions();
+
+
+
+        async function loadTransactions() {
+
+            try {
+
+                const response = await fetch(
+                    "/api/Transactions",
+                    {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    }
+                );
+
+
+                if (!response.ok) {
+
+                    document.getElementById("transactionCards").innerHTML = "";
+
+                    return;
+                }
+
+
+                allTransactions = await response.json();
+
+                displayTransactions(allTransactions);
+
+            }
+            catch (error) {
+
+                console.error(error);
+
+            }
+
+        }
+
+
+
+        function displayTransactions(transactions) {
+
+            const container =
+                document.getElementById("transactionCards");
+
+            const empty =
+                document.getElementById("emptyTransactions");
+
+            const count =
+                document.getElementById("transactionCount");
+
+            const total =
+                document.getElementById("totalTransactions");
+
+
+            container.innerHTML = "";
+
+
+            count.textContent =
+                `${transactions.length} ${transactions.length === 1
+                    ? "transaction"
+                    : "transactions"
+                }`;
+
+
+            total.textContent =
+                transactions.length;
+
+
+            if (transactions.length === 0) {
+
+                empty.style.display = "block";
+
+                return;
+
+            }
+
+
+            empty.style.display = "none";
+
+
+            transactions.forEach(transaction => {
+
+
+                const id =
+                    transaction.transactionID ??
+                    transaction.TransactionID ??
+                    transaction.id;
+
+
+                const date =
+                    transaction.date ??
+                    transaction.Date;
+
+
+                const category =
+                    transaction.categoryName ??
+                    transaction.CategoryName ??
+                    "No Category";
+
+
+                const amount =
+                    Number(
+                        transaction.amount ??
+                        transaction.Amount ??
+                        0
+                    );
+
+
+                let formattedDate =
+                    "Not available";
+
+
+                if (date) {
+
+                    formattedDate =
+                        new Date(date).toLocaleDateString(
+                            "en-CA",
+                            {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric"
+                            }
+                        );
+
+                }
+
+
+                const card =
+                    document.createElement("div");
+
+
+                card.className =
+                    "transaction-card" + (amount >= 0 ? " income" : "");
+
+
+                card.innerHTML = `
+
+                        <div class="transaction-card-left">
+
+                            <div class="transaction-icon">
+
+                                <i class="bi ${amount >= 0 ? 'bi-arrow-down-circle-fill' : 'bi-arrow-up-circle-fill'}"></i>
+
+                            </div>
+
+
+                            <div class="transaction-info">
+
+                                <h3>
+                                    ${category}
+                                </h3>
+
+
+                                <span>
+
+                                    <i class="bi bi-calendar3"></i>
+
+                                    ${formattedDate}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="transaction-card-right">
+
+
+                            <strong class="transaction-amount">
+
+                                $${amount.toFixed(2)}
+
+                            </strong>
+
+
+                            <div class="transaction-actions">
+
+
+                                <a href="/TransactionPage/Details/${id}"
+                                   class="transaction-action details"
+                                   title="View Details">
+
+                                    <i class="bi bi-eye"></i>
+
+                                </a>
+
+
+                                <a href="/TransactionPage/Edit/${id}"
+                                   class="transaction-action edit"
+                                   title="Edit">
+
+                                    <i class="bi bi-pencil"></i>
+
+                                </a>
+
+
+                                <button
+                                    class="transaction-action delete"
+                                    onclick="deleteTransaction(${id})"
+                                    title="Delete">
+
+                                    <i class="bi bi-trash"></i>
+
+                                </button>
+
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+
+                container.appendChild(card);
+
+            });
+
+        }
+
+
+
+        function showAllTransactions() {
+
+            displayTransactions(allTransactions);
+
+            setActiveFilter(0);
+
+        }
+
+
+
+        function showIncome() {
+
+            const income =
+                allTransactions.filter(transaction => {
+
+                    const amount =
+                        Number(
+                            transaction.amount ??
+                            transaction.Amount ??
+                            0
+                        );
+
+                    return amount > 0;
+
+                });
+
+
+            displayTransactions(income);
+
+            setActiveFilter(1);
+
+        }
+
+
+
+        function showExpenses() {
+
+            const expenses =
+                allTransactions.filter(transaction => {
+
+                    const amount =
+                        Number(
+                            transaction.amount ??
+                            transaction.Amount ??
+                            0
+                        );
+
+                    return amount < 0;
+
+                });
+
+
+            displayTransactions(expenses);
+
+            setActiveFilter(2);
+
+        }
+
+
+
+        function setActiveFilter(index) {
+
+            const buttons =
+                document.querySelectorAll(
+                    ".transaction-filter"
+                );
+
+
+            buttons.forEach(button => {
+
+                button.classList.remove("active");
+
+            });
+
+
+            if (buttons[index]) {
+
+                buttons[index].classList.add("active");
+
+            }
+
+        }
+
+
+
+        async function deleteTransaction(id) {
+
+            const response =
+                await fetch(
+                    "/api/Transactions/" + id,
+                    {
+                        method: "DELETE",
+
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (response.ok) {
+
+                loadTransactions();
+
+            }
+
+        }
+
+    </script>
+
+
+    <script src="~/js/authGuard.js"></script>
 
 }

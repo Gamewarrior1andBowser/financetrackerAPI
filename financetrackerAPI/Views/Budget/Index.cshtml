@@ -1,577 +1,329 @@
-﻿@{
+@{
     ViewData["Title"] = "Budgets";
 }
 
+
+
 <div class="budget-page">
 
-    <!-- Page Header -->
+    <!-- HEADER -->
     <div class="budget-header">
+
         <div>
             <p class="budget-subtitle">Personal Finance</p>
-
-            <h1 class="budget-title">
-                Budget Tracker
-            </h1>
-
+            <h1 class="budget-title">Budgets</h1>
             <p class="budget-description">
-                Manage your budgets, spending limits, and financial goals.
+                Set spending limits and keep your budget goals on track.
             </p>
         </div>
 
-        <a asp-controller="BudgetPage"
-           asp-action="Create"
-           class="btn btn-primary budget-add-btn">
-
-            <i class="bi bi-plus-circle me-2"></i>
+        <a asp-controller="BudgetPage" asp-action="Create" class="budget-add-btn">
+            <i class="bi bi-plus-circle"></i>
             Add Budget
-
         </a>
+
     </div>
 
-
-    <!-- Main Layout -->
-    <div class="budget-layout">
-
-        <!-- LEFT SIDEBAR -->
-        <aside class="budget-sidebar">
-
-            <div class="sidebar-section">
-
-                <h6 class="sidebar-title">
-                    Budget Categories
-                </h6>
-
-                <div class="budget-category-list">
-
-                    <button class="budget-category active"
-                            onclick="showAllBudgets()">
-
-                        <i class="bi bi-grid-fill"></i>
-
-                        <span>All Budgets</span>
-
-                    </button>
-
-                    <button class="budget-category"
-                            onclick="filterBudgets('active')">
-
-                        <i class="bi bi-check-circle"></i>
-
-                        <span>Active</span>
-
-                    </button>
-
-                    <button class="budget-category"
-                            onclick="filterBudgets('recent')">
-
-                        <i class="bi bi-calendar3"></i>
-
-                        <span>Recently Added</span>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- QUICK LINKS -->
-            <div class="sidebar-section">
-
-                <h6 class="sidebar-title">
-                    Quick Links
-                </h6>
-
-                <div class="quick-links">
-
-                    <a asp-controller="Dashboard"
-                       asp-action="Index"
-                       class="quick-link">
-
-                        <i class="bi bi-house-door-fill"></i>
-                        Home
-
-                    </a>
-
-                    <a asp-controller="TransactionPage"
-                       asp-action="Index"
-                       class="quick-link">
-
-                        <i class="bi bi-arrow-left-right"></i>
-                        Transactions
-
-                    </a>
-
-                    <a asp-controller="CategoryPage"
-                       asp-action="Index"
-                       class="quick-link">
-
-                        <i class="bi bi-tags-fill"></i>
-                        Categories
-
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <!-- BUDGET SUMMARY -->
-            <div class="sidebar-summary">
-
-                <div class="summary-icon">
-                    <i class="bi bi-piggy-bank-fill"></i>
-                </div>
-
-                <div>
-                    <small>Total Budgets</small>
-
-                    <strong id="totalBudgets">
-                        0
-                    </strong>
-                </div>
-
-            </div>
-
-        </aside>
-
-
-        <!-- CENTER CONTENT -->
-        <main class="budget-main">
-
-            <div class="section-heading">
-
-                <div>
-                    <h2>My Budgets</h2>
-
-                    <span>
-                        All your budgets in one place
-                    </span>
-                </div>
-
-                <span class="budget-count"
-                      id="budgetCount">
-                    0 budgets
-                </span>
-
-            </div>
-
-
-            <!-- Budget Cards -->
-            <div id="budgetCards"
-                 class="budget-card-grid">
-
-                <!-- JavaScript will load budgets here -->
-
-            </div>
-
-
-            <!-- Empty State -->
-            <div id="emptyBudget"
-                 class="empty-budget"
-                 style="display:none;">
-
-                <div class="empty-icon">
-                    <i class="bi bi-wallet2"></i>
-                </div>
-
-                <h3>No budgets yet</h3>
-
-                <p>
-                    Create your first budget to start managing your spending.
-                </p>
-
-                <a asp-controller="BudgetPage"
-                   asp-action="Create"
-                   class="btn btn-primary">
-
-                    <i class="bi bi-plus-circle me-1"></i>
-                    Create Budget
-
-                </a>
-
-            </div>
-
-        </main>
-
-
-        <!-- RIGHT NOTES -->
-        <aside class="budget-notes">
-
-            <h6 class="notes-title">
-                Notes
-            </h6>
-
-
-            <div class="note-card note-yellow">
-
-                <div class="note-icon">
-                    <i class="bi bi-lightbulb-fill"></i>
-                </div>
-
-                <div>
-
-                    <strong>Budget Tip</strong>
-
-                    <p>
-                        Set realistic spending limits for each budget category.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="note-card note-gray">
-
-                <div class="note-icon">
-                    <i class="bi bi-info-circle-fill"></i>
-                </div>
-
-                <div>
-
-                    <strong>Your Budgets</strong>
-
-                    <p>
-                        Your budget limits help you keep track of how much you
-                        plan to spend.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="note-card note-blue">
-
-                <div class="note-icon">
-                    <i class="bi bi-piggy-bank-fill"></i>
-                </div>
-
-                <div>
-
-                    <strong>Save More</strong>
-
-                    <p>
-                        Review your budgets regularly and adjust them when
-                        your financial goals change.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </aside>
-
+    <!-- TOOLBAR -->
+    <div class="budget-toolbar">
+
+        <div class="budget-filter-list">
+            <button class="budget-filter active" onclick="showAllBudgets()">
+                <i class="bi bi-grid-fill"></i>
+                <span>All</span>
+            </button>
+
+            <button class="budget-filter" onclick="showActiveBudgets()">
+                <i class="bi bi-check-circle"></i>
+                <span>Active</span>
+            </button>
+
+            <button class="budget-filter" onclick="showRecentBudgets()">
+                <i class="bi bi-calendar3"></i>
+                <span>Recent</span>
+            </button>
+        </div>
+
+        <div class="budget-toolbar-meta">
+            <span id="budgetCount">0 budgets</span>
+            <div class="toolbar-divider"></div>
+            <span>Total: <strong id="totalBudgeted">$0.00</strong></span>
+        </div>
+
+    </div>
+
+    <!-- BUDGET LIST -->
+    <div id="budgetCards" class="budget-card-grid"></div>
+
+    <!-- EMPTY STATE -->
+    <div id="emptyBudget" class="budget-empty" style="display:none;">
+        <div class="budget-empty-icon">
+            <i class="bi bi-wallet2"></i>
+        </div>
+        <h3>No budgets yet</h3>
+        <p>Create your first budget to start managing your spending.</p>
+        <a asp-controller="BudgetPage" asp-action="Create" class="budget-add-btn">
+            <i class="bi bi-plus-circle"></i>
+            Add Budget
+        </a>
     </div>
 
 </div>
 
-
 @section Scripts {
 
-<script>
+    <script>
 
-    let allBudgets = [];
+        const token = localStorage.getItem("token");
+
+        let allBudgets = [];
 
 
-    async function loadBudgets() {
+        loadBudgets();
 
-        try {
 
-            const response = await fetch("/api/Budget",
-            {
-                headers:
-                {
-                    "Authorization": "Bearer " + token
+        async function loadBudgets() {
+
+            try {
+
+                const response = await fetch(
+                    "/api/Budget",
+                    {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Unable to load budgets.");
                 }
-            });
 
-            if (!response.ok) {
-                throw new Error("Unable to load budgets.");
+                allBudgets = await response.json();
+
+                displayBudgets(allBudgets);
+
+            }
+            catch (error) {
+
+                console.error(error);
+
+                document.getElementById("budgetCards").innerHTML = `
+                    <div class="budget-error">
+                        <i class="bi bi-exclamation-circle"></i>
+                        <p>Unable to load budgets.</p>
+                    </div>
+                `;
+
             }
 
-            allBudgets = await response.json();
-
-            displayBudgets(allBudgets);
-
-        }
-        catch (error) {
-
-            console.error(error);
-
-            document.getElementById("budgetCards").innerHTML = `
-                <div class="budget-error">
-                    <i class="bi bi-exclamation-circle"></i>
-                    <p>Unable to load budgets.</p>
-                </div>
-            `;
-
-        }
-
-    }
-
-
-    function displayBudgets(budgets) {
-
-        const container =
-            document.getElementById("budgetCards");
-
-        const empty =
-            document.getElementById("emptyBudget");
-
-        const count =
-            document.getElementById("budgetCount");
-
-        const total =
-            document.getElementById("totalBudgets");
-
-
-        container.innerHTML = "";
-
-
-        count.textContent =
-            `${budgets.length} ${budgets.length === 1 ? "budget" : "budgets"}`;
-
-
-        total.textContent = budgets.length;
-
-
-        if (budgets.length === 0) {
-
-            empty.style.display = "block";
-
-            return;
-
         }
 
 
-        empty.style.display = "none";
+        function displayBudgets(budgets) {
+
+            const container =
+                document.getElementById("budgetCards");
+
+            const empty =
+                document.getElementById("emptyBudget");
+
+            const count =
+                document.getElementById("budgetCount");
+
+            const totalBudgeted =
+                document.getElementById("totalBudgeted");
 
 
-        budgets.forEach((budget, index) => {
-
-            const id =
-                budget.budgetID ??
-                budget.BudgetID ??
-                budget.id;
+            container.innerHTML = "";
 
 
-            const name =
-                budget.name ??
-                budget.Name ??
-                "Unnamed Budget";
+            count.textContent =
+                `${budgets.length} ${budgets.length === 1 ? "budget" : "budgets"}`;
 
 
-            const limit =
-                budget.limit ??
-                budget.Limit ??
-                0;
+            const total =
+                budgets.reduce((sum, b) => sum + Number(b.limit ?? b.Limit ?? 0), 0);
+
+            totalBudgeted.textContent =
+                `$${total.toFixed(2)}`;
 
 
-            const date =
-                budget.date ??
-                budget.Date ??
-                budget.dateCreated ??
-                budget.DateCreated;
+            if (budgets.length === 0) {
+
+                empty.style.display = "block";
+
+                return;
+
+            }
 
 
-            let formattedDate = "Not available";
+            empty.style.display = "none";
 
 
-            if (date) {
+            budgets.forEach(budget => {
 
-                formattedDate =
-                    new Date(date).toLocaleDateString(
-                        "en-CA",
-                        {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric"
-                        }
+                const id =
+                    budget.budgetID ??
+                    budget.BudgetID ??
+                    budget.id;
+
+
+                const name =
+                    budget.name ??
+                    budget.Name ??
+                    "Unnamed Budget";
+
+
+                const limit =
+                    Number(
+                        budget.limit ??
+                        budget.Limit ??
+                        0
                     );
 
-            }
+
+                const date =
+                    budget.date ??
+                    budget.Date ??
+                    budget.dateCreated ??
+                    budget.DateCreated;
 
 
-            const card = document.createElement("div");
-
-            card.className = "budget-card";
+                let formattedDate = "Not available";
 
 
-            card.innerHTML = `
+                if (date) {
 
-                <div class="budget-card-top">
+                    formattedDate =
+                        new Date(date).toLocaleDateString(
+                            "en-CA",
+                            {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric"
+                            }
+                        );
 
-                    <div class="budget-status">
-                        <span class="status-dot"></span>
-                        Active
+                }
+
+
+                const card =
+                    document.createElement("div");
+
+
+                card.className = "budget-card";
+
+
+                card.innerHTML = `
+
+                    <div class="budget-card-left">
+
+                        <div class="budget-icon">
+
+                            <i class="bi bi-wallet2"></i>
+
+                        </div>
+
+
+                        <div class="budget-info">
+
+                            <h3>
+                                ${name}
+                            </h3>
+
+
+                            <span>
+
+                                <i class="bi bi-calendar3"></i>
+
+                                Created ${formattedDate}
+
+                            </span>
+
+                        </div>
+
                     </div>
 
-                    <div class="budget-menu">
 
-                        <button
-                            class="budget-menu-btn"
-                            onclick="toggleMenu(${index})">
+                    <div class="budget-card-right">
 
-                            <i class="bi bi-three-dots"></i>
+                        <div class="budget-limit">
 
-                        </button>
+                            <small>Monthly limit</small>
 
-                        <div
-                            id="menu-${index}"
-                            class="budget-dropdown">
+                            <strong class="budget-amount">
 
-                            <a href="/BudgetPage/Details?id=${id}">
+                                $${limit.toFixed(2)}
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="budget-actions">
+
+
+                            <a href="/BudgetPage/Details?id=${id}"
+                               class="budget-action details"
+                               title="View Details">
+
                                 <i class="bi bi-eye"></i>
-                                Details
+
                             </a>
 
-                            <a href="/BudgetPage/Edit?id=${id}">
+
+                            <a href="/BudgetPage/Edit?id=${id}"
+                               class="budget-action edit"
+                               title="Edit">
+
                                 <i class="bi bi-pencil"></i>
-                                Edit
+
                             </a>
+
 
                             <a href="/BudgetPage/Delete?id=${id}"
-                               class="delete-link">
+                               class="budget-action delete"
+                               title="Delete">
 
                                 <i class="bi bi-trash"></i>
-                                Delete
 
                             </a>
 
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="budget-card-body">
-
-                    <div class="budget-icon">
-
-                        <i class="bi bi-wallet2"></i>
-
-                    </div>
-
-
-                    <h3>
-                        ${name}
-                    </h3>
-
-
-                    <div class="budget-limit">
-
-                        <span>Budget Limit</span>
-
-                        <strong>
-                            $${Number(limit).toFixed(2)}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="budget-progress">
-
-                        <div class="progress-label">
-
-                            <span>
-                                Spending Limit
-                            </span>
-
-                            <span>
-                                $${Number(limit).toFixed(2)}
-                            </span>
-
-                        </div>
-
-                        <div class="progress">
-
-                            <div class="progress-bar"
-                                 style="width: 100%;">
-                            </div>
 
                         </div>
 
                     </div>
 
-
-                    <div class="budget-date">
-
-                        <i class="bi bi-calendar3"></i>
-
-                        Created ${formattedDate}
-
-                    </div>
-
-                </div>
+                `;
 
 
-                <div class="budget-card-footer">
-
-                    <a href="/BudgetPage/Details?id=${id}"
-                       class="view-budget">
-
-                        View Details
-
-                        <i class="bi bi-arrow-right"></i>
-
-                    </a>
-
-                </div>
-
-            `;
-
-
-            container.appendChild(card);
-
-        });
-
-    }
-
-
-    function toggleMenu(index) {
-
-        document
-            .querySelectorAll(".budget-dropdown")
-            .forEach(menu => {
-
-                menu.classList.remove("show");
+                container.appendChild(card);
 
             });
 
-
-        const menu =
-            document.getElementById(`menu-${index}`);
-
-
-        if (menu) {
-            menu.classList.toggle("show");
         }
 
-    }
 
-
-    function showAllBudgets() {
-
-        displayBudgets(allBudgets);
-
-        setActiveCategory(0);
-
-    }
-
-
-    function filterBudgets(type) {
-
-        if (type === "active") {
+        function showAllBudgets() {
 
             displayBudgets(allBudgets);
 
+            setActiveFilter(0);
+
         }
 
 
-        if (type === "recent") {
+        function showActiveBudgets() {
+
+            displayBudgets(allBudgets);
+
+            setActiveFilter(1);
+
+        }
+
+
+        function showRecentBudgets() {
 
             const recent =
                 [...allBudgets]
@@ -601,57 +353,35 @@
 
             displayBudgets(recent);
 
-        }
-
-
-        setActiveCategory(
-            type === "active" ? 1 : 2
-        );
-
-    }
-
-
-    function setActiveCategory(index) {
-
-        const buttons =
-            document.querySelectorAll(".budget-category");
-
-
-        buttons.forEach(button => {
-
-            button.classList.remove("active");
-
-        });
-
-
-        if (buttons[index]) {
-
-            buttons[index].classList.add("active");
+            setActiveFilter(2);
 
         }
 
-    }
+
+        function setActiveFilter(index) {
+
+            const buttons =
+                document.querySelectorAll(".budget-filter");
 
 
-    document.addEventListener("click", function (event) {
+            buttons.forEach(button => {
 
-        if (!event.target.closest(".budget-menu")) {
+                button.classList.remove("active");
 
-            document
-                .querySelectorAll(".budget-dropdown")
-                .forEach(menu => {
+            });
 
-                    menu.classList.remove("show");
 
-                });
+            if (buttons[index]) {
+
+                buttons[index].classList.add("active");
+
+            }
 
         }
 
-    });
+    </script>
 
 
-    loadBudgets();
-
-</script>
+    <script src="~/js/authGuard.js"></script>
 
 }
