@@ -29,4 +29,11 @@ public class CategoryPageController : Controller
         ViewData["categoryID"] = id;
         return View("~/Views/Category/Details.cshtml");
     }
+
+    public IActionResult Delete(int id)
+    {
+        ViewData["categoryID"] = id;
+
+        return View("~/Views/Category/Delete.cshtml");
+    }
 }

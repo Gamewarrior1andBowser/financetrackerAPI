@@ -43,6 +43,16 @@ public class CategoryController : ControllerBase
             return BadRequest("Category type is required");
         }
 
+        Category? existingCategory = await _context.Categories
+            .FirstOrDefaultAsync(c =>
+                c.userID == userID &&
+                c.Name == category.Name);
+
+        if (existingCategory != null)
+        {
+            return BadRequest("You already have a category with this name.");
+        }
+
         category.userID = userID;
 
         _context.Categories.Add(category);
@@ -123,6 +133,27 @@ public class CategoryController : ControllerBase
             return NotFound("Category not found");
         }
 
+        Category? existingCategory = await _context.Categories
+            .FirstOrDefaultAsync(c =>
+                c.userID == userID &&
+                c.Name == updatedCategory.Name &&
+                c.categoryID != id);
+
+        if (existingCategory != null)
+        {
+            return BadRequest("You already have a category with this name.");
+        }
+
+        if (string.IsNullOrEmpty(updatedCategory.Name))
+        {
+            return BadRequest("Category name is required");
+        }
+
+        if (string.IsNullOrEmpty(updatedCategory.Type))
+        {
+            return BadRequest("Category type is required");
+        }
+
         category.Name = updatedCategory.Name;
         category.Type = updatedCategory.Type;
 
@@ -161,4 +192,3 @@ public class CategoryController : ControllerBase
         return Ok("Category deleted");
     }
 }
-
