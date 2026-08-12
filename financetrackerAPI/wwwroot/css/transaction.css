@@ -1,6 +1,5 @@
 ﻿/* =========================================================
 TRANSACTION PAGE
-========================================================= */
 
 .transaction-page {
     max-width: 1400px;
@@ -95,6 +94,131 @@ TRANSACTION PAGE
 }
 
     .transaction-card:hover {
+.transaction-page {
+    --purple-1: #4f46a5;
+    --purple-2: #6d5bd0;
+    --blue-1: #4f86c6;
+    --amber: #f59e0b;
+    --amber-soft: #fff7e6;
+    --red: #dc2626;
+    --red-soft: #fef2f2;
+    --ink: #252535;
+    --muted: #6b6b85;
+    --line: #e2e4ea;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin: 0 32px;
+}
+
+/* ---------- Header ---------- */
+.transaction-header {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(30,30,60,.05);
+}
+
+.transaction-subtitle {
+    margin: 0 0 4px;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--purple-1);
+}
+
+.transaction-title {
+    margin: 0 0 6px;
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--ink);
+}
+
+.transaction-description {
+    margin: 0;
+    font-size: .9rem;
+    color: var(--muted);
+}
+
+.transaction-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    align-self: flex-start;
+    padding: 12px 22px;
+    border-radius: 30px;
+    background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+    color: #fff;
+    font-weight: 700;
+    font-size: .88rem;
+    text-decoration: none;
+    transition: .2s ease;
+}
+
+    .transaction-add-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(79,70,165,.25);
+        color: #fff;
+    }
+
+/* ---------- Layout ---------- */
+.transaction-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+/* ---------- Sidebar ---------- */
+.transaction-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.transaction-sidebar-section {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 10px rgba(30,30,60,.05);
+}
+
+.transaction-sidebar-title {
+    margin: 0 0 12px;
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.transaction-filter-list,
+.transaction-quick-links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.transaction-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: .88rem;
+    text-align: left;
         transform: translateY(-3px);
         box-shadow: 0 8px 20px rgba(30, 30, 60, .10);
     }
