@@ -1,7 +1,7 @@
 ﻿using financetrackerAPI.Data;
 using financetrackerAPI.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,25 +9,20 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-
 namespace financetrackerAPI.Controllers;
-
 
 [ApiController]
 [Route("api/[controller]")]
-
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly IConfiguration _config;
-
 
     public AuthController(AppDbContext context, IConfiguration config)
     {
         _context = context;
         _config = config;
     }
-
 
     [HttpPost("register")]
     public async Task<IActionResult> Register(User user)
@@ -36,7 +31,8 @@ public class AuthController : ControllerBase
         {
             return BadRequest("Email is required");
         }
-        else if (string.IsNullOrWhiteSpace(user.password)) {
+        else if (string.IsNullOrWhiteSpace(user.password))
+        {
             return BadRequest("Password is required");
         }
 
@@ -72,20 +68,17 @@ public class AuthController : ControllerBase
         return Ok("Registration successful");
     }
 
-
     [HttpPost("login")]
-    public IActionResult Login(UserLoginRequest login)
+    public async Task<IActionResult> Login(UserLoginRequest login)
     {
-        User user = _context.Users
-            .FirstOrDefault(u =>
-                u.email == login.UsernameOrEmail); //||
-                //u.username == login.UsernameOrEmail);
+        User? user = await _context.Users
+            .FirstOrDefaultAsync(u =>
+                u.email == login.UsernameOrEmail);
 
         if (user == null)
         {
             return Unauthorized("This account doesn't exist");
         }
-
 
         bool validPassword =
             BCrypt.Net.BCrypt.Verify(
@@ -93,15 +86,35 @@ public class AuthController : ControllerBase
                 user.password
             );
 
-
         if (!validPassword)
         {
             return Unauthorized("Invalid username/email or password");
         }
 
-
         string token = GenerateToken(user);
 
+        List<Claim> claims = new List<Claim>
+        {
+            new Claim("id", user.userID.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.userID.ToString())
+        };
+
+        ClaimsIdentity identity = new ClaimsIdentity(
+            claims,
+            CookieAuthenticationDefaults.AuthenticationScheme
+        );
+
+        ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            principal,
+            new AuthenticationProperties
+            {
+                IsPersistent = false,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1)
+            }
+        );
 
         return Ok(new
         {
@@ -109,30 +122,28 @@ public class AuthController : ControllerBase
         });
     }
 
-
-
     private string GenerateToken(User user)
     {
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_config["Jwt:Key"])
+        SymmetricSecurityKey key = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(_config["Jwt:Key"]!)
         );
 
-        var credentials = new SigningCredentials(
+        SigningCredentials credentials = new SigningCredentials(
             key,
             SecurityAlgorithms.HmacSha256
         );
 
-        var claims = new[]
+        Claim[] claims =
         {
             new Claim("id", user.userID.ToString()),
-        new Claim(ClaimTypes.NameIdentifier, user.userID.ToString())
-    };
+            new Claim(ClaimTypes.NameIdentifier, user.userID.ToString())
+        };
 
-        var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],     
-            audience: _config["Jwt:Audience"],  
+        JwtSecurityToken token = new JwtSecurityToken(
+            issuer: _config["Jwt:Issuer"],
+            audience: _config["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddHours(1),
+            expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: credentials
         );
 
