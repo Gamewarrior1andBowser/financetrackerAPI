@@ -55,7 +55,7 @@ public class TransactionsController : ControllerBase
                 t.categoryID,
                 t.notes,
                 CategoryName = t.Category != null
-                    ? t.Category.Name
+                    ? t.Category.name
                     : "No Category"
             })
             .ToList();
@@ -81,7 +81,7 @@ public class TransactionsController : ControllerBase
                 t.categoryID,
                 t.notes,
                 CategoryName = t.Category != null
-                    ? t.Category.Name
+                    ? t.Category.name
                     : "No Category"
             })
             .FirstOrDefault();
