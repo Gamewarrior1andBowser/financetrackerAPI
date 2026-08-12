@@ -64,6 +64,15 @@ public class BudgetController : ControllerBase
         budget.userID = userID;
         budget.date = DateTime.Now;
 
+        if (string.IsNullOrWhiteSpace(budget.username))
+            return BadRequest("Budget name is required.");
+
+        if (budget.limits <= 0)
+            return BadRequest("Budget limit must be greater than zero.");
+
+        budget.userID = userID;
+        budget.date = DateTime.Now;
+
         _context.Budgets.Add(budget);
 
         await _context.SaveChangesAsync();
