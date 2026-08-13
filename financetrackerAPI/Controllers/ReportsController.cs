@@ -1,4 +1,5 @@
 ﻿using financetrackerAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ namespace financetrackerAPI.Controllers
         }
 
 
-
+        [Authorize]
         public IActionResult Index()
         {
             return View();
