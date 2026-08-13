@@ -3,7 +3,6 @@
 }
 
 <div class="budget-form-page">
-
     <div class="budget-form-card">
 
         <div class="budget-form-header">
@@ -21,7 +20,6 @@
 
             <div class="budget-form-group">
                 <label for="name">Budget Name</label>
-
                 <input id="name"
                        type="text"
                        class="form-control"
@@ -30,50 +28,27 @@
             </div>
 
             <div class="budget-form-group">
-                <label for="limit">Budget Limit</label>
+                <label for="categoryID">Category</label>
 
-            <div class="mb-3">
-
-                <label class="form-label">
-                    Category
-                </label>
-
-
-                <select id="categoryID"
-                        class="form-select">
-
-                    <option>
-                        Loading categories...
-                    </option>
-
+                <select id="categoryID" class="form-select" required>
+                    <option>Loading categories...</option>
                 </select>
-
-
             </div>
 
-
-            <div class="mb-4">
-
-                <label class="form-label">
-                    Budget limits
-                </label>
-
+            <div class="budget-form-group">
+                <label for="limits">Budget Limit</label>
 
                 <input id="limits"
                        type="number"
                        min="1"
                        step="0.01"
                        class="form-control"
-                       placeholder="Enter budget limits" />
-
+                       placeholder="Enter budget limit"
+                       required />
 
                 <small class="text-muted">
-
                     Set the maximum amount you want to spend for this budget.
-
                 </small>
-
-
             </div>
 
             <div id="createError"
@@ -82,192 +57,101 @@
             </div>
 
             <div class="budget-form-actions">
-
                 <a asp-controller="BudgetPage"
                    asp-action="Index"
                    class="budget-cancel-btn">
-                    <i class="bi bi-arrow-left"></i>
-                    Back
+                    <i class="bi bi-arrow-left"></i> Back
                 </a>
 
-                <button type="submit"
-                        class="budget-save-btn">
-                    <i class="bi bi-check-circle"></i>
-                    Save Budget
+                <button type="submit" class="budget-save-btn">
+                    <i class="bi bi-check-circle"></i> Save Budget
                 </button>
-
             </div>
 
         </form>
-
     </div>
-
 </div>
 
 @section Scripts {
-
     <script>
+        const token = localStorage.getItem("token");
+        const headers = { Authorization: "Bearer " + token };
 
+        document.getElementById("createBudgetForm")
+            .addEventListener("submit", createBudget);
 
-    const token = localStorage.getItem("token");
+        async function loadCategories() {
+            const response = await fetch("/api/Category", { headers });
+            const dropdown = document.getElementById("categoryID");
 
-    loadCategories();
+            if (!response.ok) {
+                dropdown.innerHTML = "<option>No categories available</option>";
+                return;
+            }
 
+            const categories = await response.json();
 
+            if (!categories.length) {
+                dropdown.innerHTML = "<option value=''>No categories available</option>";
+                return;
+            }
 
-    async function loadCategories() {
+            dropdown.innerHTML = categories.map(category =>
+                `<option value="${category.categoryID}">
+                        ${category.name}
+                    </option>`
+            ).join("");
+        }
 
+        function showError(message) {
+            const error = document.getElementById("createError");
+            error.textContent = message;
+            error.style.display = "block";
+        }
 
-        const response = await fetch("/api/Category",
-            {
+        async function createBudget(event) {
+            event.preventDefault();
 
-                headers:
-                {
+            const name = document.getElementById("name").value.trim();
+            const categoryID = Number(document.getElementById("categoryID").value);
+            const limits = Number(document.getElementById("limits").value);
 
-                    "Authorization": "Bearer " + token
+            if (!name) {
+                showError("Please enter a budget name.");
+                return;
+            }
 
-                }
+            if (!categoryID) {
+                showError("Please select a category.");
+                return;
+            }
 
+            if (!limits || limits <= 0) {
+                showError("Please enter a valid budget limit.");
+                return;
+            }
 
+            const budget = {
+                username: name,
+                categoryID: categoryID,
+                limits: limits,
+                date: new Date().toISOString()
+            };
+
+            const response = await fetch("/api/Budget", {
+                method: "POST",
+                headers: { ...headers, "Content-Type": "application/json" },
+                body: JSON.stringify(budget)
             });
 
-        const categories = await response.json();
-        const dropdown = document.getElementById("categoryID");
+            if (!response.ok) {
+                showError("Unable to create budget.");
+                return;
+            }
 
-        if (categories.length === 0) {
-            dropdown.innerHTML = `<option value="">No categories available</option>`;
-            return;
+            window.location.href = "/BudgetPage";
         }
 
-
-        if (!response.ok) {
-
-            document.getElementById("categoryID").innerHTML =
-                "<option>No Categories</option>";
-
-            return;
-
-        }
-
-
-
-        let options = "";
-
-
-
-
-        categories.forEach(category => {
-            options += `<option value="${category.categoryID}">${category.name}</option>`;
-        });
-
-        dropdown.innerHTML = options;
-
-        document.getElementById("categoryID").innerHTML = options;
-    }
-
-
-
-    function showError(message)
-    {
-
-        const box = document.getElementById("createError");
-
-        box.innerText = message;
-
-        box.style.display = "block";
-
-    }
-
-
-
-
-    async function createBudget()
-    {
-
-        e.preventDefault();
-
-        const name =
-            document.getElementById("name").value.trim();
-
-        const name = document
-            .getElementById("name")
-            .value
-            .trim();
-
-        const limit = Number(
-            document.getElementById("limit").value
-        );
-
-        const limits =
-            Number(document.getElementById("limits").value);
-
-            
-        let valid = true;
-            [nameInput, limitInput].forEach(input => input.classList.remove('is-invalid'));
-
-        if(!name)
-        {
-            showError("Please enter a budget name.");
-            return;
-        }
-
-
-        if(!limits || limits <= 0)
-        {
-            showError("Please enter a valid budget limits.");
-            return;
-        }
-
-
-        const categoryID = Number(document.getElementById("categoryID").value);
-
-
-        const budget = {
-
-            username: name,
-
-            categoryID: categoryID,
-
-            limits: limits,
-
-            date: new Date().toISOString()
-
-        };
-
-        const response = await fetch("/api/Budget",
-        {
-
-            method:"POST",
-
-            headers:
-            {
-
-                "Content-Type":"application/json",
-
-                "Authorization":"Bearer " + token
-
-            },
-
-
-            body: JSON.stringify(budget)
-
-        });
-
-
-        if(!response.ok)
-        {
-
-            showError("Unable to create budget.");
-
-            return;
-
-        }
-
-
-
-
-        window.location.href="/BudgetPage";
-
-    }
+        loadCategories();
     </script>
 }

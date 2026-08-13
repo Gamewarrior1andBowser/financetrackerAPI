@@ -1,29 +1,30 @@
-﻿ @{
+﻿@{
     ViewData["Title"] = "Dashboard";
 }
 
-
-
 <div class="finance-dashboard page-content">
 
-    <!-- HERO -->
     <div class="dashboard-hero">
         <div class="hero-text">
-            <div class="hero-badge"><i class="bi bi-stack"></i> Personal Finance Tracker</div>
+            <div class="hero-badge">
+                <i class="bi bi-stack"></i> Personal Finance Tracker
+            </div>
             <h2>Hello, <span id="greetingName">...</span></h2>
             <p>Here's what's happening with your finances today.</p>
         </div>
+
         <div class="hero-actions">
-            <a asp-controller="TransactionPage" asp-action="Create" class="btn-new-income">
+            <a asp-controller="TransactionPage" asp-action="Index"
+               asp-route-type="Income" class="btn-new-income">
                 <i class="bi bi-plus-circle-fill"></i> New Income
             </a>
-            <a asp-controller="TransactionPage" asp-action="Create" class="btn-new-expense">
+            <a asp-controller="TransactionPage" asp-action="Index"
+               asp-route-type="Expense" class="btn-new-expense">
                 <i class="bi bi-plus-circle-fill"></i> New Expense
             </a>
         </div>
     </div>
 
-    <!-- SUBNAV -->
     <div class="dashboard-subnav">
         <a asp-controller="TransactionPage" asp-action="Index" class="active">
             <i class="bi bi-cash-stack"></i> Transactions
@@ -33,8 +34,8 @@
         </a>
     </div>
 
-    <!-- SUMMARY -->
     <div class="summary-cards">
+
         <div class="summary-card income">
             <div class="summary-card-head">
                 <span>Total Income</span>
@@ -42,6 +43,7 @@
             </div>
             <strong id="incomeTotal">$0.00</strong>
         </div>
+
         <div class="summary-card expense">
             <div class="summary-card-head">
                 <span>Total Expenses</span>
@@ -49,6 +51,7 @@
             </div>
             <strong id="expenseTotal">$0.00</strong>
         </div>
+
         <div class="summary-card balance">
             <div class="summary-card-head">
                 <span>Balance</span>
@@ -56,9 +59,9 @@
             </div>
             <strong id="balanceTotal">$0.00</strong>
         </div>
+
     </div>
 
-    <!-- CHARTS -->
     <div id="dashboardStats" class="chart-grid">
 
         <div class="chart-card">
@@ -78,8 +81,8 @@
 
     </div>
 
-    <!-- RECENT TRANSACTIONS -->
     <div class="chart-card recent-dashboard-section">
+
         <div class="recent-header">
             <h2>Recent Transactions</h2>
             <a asp-controller="TransactionPage" asp-action="Index">
@@ -93,840 +96,369 @@
             <i class="bi bi-receipt"></i>
             <p>No transactions yet.</p>
         </div>
+
     </div>
 
 </div>
 
 @section Scripts {
 
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-
         const token = localStorage.getItem("token");
 
-        let dashboardCategories = [];
-        let dashboardTransactions = [];
-        let categoryChartInstance = null;
-        let trendChartInstance = null;
-
+        let categories = [];
+        let transactions = [];
+        let categoryChart;
+        let trendChart;
 
         loadDashboard();
-
         loadGreeting();
 
-
-        /* =========================================
-           GREETING
-        ========================================= */
-
-        function decodeJwtPayload(rawToken) {
-
+        function getJwtPayload(token) {
             try {
+                const data = token.split(".")[1];
+                const text = atob(data.replace(/-/g, "+").replace(/_/g, "/"));
 
-                const base64Url =
-                    rawToken.split(".")[1];
-
-                const base64 =
-                    base64Url
-                        .replace(/-/g, "+")
-                        .replace(/_/g, "/");
-
-                const jsonPayload =
+                return JSON.parse(
                     decodeURIComponent(
-                        atob(base64)
-                            .split("")
-                            .map(c =>
-                                "%" +
-                                ("00" + c.charCodeAt(0).toString(16)).slice(-2)
-                            )
-                            .join("")
-                    );
-
-                return JSON.parse(jsonPayload);
-
-            }
-            catch (error) {
-
-                console.error(
-                    "Failed to decode JWT",
-                    error
+                        text.split("").map(c =>
+                            "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)
+                        ).join("")
+                    )
                 );
-
+            } catch {
                 return null;
-
             }
-
         }
 
-
-        async function getUserDisplayName() {
-
+        async function getUserName() {
             if (!token) return "User";
 
+            const user = getJwtPayload(token);
+            const name = user?.name || user?.given_name || user?.unique_name;
 
-            const payload =
-                decodeJwtPayload(token);
-
-            // Adjust these claim keys to match whatever AuthController.GenerateToken actually issues
-            const claimName =
-                payload?.name ||
-                payload?.given_name ||
-                payload?.unique_name;
-
-
-            if (claimName) return claimName;
-
+            if (name) return name;
 
             try {
-
-                const response =
-                    await fetch("/api/User/profile", {
-                        headers: {
-                            "Authorization": "Bearer " + token
-                        }
-                    });
-
+                const response = await fetch("/api/User/profile", {
+                    headers: { Authorization: "Bearer " + token }
+                });
 
                 if (response.ok) {
-
-                    const user =
-                        await response.json();
-
-                    if (user?.name) return user.name;
-
+                    const data = await response.json();
+                    return data?.name || "User";
                 }
-
-            }
-            catch (error) {
-
-                console.warn(
-                    "Could not fetch user profile for greeting",
-                    error
-                );
-
-            }
-
+            } catch { }
 
             return "User";
-
         }
-
 
         async function loadGreeting() {
-
-            const greetingEl =
-                document.getElementById(
-                    "greetingName"
-                );
-
-
-            if (!greetingEl) return;
-
-
-            const name =
-                await getUserDisplayName();
-
-
-            greetingEl.innerText = name;
-
+            document.getElementById("greetingName").textContent =
+                await getUserName();
         }
-
 
         async function loadDashboard() {
-
             try {
+                const headers = {
+                    Authorization: "Bearer " + token
+                };
 
-                const [
-                    categoriesRes,
-                    transactionsRes,
-                    budgetsRes
-                ] = await Promise.all([
+                const categoryResponse = await fetch("/api/Category", { headers });
+                const transactionResponse = await fetch("/api/Transactions", { headers });
 
-                    fetch("/api/Category", {
-                        headers: {
-                            "Authorization": "Bearer " + token
-                        }
-                    }),
+                categories = categoryResponse.ok
+                    ? await categoryResponse.json()
+                    : [];
 
-                    fetch("/api/Transactions", {
-                        headers: {
-                            "Authorization": "Bearer " + token
-                        }
-                    }),
+                transactions = transactionResponse.ok
+                    ? await transactionResponse.json()
+                    : [];
 
-                    fetch("/api/Budget", {
-                        headers: {
-                            "Authorization": "Bearer " + token
-                        }
-                    })
+                showTotals();
+                showCategoryChart();
+                showTrendChart();
+                showRecentTransactions();
 
-                ]);
-
-
-                dashboardCategories =
-                    categoriesRes.ok
-                        ? await categoriesRes.json()
-                        : [];
-
-
-                dashboardTransactions =
-                    transactionsRes.ok
-                        ? await transactionsRes.json()
-                        : [];
-
-
-                const budgets =
-                    budgetsRes.ok
-                        ? await budgetsRes.json()
-                        : [];
-
-
-                renderTotals();
-
-                renderCategoryChart();
-
-                renderTrendChart();
-
-                renderRecentTransactions();
-
+            } catch (error) {
+                console.error("Dashboard loading error:", error);
             }
-            catch (error) {
-
-                console.error(
-                    "Dashboard loading error:",
-                    error
-                );
-
-            }
-
         }
 
+        function getCategory(id) {
+            return categories.find(c => c.categoryID === id);
+        }
 
+        function isIncome(transaction) {
+            const category = getCategory(transaction.categoryID);
 
-        /* =========================================
-           TOTALS
-        ========================================= */
+            return category?.type?.toLowerCase() === "income";
+        }
 
-        function renderTotals() {
-
+        function showTotals() {
             let income = 0;
             let expenses = 0;
 
+            transactions.forEach(transaction => {
+                const amount = Number(transaction.amount) || 0;
 
-            dashboardTransactions.forEach(transaction => {
-
-                const category =
-                    dashboardCategories.find(
-                        c =>
-                            c.categoryID ===
-                            transaction.categoryID
-                    );
-
-
-                if (!category) return;
-
-
-                const amount =
-                    Number(transaction.amount) || 0;
-
-
-                if (
-                    category.type &&
-                    category.type.toLowerCase() === "income"
-                ) {
-
+                if (isIncome(transaction))
                     income += amount;
-
-                }
-                else {
-
+                else
                     expenses += amount;
-
-                }
-
             });
 
-
-            document.getElementById(
-                "incomeTotal"
-            ).innerText =
+            document.getElementById("incomeTotal").textContent =
                 "$" + income.toFixed(2);
 
-
-            document.getElementById(
-                "expenseTotal"
-            ).innerText =
+            document.getElementById("expenseTotal").textContent =
                 "$" + expenses.toFixed(2);
 
-
-            document.getElementById(
-                "balanceTotal"
-            ).innerText =
+            document.getElementById("balanceTotal").textContent =
                 "$" + (income - expenses).toFixed(2);
-
         }
 
-
-
-        /* =========================================
-           CATEGORY DONUT
-        ========================================= */
-
-        function renderCategoryChart() {
-
+        function showCategoryChart() {
             const now = new Date();
+            const totals = {};
 
-            const currentMonth =
-                now.getMonth();
-
-            const currentYear =
-                now.getFullYear();
-
-
-            const categoryTotals = {};
-
-
-            dashboardTransactions.forEach(transaction => {
-
-                const transactionDate =
-                    new Date(transaction.date);
-
+            transactions.forEach(transaction => {
+                const date = new Date(transaction.date);
 
                 if (
-                    transactionDate.getMonth() !== currentMonth ||
-                    transactionDate.getFullYear() !== currentYear
-                ) {
-
-                    return;
-
-                }
-
+                    date.getMonth() !== now.getMonth() ||
+                    date.getFullYear() !== now.getFullYear() ||
+                    isIncome(transaction)
+                ) return;
 
                 const category =
-                    dashboardCategories.find(
-                        c =>
-                            c.categoryID ===
-                            transaction.categoryID
-                    );
-
-
-                if (!category) return;
-
-
-                if (
-                    category.type &&
-                    category.type.toLowerCase() === "income"
-                ) {
-
-                    return;
-
-                }
-
-
-                const categoryName =
-                    category.name ||
+                    getCategory(transaction.categoryID)?.name ||
                     transaction.categoryName ||
                     "Other";
 
-
-                categoryTotals[categoryName] =
-                    (categoryTotals[categoryName] || 0) +
-                    Number(transaction.amount || 0);
-
+                totals[category] =
+                    (totals[category] || 0) +
+                    (Number(transaction.amount) || 0);
             });
 
+            const labels = Object.keys(totals);
+            const values = Object.values(totals);
 
-            const labels =
-                Object.keys(categoryTotals);
+            categoryChart?.destroy();
 
-
-            const values =
-                Object.values(categoryTotals);
-
-
-            const canvas =
-                document.getElementById(
-                    "categoryChart"
-                );
-
-
-            if (categoryChartInstance) {
-
-                categoryChartInstance.destroy();
-
-            }
-
-
-            categoryChartInstance =
-                new Chart(canvas, {
-
+            categoryChart = new Chart(
+                document.getElementById("categoryChart"),
+                {
                     type: "doughnut",
-
                     data: {
-
                         labels: labels,
-
                         datasets: [{
-
                             data: values,
-
                             backgroundColor: [
-                                "#4f46a5", "#6d5bd0", "#4f86c6",
-                                "#f59e0b", "#fbbf24", "#9b91df",
-                                "#7c74d1", "#3f8fd1"
+                                "#4f46a5",
+                                "#6d5bd0",
+                                "#4f86c6",
+                                "#f59e0b",
+                                "#fbbf24",
+                                "#9b91df",
+                                "#7c74d1",
+                                "#3f8fd1"
                             ],
-
                             borderWidth: 3,
-
-                            borderColor: "#ffffff"
-
+                            borderColor: "#fff"
                         }]
-
                     },
-
                     options: {
-
                         responsive: true,
-
                         maintainAspectRatio: false,
-
                         cutout: "62%",
-
                         plugins: {
-
-                            legend: {
-                                display: false
-                            },
-
+                            legend: { display: false },
                             tooltip: {
-
                                 callbacks: {
-
-                                    label: function(context) {
-
-                                        return "$" +
-                                            Number(
-                                                context.raw
-                                            ).toFixed(2);
-
-                                    }
-
+                                    label: item =>
+                                        "$" + Number(item.raw).toFixed(2)
                                 }
-
                             }
-
                         }
-
                     }
-
-                });
-
-
-            renderCategoryLegend(
-                labels,
-                values
+                }
             );
 
+            showCategoryLegend(labels, values);
         }
 
+        function showCategoryLegend(labels, values) {
+            const legend = document.getElementById("categoryLegend");
 
-
-        function renderCategoryLegend(
-            labels,
-            values
-        ) {
-
-            const legend =
-                document.getElementById(
-                    "categoryLegend"
-                );
-
-
-            if (labels.length === 0) {
-
-                legend.innerHTML = `
-                                    <span class="no-chart-data">
-                                        No expenses this month
-                                    </span>
-                                `;
-
+            if (!labels.length) {
+                legend.innerHTML =
+                    `<span class="no-chart-data">No expenses this month</span>`;
                 return;
-
             }
 
+            const total = values.reduce((a, b) => a + b, 0);
 
-            const total =
-                values.reduce(
-                    (sum, value) =>
-                        sum + value,
-                    0
-                );
-
-            const palette = [
-                "#4f46a5", "#6d5bd0", "#4f86c6",
-                "#f59e0b", "#fbbf24", "#9b91df",
-                "#7c74d1", "#3f8fd1"
+            const colors = [
+                "#4f46a5",
+                "#6d5bd0",
+                "#4f86c6",
+                "#f59e0b",
+                "#fbbf24",
+                "#9b91df",
+                "#7c74d1",
+                "#3f8fd1"
             ];
 
-
-            legend.innerHTML =
-                labels.map((label, index) => {
-
-                    const percentage =
-                        total > 0
-                            ? (
-                                values[index] /
-                                total *
-                                100
-                            ).toFixed(1)
-                            : 0;
-
-
-                    return `
-
-                                        <div class="legend-item">
-
-                                            <span class="legend-dot" style="background:${palette[index % palette.length]}"></span>
-
-                                            <span>
-                                                ${label}
-                                            </span>
-
-                                            <strong>
-                                                $${values[index].toFixed(2)}
-                                            </strong>
-
-                                            (${percentage}%)
-
-                                        </div>
-
-                                    `;
-
-                }).join("");
-
+            legend.innerHTML = labels.map((label, i) => `
+                        <div class="legend-item">
+                            <span class="legend-dot"
+                                  style="background:${colors[i % colors.length]}"></span>
+                            <span>${label}</span>
+                            <strong>$${values[i].toFixed(2)}</strong>
+                            (${(values[i] / total * 100).toFixed(1)}%)
+                        </div>
+                    `).join("");
         }
 
+        function showTrendChart() {
+            const year = new Date().getFullYear();
 
-
-        /* =========================================
-           YEAR TREND
-        ========================================= */
-
-        function renderTrendChart() {
-
-            const currentYear =
-                new Date().getFullYear();
-
-
-            const monthLabels = [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec"
+            const labels = [
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
             ];
 
+            const income = Array(12).fill(0);
+            const expenses = Array(12).fill(0);
 
-            const incomeData =
-                new Array(12).fill(0);
+            transactions.forEach(transaction => {
+                const date = new Date(transaction.date);
 
+                if (date.getFullYear() !== year) return;
 
-            const expenseData =
-                new Array(12).fill(0);
+                const amount = Number(transaction.amount) || 0;
 
-
-            dashboardTransactions.forEach(transaction => {
-
-                const date =
-                    new Date(transaction.date);
-
-
-                if (
-                    date.getFullYear() !==
-                    currentYear
-                ) {
-
-                    return;
-
-                }
-
-
-                const month =
-                    date.getMonth();
-
-
-                const category =
-                    dashboardCategories.find(
-                        c =>
-                            c.categoryID ===
-                            transaction.categoryID
-                    );
-
-
-                if (!category) return;
-
-
-                const amount =
-                    Number(transaction.amount) || 0;
-
-
-                if (
-                    category.type &&
-                    category.type.toLowerCase() === "income"
-                ) {
-
-                    incomeData[month] += amount;
-
-                }
-                else {
-
-                    expenseData[month] += amount;
-
-                }
-
+                if (isIncome(transaction))
+                    income[date.getMonth()] += amount;
+                else
+                    expenses[date.getMonth()] += amount;
             });
 
+            trendChart?.destroy();
 
-            const canvas =
-                document.getElementById(
-                    "trendChart"
-                );
-
-
-            if (trendChartInstance) {
-
-                trendChartInstance.destroy();
-
-            }
-
-
-            trendChartInstance =
-                new Chart(canvas, {
-
+            trendChart = new Chart(
+                document.getElementById("trendChart"),
+                {
                     type: "line",
-
                     data: {
-
-                        labels: monthLabels,
-
+                        labels: labels,
                         datasets: [
-
                             {
-
                                 label: "Income",
-
-                                data: incomeData,
-
+                                data: income,
                                 borderColor: "#4f46a5",
                                 backgroundColor: "rgba(79,70,165,.12)",
-
                                 borderWidth: 2,
-
-                                tension: 0.35,
-
+                                tension: .35,
                                 fill: true
-
                             },
-
                             {
-
                                 label: "Expense",
-
-                                data: expenseData,
-
+                                data: expenses,
                                 borderColor: "#f59e0b",
                                 backgroundColor: "rgba(245,158,11,.12)",
-
                                 borderWidth: 2,
-
-                                tension: 0.35,
-
+                                tension: .35,
                                 fill: true
-
                             }
-
                         ]
-
                     },
-
                     options: {
-
                         responsive: true,
-
                         maintainAspectRatio: false,
-
                         interaction: {
-
                             intersect: false,
-
                             mode: "index"
-
                         },
-
                         plugins: {
-
                             legend: {
-
                                 position: "bottom"
-
                             }
-
                         },
-
                         scales: {
-
                             y: {
-
                                 beginAtZero: true,
-
                                 ticks: {
-
-                                    callback: function(value) {
-
-                                        return "$" +
-                                            Number(value)
-                                                .toLocaleString();
-
-                                    }
-
+                                    callback: value =>
+                                        "$" + Number(value).toLocaleString()
                                 }
-
                             }
-
                         }
-
                     }
-
-                });
-
+                }
+            );
         }
 
-
-
-        /* =========================================
-           RECENT TRANSACTIONS
-        ========================================= */
-
-        function renderRecentTransactions() {
-
+        function showRecentTransactions() {
             const container =
-                document.getElementById(
-                    "recentDashboardTransactions"
-                );
-
+                document.getElementById("recentDashboardTransactions");
 
             const empty =
-                document.getElementById(
-                    "noRecentTransactions"
-                );
+                document.getElementById("noRecentTransactions");
 
-
-            if (
-                !dashboardTransactions ||
-                dashboardTransactions.length === 0
-            ) {
-
+            if (!transactions.length) {
                 container.innerHTML = "";
-
                 empty.style.display = "block";
-
                 return;
-
             }
-
 
             empty.style.display = "none";
 
+            const recent = [...transactions]
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
 
-    const recent = [...transactions]
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 5);
+            container.innerHTML = recent.map(transaction => {
 
+                const date = transaction.date
+                    ? new Date(transaction.date).toLocaleDateString("en-CA", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric"
+                    })
+                    : "Unknown";
 
-            container.innerHTML =
-                recent.map(transaction => {
+                return `
+                            <div class="dashboard-transaction-row">
 
-                    const amount =
-                        Number(
-                            transaction.amount
-                        ) || 0;
+                                <div class="dashboard-transaction-left">
 
+                                    <div class="dashboard-transaction-icon">
+                                        <i class="bi bi-receipt"></i>
+                                    </div>
 
-                    const category =
-                        transaction.categoryName ??
-                        "No Category";
+                                    <div>
+                                        <strong>
+                                            ${transaction.categoryName ?? "No Category"}
+                                        </strong>
+                                        <span>${date}</span>
+                                    </div>
 
+                                </div>
 
-                    const date =
-                        new Date(
-                            transaction.date
-                        ).toLocaleDateString(
-                            "en-CA",
-                            {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric"
-                            }
-                        );
+                                <strong class="dashboard-transaction-amount">
+                                    $${(Number(transaction.amount) || 0).toFixed(2)}
+                                </strong>
 
+                            </div>
+                        `;
 
-                    return `
-
-                                        <div class="dashboard-transaction-row">
-
-                                            <div class="dashboard-transaction-left">
-
-                                                <div class="dashboard-transaction-icon">
-
-                                                    <i class="bi bi-receipt"></i>
-
-                                                </div>
-
-
-                                                <div>
-
-                                                    <strong>
-                                                        ${category}
-                                                    </strong>
-
-                                                    <span>
-                                                        ${date}
-                                                    </span>
-
-                                                </div>
-
-                                            </div>
-
-
-                                            <strong class="dashboard-transaction-amount">
-
-                                                $${amount.toFixed(2)}
-
-                                            </strong>
-
-                                        </div>
-
-                                    `;
-
-                }).join("");
-
+            }).join("");
         }
-
     </script>
 
-
     <script src="~/js/authGuard.js"></script>
-
 }
-
-
- 
