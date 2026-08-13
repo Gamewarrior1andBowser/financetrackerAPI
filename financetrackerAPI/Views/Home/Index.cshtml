@@ -1,638 +1,4 @@
-﻿@* @{
-ViewData["Title"] = "Home";
-}
-
-
-<div class="container">
-
-
-    <!-- Hero Section -->
-
-    <div class="row align-items-center py-5">
-
-
-        <div class="col-md-6">
-
-
-            <h1 class="display-4 fw-bold text-primary">
-
-                <i class="bi bi-wallet2 me-2"></i>
-
-                Finance Tracker
-
-            </h1>
-
-
-            <p class="lead mt-3">
-
-                Manage your income, expenses, budgets, and financial goals easily with one simple platform.
-
-            </p>
-
-
-            <p class="mt-4 text-muted">
-
-                Explore how Finance Tracker helps users organize their money,
-                analyze spending habits, and make better financial decisions.
-
-            </p>
-
-
-        </div>
-
-
-
-        <div class="col-md-6">
-
-
-            <div class="card shadow border-0 p-4">
-
-
-                <h3 class="fw-bold">
-
-                    Why use Finance Tracker?
-
-                </h3>
-
-
-                <p>
-
-                    Track transactions, organize categories, manage budgets,
-                    and understand your financial habits through detailed reports.
-
-                </p>
-
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-
-
-
-    <!-- Features -->
-
-
-    <div class="row mt-5">
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card shadow border-0 h-100">
-
-
-                <div class="card-body text-center">
-
-
-                    <i class="bi bi-cash-stack text-success"
-                       style="font-size:50px;">
-                    </i>
-
-
-                    <h4 class="mt-3">
-
-                        Track Transactions
-
-                    </h4>
-
-
-                    <p>
-
-                        Record and monitor income and expenses.
-
-                    </p>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card shadow border-0 h-100">
-
-
-                <div class="card-body text-center">
-
-
-                    <i class="bi bi-tags-fill text-primary"
-                       style="font-size:50px;">
-                    </i>
-
-
-                    <h4 class="mt-3">
-
-                        Manage Categories
-
-                    </h4>
-
-
-                    <p>
-
-                        Organize financial activities into meaningful categories.
-
-                    </p>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card shadow border-0 h-100">
-
-
-                <div class="card-body text-center">
-
-
-                    <i class="bi bi-bar-chart-fill text-warning"
-                       style="font-size:50px;">
-                    </i>
-
-
-                    <h4 class="mt-3">
-
-                        Financial Reports
-
-                    </h4>
-
-
-                    <p>
-
-                        Analyze spending patterns and financial progress.
-
-                    </p>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-
-
-
-    <!-- Demo Preview -->
-
-
-    <div class="mt-5">
-
-
-        <h2 class="text-center fw-bold mb-4">
-
-            Finance Tracker Preview
-
-        </h2>
-
-
-        <p class="text-center text-muted">
-
-            This is an example of how your dashboard will look after creating an account.
-
-        </p>
-
-
-    </div>
-
-
-
-
-
-    <!-- Summary Cards -->
-
-
-    <div class="row g-4 mt-3">
-
-
-        <div class="col-md-4">
-
-
-            <div class="card shadow border-0 text-center p-4">
-
-
-                <h5>
-
-                    Total Income
-
-                </h5>
-
-
-                <h2 class="text-success"
-                    id="income">
-
-                    $0
-
-                </h2>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-4">
-
-
-            <div class="card shadow border-0 text-center p-4">
-
-
-                <h5>
-
-                    Total Expenses
-
-                </h5>
-
-
-                <h2 class="text-danger"
-                    id="expenses">
-
-                    $0
-
-                </h2>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-4">
-
-
-            <div class="card shadow border-0 text-center p-4">
-
-
-                <h5>
-
-                    Remaining Balance
-
-                </h5>
-
-
-                <h2 class="text-primary"
-                    id="balance">
-
-                    $0
-
-                </h2>
-
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-    <!-- Budget and Savings Preview -->
-
-
-    <div class="row mt-5">
-
-
-        <div class="col-md-6">
-
-
-            <div class="card shadow border-0 p-4">
-
-
-                <h3>
-
-                    <i class="bi bi-wallet2 me-2"></i>
-
-                    Budget Preview
-
-                </h3>
-
-
-                <hr />
-
-
-                <p>
-
-                    Monthly Budget:
-
-                    <strong id="budgetlimits">
-                        $0
-                    </strong>
-
-                </p>
-
-
-
-                <p>
-
-                    amount Used:
-
-                    <strong id="budgetUsed">
-                        $0
-                    </strong>
-
-                </p>
-
-
-
-                <p>
-
-                    Remaining:
-
-                    <strong class="text-success"
-                            id="budgetRemaining">
-                        $0
-                    </strong>
-
-                </p>
-
-                
-                <p>
-
-                    Percentage:
-
-                    <strong class="text-success"
-                            id="budgetPercentage">
-                        $0
-                    </strong>
-
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-6">
-
-
-            <div class="card shadow border-0 p-4">
-
-
-                <h3>
-
-                    <i class="bi bi-piggy-bank-fill me-2"></i>
-
-                    Savings Goal
-
-                </h3>
-
-
-                <hr />
-
-
-                <p>
-
-                    Goal amount:
-
-                    <strong id="savingGoal">
-                        $0
-                    </strong>
-
-                </p>
-
-
-
-                <p>
-
-                    Current Savings:
-
-                    <strong class="text-primary"
-                            id="savingCurrent">
-                        $0
-                    </strong>
-
-                </p>
-                <p>
-                    Remaining:
-
-                    <strong class="text-danger"
-                            id="savingRemaining">
-                        $0
-                    </strong>
-                </p>
-
-
-                <p>
-                    Progress:
-
-                    <strong class="text-success"
-                            id="savingProgress">
-                        0%
-                    </strong>
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- Demo Transactions -->
-
-
-    <div class="card shadow border-0 mt-5 p-4">
-
-
-        <h3>
-
-            Recent Transactions Preview
-
-        </h3>
-
-
-        <table class="table table-hover mt-3">
-
-
-            <thead>
-
-                <tr>
-
-
-                    <th>Category</th>
-
-                    <th>Type</th>
-
-                    <th>amount</th>
-
-                    <th>date</th>
-
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="demoTransactions">
-            </tbody>
-
-
-        </table>
-
-
-    </div>
-
-
-</div>
-
-
-
-
-
-@section Scripts {
-
-
-    <script>
-
-
-        async function loadDemoData() {
-
-
-            const response = await fetch("/data/demo-data.json");
-
-
-            const data = await response.json();
-
-
-
-            document.getElementById("income").innerHTML =
-                "$" + data.income;
-
-
-
-            document.getElementById("expenses").innerHTML =
-                "$" + data.expenses;
-
-
-
-            document.getElementById("balance").innerHTML =
-                "$" + data.balance;
-
-            document.getElementById("budgetlimits").innerHTML =
-                "$" + data.budget.monthlylimits;
-
-
-            document.getElementById("budgetUsed").innerHTML =
-                "$" + data.budget.used;
-
-
-            document.getElementById("budgetRemaining").innerHTML =
-                "$" + data.budget.remaining;
-
-                  document.getElementById("budgetPercentage").innerHTML =
-                 + data.budget.usagePercentage + "%";
-
-            document.getElementById("savingGoal").innerHTML =
-                "$" + data.savingsGoal.goal;
-
-
-            document.getElementById("savingCurrent").innerHTML =
-                "$" + data.savingsGoal.current;
-
-                 document.getElementById("savingRemaining").innerHTML =
-                "$" + data.savingsGoal.remaining;
-
-                 document.getElementById("savingProgress").innerHTML =
-                "$" + data.savingsGoal.progress;
-
-            let rows = "";
-
-
-
-            data.transactions.forEach(transaction => {
-
-
-                rows += `
-
-                        <tr>
-
-
-                            <td>${transaction.category}</td>
-
-                            <td>${transaction.type}</td>
-
-                            <td>$${transaction.amount}</td>
-
-                            <td>${transaction.date}</td>
-
-
-                        </tr>
-
-                        `;
-
-
-            });
-
-
-
-            document.getElementById("demoTransactions").innerHTML = rows;
-
-
-        }
-
-
-
-        loadDemoData();
-
-
-    </script>
-
-
-} *@
-
-
-
-
-
-
-
-@{
+﻿@{
     ViewData["Title"] = "Home";
 }
 
@@ -704,101 +70,6 @@ ViewData["Title"] = "Home";
 
     </section>
 
-@*     <!-- PREVIEW INTRO -->
-    <section class="home-preview-intro">
-        <h2>Take a look inside</h2>
-        <p>A sample of what your dashboard looks like once your data is in.</p>
-    </section>
-
-    <!-- SUMMARY CARDS -->
-    <section class="home-summary-cards">
-
-        <div class="home-summary-card income">
-            <span>Total Income</span>
-            <strong id="income">$0</strong>
-        </div>
-
-        <div class="home-summary-card expense">
-            <span>Total Expenses</span>
-            <strong id="expenses">$0</strong>
-        </div>
-
-        <div class="home-summary-card balance">
-            <span>Remaining Balance</span>
-            <strong id="balance">$0</strong>
-        </div>
-
-    </section>
-
-    <!-- BUDGET + SAVINGS PREVIEW -->
-    <section class="home-panel-grid">
-
-        <div class="home-panel">
-            <h3><i class="bi bi-wallet2 me-2"></i>Budget Preview</h3>
-            <hr />
-
-            <div class="home-panel-row">
-                <span>Monthly Budget</span>
-                <strong id="budgetlimits">$0</strong>
-            </div>
-            <div class="home-panel-row">
-                <span>Amount Used</span>
-                <strong id="budgetUsed">$0</strong>
-            </div>
-            <div class="home-panel-row">
-                <span>Remaining</span>
-                <strong class="positive" id="budgetRemaining">$0</strong>
-            </div>
-
-            <div class="home-progress">
-                <div class="home-progress-bar" id="budgetProgressBar"></div>
-            </div>
-            <span class="home-progress-label" id="budgetPercentage">0% used</span>
-        </div>
-
-        <div class="home-panel">
-            <h3><i class="bi bi-piggy-bank-fill me-2"></i>Savings Goal</h3>
-            <hr />
-
-            <div class="home-panel-row">
-                <span>Goal Amount</span>
-                <strong id="savingGoal">$0</strong>
-            </div>
-            <div class="home-panel-row">
-                <span>Current Savings</span>
-                <strong class="accent" id="savingCurrent">$0</strong>
-            </div>
-            <div class="home-panel-row">
-                <span>Remaining</span>
-                <strong class="negative" id="savingRemaining">$0</strong>
-            </div>
-
-            <div class="home-progress">
-                <div class="home-progress-bar savings" id="savingProgressBar"></div>
-            </div>
-            <span class="home-progress-label" id="savingProgress">0% reached</span>
-        </div>
-
-    </section>
-
-    <!-- DEMO TRANSACTIONS -->
-    <section class="home-table-card">
-        <h3>Recent Transactions Preview</h3>
-
-        <table class="home-table">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody id="demoTransactions"></tbody>
-        </table>
-    </section>
-
-</div> *@
 <!-- PREVIEW INTRO -->
     <section class="home-preview-intro">
         <h2>Take a look inside</h2>
@@ -825,56 +96,18 @@ ViewData["Title"] = "Home";
 
     </section>
 
-    <!-- BUDGET + SAVINGS PREVIEW -->
-    @* <section class="home-panel-grid">
+    <!-- CATEGORY CHART PREVIEW -->
+    <section class="home-chart-card reveal-left">
+        <h3><i class="bi bi-pie-chart-fill me-2"></i>Spend by Category Preview</h3>
+        <hr />
 
-        <div class="home-panel reveal-left">
-            <h3><i class="bi bi-wallet2 me-2"></i>Budget Preview</h3>
-            <hr />
-
-            <div class="home-panel-row">
-                <span>Monthly Budget</span>
-                <strong id="budgetlimits">$0</strong>
+        <div class="home-chart-layout">
+            <div class="home-chart-container">
+                <canvas id="demoCategoryChart"></canvas>
             </div>
-            <div class="home-panel-row">
-                <span>Amount Used</span>
-                <strong id="budgetUsed">$0</strong>
-            </div>
-            <div class="home-panel-row">
-                <span>Remaining</span>
-                <strong class="positive" id="budgetRemaining">$0</strong>
-            </div>
-
-            <div class="home-progress">
-                <div class="home-progress-bar" id="budgetProgressBar"></div>
-            </div>
-            <span class="home-progress-label" id="budgetPercentage">0% used</span>
+            <div id="demoCategoryLegend" class="home-chart-legend"></div>
         </div>
-
-        <div class="home-panel reveal-left">
-            <h3><i class="bi bi-piggy-bank-fill me-2"></i>Savings Goal</h3>
-            <hr />
-
-            <div class="home-panel-row">
-                <span>Goal Amount</span>
-                <strong id="savingGoal">$0</strong>
-            </div>
-            <div class="home-panel-row">
-                <span>Current Savings</span>
-                <strong class="accent" id="savingCurrent">$0</strong>
-            </div>
-            <div class="home-panel-row">
-                <span>Remaining</span>
-                <strong class="negative" id="savingRemaining">$0</strong>
-            </div>
-
-            <div class="home-progress">
-                <div class="home-progress-bar savings" id="savingProgressBar"></div>
-            </div>
-            <span class="home-progress-label" id="savingProgress">0% reached</span>
-        </div>
-
-    </section>  *@
+    </section>
 
     <!-- DEMO TRANSACTIONS -->
     <section class="home-table-card reveal-left">
@@ -894,11 +127,15 @@ ViewData["Title"] = "Home";
     </section>
 
 </div>
-
-
+  
 @section Scripts {
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
+
+        let demoCategoryChartInstance = null;
 
         async function loadDemoData() {
 
@@ -908,22 +145,6 @@ ViewData["Title"] = "Home";
             document.getElementById("income").innerHTML = "$" + data.income;
             document.getElementById("expenses").innerHTML = "$" + data.expenses;
             document.getElementById("balance").innerHTML = "$" + data.balance;
-
-            document.getElementById("budgetlimits").innerHTML = "$" + data.budget.monthlylimits;
-            document.getElementById("budgetUsed").innerHTML = "$" + data.budget.used;
-            document.getElementById("budgetRemaining").innerHTML = "$" + data.budget.remaining;
-
-            const budgetPct = data.budget.usagePercentage;
-            document.getElementById("budgetPercentage").innerHTML = budgetPct + "% used";
-            document.getElementById("budgetProgressBar").style.width = Math.min(budgetPct, 100) + "%";
-
-            document.getElementById("savingGoal").innerHTML = "$" + data.savingsGoal.goal;
-            document.getElementById("savingCurrent").innerHTML = "$" + data.savingsGoal.current;
-            document.getElementById("savingRemaining").innerHTML = "$" + data.savingsGoal.remaining;
-
-            const savingPct = data.savingsGoal.progress;
-            document.getElementById("savingProgress").innerHTML = savingPct + "% reached";
-            document.getElementById("savingProgressBar").style.width = Math.min(savingPct, 100) + "%";
 
             let rows = "";
 
@@ -940,39 +161,135 @@ ViewData["Title"] = "Home";
 
             document.getElementById("demoTransactions").innerHTML = rows;
 
+            renderDemoCategoryChart(data.transactions);
+
+        }
+
+        function renderDemoCategoryChart(transactions) {
+
+            const categoryTotals = {};
+
+            transactions.forEach(transaction => {
+
+                if (transaction.type.toLowerCase() !== "expense") {
+                    return;
+                }
+
+                categoryTotals[transaction.category] =
+                    (categoryTotals[transaction.category] || 0) + Number(transaction.amount || 0);
+
+            });
+
+            const labels = Object.keys(categoryTotals);
+            const values = Object.values(categoryTotals);
+
+            const canvas = document.getElementById("demoCategoryChart");
+
+            if (demoCategoryChartInstance) {
+                demoCategoryChartInstance.destroy();
+            }
+
+            const palette = [
+                "#4f46a5", "#6d5bd0", "#4f86c6",
+                "#f59e0b", "#fbbf24", "#9b91df",
+                "#7c74d1", "#3f8fd1"
+            ];
+
+            demoCategoryChartInstance = new Chart(canvas, {
+
+                type: "doughnut",
+
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: palette,
+                        borderWidth: 3,
+                        borderColor: "#ffffff"
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "62%",
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return "$" + Number(context.raw).toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            });
+
+            renderDemoCategoryLegend(labels, values, palette);
+
+        }
+
+        function renderDemoCategoryLegend(labels, values, palette) {
+
+            const legend = document.getElementById("demoCategoryLegend");
+
+            if (labels.length === 0) {
+                legend.innerHTML = `<span class="no-chart-data">No expense data</span>`;
+                return;
+            }
+
+            const total = values.reduce((sum, v) => sum + v, 0);
+
+            legend.innerHTML = labels.map((label, index) => {
+
+                const percentage = total > 0
+                    ? (values[index] / total * 100).toFixed(1)
+                    : 0;
+
+                return `
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background:${palette[index % palette.length]}"></span>
+                        <span>${label}</span>
+                        <strong>$${values[index].toFixed(2)}</strong>
+                        (${percentage}%)
+                    </div>
+                `;
+
+            }).join("");
+
         }
 
         loadDemoData();
 
 
- function initScrollReveal() {
-    const revealEls = document.querySelectorAll(".reveal-left");
+        function initScrollReveal() {
+            const revealEls = document.querySelectorAll(".reveal-left");
 
-    // Respect users who prefer reduced motion
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
-        revealEls.forEach(el => el.classList.add("is-visible"));
-        return;
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("is-visible");
-            } else {
-                entry.target.classList.remove("is-visible");
+            const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (prefersReducedMotion) {
+                revealEls.forEach(el => el.classList.add("is-visible"));
+                return;
             }
-        });
-    }, {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px"
-    });
 
-    revealEls.forEach(el => observer.observe(el));
-}
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                    } else {
+                        entry.target.classList.remove("is-visible");
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            });
 
-initScrollReveal();
+            revealEls.forEach(el => observer.observe(el));
+        }
+
+        initScrollReveal();
 
     </script>
-
 }

@@ -453,6 +453,66 @@
         color: var(--amber);
     }
 
+
+
+
+
+
+.home-chart-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 32px;
+}
+
+    .home-chart-card h3 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+    }
+
+.home-chart-layout {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.home-chart-container {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    flex-shrink: 0;
+}
+
+.home-chart-legend {
+    flex: 1;
+    min-width: 200px;
+}
+
+    .home-chart-legend .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 0;
+        font-size: 0.9rem;
+    }
+
+    .home-chart-legend .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    .home-chart-legend .no-chart-data {
+        color: #999;
+        font-style: italic;
+    }
+
+
 /* ---------- Responsive ----------
    Mobile-first, one shared breakpoint — same 768px point site.css
    uses for its html font-size bump / dashboard.css uses throughout. */
