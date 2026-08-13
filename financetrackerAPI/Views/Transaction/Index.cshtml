@@ -7,19 +7,15 @@
     <div class="transaction-header">
         <div>
             <h1 class="transaction-title">
-                <i class="bi bi-receipt"></i>
-                Transactions
+                <i class="bi bi-receipt"></i> Transactions
             </h1>
             <p class="transaction-description">
                 View and manage your transactions.
             </p>
         </div>
 
-        <button type="button"
-                class="transaction-add-btn"
-                onclick="showCreatePanel()">
-            <i class="bi bi-plus-lg"></i>
-            Add Transaction
+        <button type="button" class="transaction-add-btn" onclick="showCreatePanel()">
+            <i class="bi bi-plus-lg"></i> Add Transaction
         </button>
     </div>
 
@@ -28,48 +24,33 @@
         <main class="transaction-main">
             <div id="transactionGrid" class="transaction-grid"></div>
 
-            <div id="transactionEmpty"
-                 class="transaction-empty"
-                 style="display:none;">
+            <div id="transactionEmpty" class="transaction-empty" style="display:none;">
                 <div class="transaction-empty-icon">
                     <i class="bi bi-receipt"></i>
                 </div>
                 <h3>No transactions yet</h3>
                 <p>Add your first transaction to start tracking your money.</p>
-
-                <button type="button"
-                        class="transaction-add-btn"
-                        onclick="showCreatePanel()">
-                    <i class="bi bi-plus-lg"></i>
-                    Add Transaction
+                <button type="button" class="transaction-add-btn" onclick="showCreatePanel()">
+                    <i class="bi bi-plus-lg"></i> Add Transaction
                 </button>
             </div>
 
-            <div id="transactionError"
-                 class="transaction-error"
-                 style="display:none;">
+            <div id="transactionError" class="transaction-error" style="display:none;">
                 Unable to load transactions.
             </div>
         </main>
 
         <aside id="transactionPanel" class="transaction-panel">
-
             <div class="transaction-panel-header">
                 <div>
                     <h2 id="panelTitle">Transaction</h2>
                     <p>Manage this transaction</p>
                 </div>
-
-                <button type="button"
-                        class="transaction-panel-close"
-                        onclick="closePanel()">
+                <button type="button" class="transaction-panel-close" onclick="closePanel()">
                     <i class="bi bi-x-lg"></i>
                 </button>
             </div>
-
-            <div id="panelContent"
-                 class="transaction-panel-content"></div>
-
+            <div id="panelContent" class="transaction-panel-content"></div>
         </aside>
 
     </div>
@@ -78,6 +59,8 @@
 @section Scripts {
     <script>
         const token = localStorage.getItem("token");
+        const headers = { Authorization: "Bearer " + token };
+
         const grid = document.getElementById("transactionGrid");
         const empty = document.getElementById("transactionEmpty");
         const errorBox = document.getElementById("transactionError");
@@ -106,10 +89,7 @@
 
         async function loadTransactions() {
             try {
-                const response = await fetch("/api/Transactions", {
-                    headers: { Authorization: "Bearer " + token }
-                });
-
+                const response = await fetch("/api/Transactions", { headers });
                 if (!response.ok) throw new Error();
 
                 const transactions = await response.json();
@@ -123,66 +103,56 @@
                 empty.style.display = "none";
 
                 grid.innerHTML = transactions.map(t => {
-                    const type = t.type || "Expense";
-                    const income = type.toLowerCase() === "income";
-                    const category = t.categoryName || "No Category";
-                    const note = t.notes?.trim() || "N/A";
-                    const date = t.date
-                        ? new Date(t.date).toLocaleDateString()
-                        : "Unknown";
+                    const income = t.type === "Income";
+                    const amount = `${income ? "+" : "-"}$${Number(t.amount || 0).toFixed(2)}`;
+                    const date = t.date ? new Date(t.date).toLocaleDateString() : "Unknown";
 
                     return `
                         <article class="transaction-card">
-
                             <div class="transaction-card-body">
 
                                 <div class="transaction-card-icon">
                                     <i class="bi bi-receipt"></i>
                                 </div>
 
-                                <h2>${escapeHtml(category)}</h2>
+                                <h2>${escapeHtml(t.categoryName || "No Category")}</h2>
 
-                                <div class="transaction-amount">
-                                    <span>${escapeHtml(type)}</span>
-                                    <strong class="${income ? "income" : "expense"}">
-                                        ${income ? "+" : "-"}$${Number(t.amount).toFixed(2)}
+                                <div class="transaction-type-amount">
+                                    <span class="transaction-type ${income ? "income" : "expense"}">
+                                        ${income ? "Income" : "Expense"}
+                                    </span>
+                                    <strong class="transaction-amount ${income ? "transaction-income" : "transaction-expense"}">
+                                        ${amount}
                                     </strong>
                                 </div>
 
-                                <div class="transaction-info">
-                                    <span>
-                                        <i class="bi bi-calendar3"></i>
-                                        ${date}
-                                    </span>
+                                <div class="transaction-date">
+                                    <i class="bi bi-calendar3"></i>
+                                    ${date}
                                 </div>
 
                                 <div class="transaction-note">
-                                    <span>Notes</span>
-                                    <p>${escapeHtml(note)}</p>
+                                    <i class="bi bi-sticky"></i>
+                                    <span>${escapeHtml(t.notes?.trim() || "N/A")}</span>
                                 </div>
 
                             </div>
 
                             <div class="transaction-card-actions">
-
-                                <button class="transaction-card-btn transaction-view-btn"
+                                <button type="button" class="transaction-card-btn transaction-view-btn"
                                         onclick="showDetails(${t.transactionsID})">
-                                    <i class="bi bi-eye"></i>
-                                    View Details
+                                    <i class="bi bi-eye"></i> View Details
                                 </button>
 
-                                <button class="transaction-card-btn transaction-edit-btn"
+                                <button type="button" class="transaction-card-btn transaction-edit-btn"
                                         onclick="showEditPanel(${t.transactionsID})">
-                                    <i class="bi bi-pencil"></i>
-                                    Edit
+                                    <i class="bi bi-pencil"></i> Edit
                                 </button>
 
-                                <button class="transaction-card-btn transaction-delete-btn"
+                                <button type="button" class="transaction-card-btn transaction-delete-btn"
                                         onclick="showDeletePanel(${t.transactionsID})">
-                                    <i class="bi bi-trash"></i>
-                                    Delete
+                                    <i class="bi bi-trash"></i> Delete
                                 </button>
-
                             </div>
                         </article>
                     `;
@@ -194,10 +164,7 @@
         }
 
         async function loadCategories(selected = "") {
-            const response = await fetch("/api/Category", {
-                headers: { Authorization: "Bearer " + token }
-            });
-
+            const response = await fetch("/api/Category", { headers });
             if (!response.ok) return "";
 
             const categories = await response.json();
@@ -213,25 +180,19 @@
             `;
         }
 
-        function showCreatePanel() {
+        function showCreatePanel(type = "Expense") {
             openPanel("Add Transaction", `
                 <form id="createTransactionForm">
 
                     <div class="transaction-form-group">
                         <label>Amount</label>
-                        <input id="createAmount"
-                               type="number"
-                               min="0.01"
-                               step="0.01"
-                               class="transaction-input"
-                               required>
+                        <input id="createAmount" type="number" min="0.01" step="0.01"
+                               class="transaction-input" required>
                     </div>
 
                     <div class="transaction-form-group">
                         <label>Category</label>
-                        <select id="createCategory"
-                                class="transaction-input"
-                                required>
+                        <select id="createCategory" class="transaction-input" required>
                             <option>Loading...</option>
                         </select>
                     </div>
@@ -239,38 +200,27 @@
                     <div class="transaction-form-group">
                         <label>Type</label>
                         <select id="createType" class="transaction-input">
-                            <option value="Expense">Expense</option>
-                            <option value="Income">Income</option>
+                            <option value="Expense" ${type === "Expense" ? "selected" : ""}>Expense</option>
+                            <option value="Income" ${type === "Income" ? "selected" : ""}>Income</option>
                         </select>
                     </div>
 
                     <div class="transaction-form-group">
                         <label>Date</label>
-                        <input id="createDate"
-                               type="date"
-                               class="transaction-input">
+                        <input id="createDate" type="date" class="transaction-input">
                     </div>
 
                     <div class="transaction-form-group">
-                        <label>
-                            Notes
-                            <span class="transaction-optional">Optional</span>
-                        </label>
-
-                        <textarea id="createNotes"
-                                  class="transaction-input transaction-textarea"
+                        <label>Notes <span class="transaction-optional">Optional</span></label>
+                        <textarea id="createNotes" class="transaction-input transaction-textarea"
                                   placeholder="Add a note if you want..."></textarea>
                     </div>
 
-                    <div id="createError"
-                         class="transaction-panel-error"
-                         style="display:none;"></div>
+                    <div id="createError" class="transaction-panel-error" style="display:none;"></div>
 
                     <button class="transaction-panel-primary">
-                        <i class="bi bi-check-circle"></i>
-                        Save Transaction
+                        <i class="bi bi-check-circle"></i> Save Transaction
                     </button>
-
                 </form>
             `);
 
@@ -287,13 +237,15 @@
 
             const error = document.getElementById("createError");
 
-            const amount = Number(document.getElementById("createAmount").value);
-            const categoryID = Number(document.getElementById("createCategory").value);
-            const type = document.getElementById("createType").value;
-            const date = document.getElementById("createDate").value;
-            const notes = document.getElementById("createNotes").value.trim();
+            const data = {
+                amount: Number(document.getElementById("createAmount").value),
+                categoryID: Number(document.getElementById("createCategory").value),
+                type: document.getElementById("createType").value,
+                date: document.getElementById("createDate").value,
+                notes: document.getElementById("createNotes").value.trim() || null
+            };
 
-            if (!amount || amount <= 0 || !categoryID) {
+            if (data.amount <= 0 || !data.categoryID) {
                 error.textContent = "Enter a valid amount and category.";
                 error.style.display = "block";
                 return;
@@ -302,17 +254,8 @@
             try {
                 const response = await fetch("/api/Transactions", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: "Bearer " + token
-                    },
-                    body: JSON.stringify({
-                        amount,
-                        categoryID,
-                        type,
-                        date,
-                        notes: notes || null
-                    })
+                    headers: { ...headers, "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
                 });
 
                 if (!response.ok) throw new Error();
@@ -328,13 +271,11 @@
 
         async function showDetails(id) {
             try {
-                const response = await fetch(`/api/Transactions/${id}`, {
-                    headers: { Authorization: "Bearer " + token }
-                });
-
+                const response = await fetch(`/api/Transactions/${id}`, { headers });
                 if (!response.ok) throw new Error();
 
                 const t = await response.json();
+                const income = t.type === "Income";
 
                 openPanel("Transaction Details", `
                     <div class="transaction-detail">
@@ -344,25 +285,27 @@
                         </div>
 
                         <div class="transaction-detail-block">
-                            <span>Amount</span>
-                            <strong>$${Number(t.amount).toFixed(2)}</strong>
-                        </div>
-
-                        <div class="transaction-detail-block">
                             <span>Category</span>
                             <strong>${escapeHtml(t.categoryName || "No Category")}</strong>
                         </div>
 
                         <div class="transaction-detail-block">
                             <span>Type</span>
-                            <strong>${escapeHtml(t.type || "N/A")}</strong>
+                            <strong class="${income ? "transaction-income" : "transaction-expense"}">
+                                ${escapeHtml(t.type || "Expense")}
+                            </strong>
+                        </div>
+
+                        <div class="transaction-detail-block">
+                            <span>Amount</span>
+                            <strong class="${income ? "transaction-income" : "transaction-expense"}">
+                                ${income ? "+" : "-"}$${Number(t.amount || 0).toFixed(2)}
+                            </strong>
                         </div>
 
                         <div class="transaction-detail-block">
                             <span>Date</span>
-                            <strong>
-                                ${t.date ? new Date(t.date).toLocaleDateString() : "N/A"}
-                            </strong>
+                            <strong>${t.date ? new Date(t.date).toLocaleDateString() : "N/A"}</strong>
                         </div>
 
                         <div class="transaction-detail-block">
@@ -376,20 +319,13 @@
                 `);
 
             } catch {
-                openPanel("Transaction Details", `
-                    <div class="transaction-panel-error">
-                        Unable to load transaction.
-                    </div>
-                `);
+                showPanelError("Transaction Details", "Unable to load transaction.");
             }
         }
 
         async function showEditPanel(id) {
             try {
-                const response = await fetch(`/api/Transactions/${id}`, {
-                    headers: { Authorization: "Bearer " + token }
-                });
-
+                const response = await fetch(`/api/Transactions/${id}`, { headers });
                 if (!response.ok) throw new Error();
 
                 const t = await response.json();
@@ -400,20 +336,13 @@
 
                         <div class="transaction-form-group">
                             <label>Amount</label>
-                            <input id="editAmount"
-                                   type="number"
-                                   min="0.01"
-                                   step="0.01"
-                                   class="transaction-input"
-                                   value="${t.amount}"
-                                   required>
+                            <input id="editAmount" type="number" min="0.01" step="0.01"
+                                   class="transaction-input" value="${t.amount}" required>
                         </div>
 
                         <div class="transaction-form-group">
                             <label>Category</label>
-                            <select id="editCategory"
-                                    class="transaction-input"
-                                    required>
+                            <select id="editCategory" class="transaction-input" required>
                                 ${categories}
                             </select>
                         </div>
@@ -421,41 +350,26 @@
                         <div class="transaction-form-group">
                             <label>Type</label>
                             <select id="editType" class="transaction-input">
-                                <option value="Expense" ${t.type === "Expense" ? "selected" : ""}>
-                                    Expense
-                                </option>
-                                <option value="Income" ${t.type === "Income" ? "selected" : ""}>
-                                    Income
-                                </option>
+                                <option value="Expense" ${t.type === "Expense" ? "selected" : ""}>Expense</option>
+                                <option value="Income" ${t.type === "Income" ? "selected" : ""}>Income</option>
                             </select>
                         </div>
 
                         <div class="transaction-form-group">
                             <label>Date</label>
-                            <input id="editDate"
-                                   type="date"
-                                   class="transaction-input"
+                            <input id="editDate" type="date" class="transaction-input"
                                    value="${t.date ? t.date.substring(0, 10) : ""}">
                         </div>
 
                         <div class="transaction-form-group">
-                            <label>
-                                Notes
-                                <span class="transaction-optional">Optional</span>
-                            </label>
-
-                            <textarea id="editNotes"
-                                      class="transaction-input transaction-textarea"
-                                      placeholder="Add a note if you want...">${escapeHtml(t.notes || "")}</textarea>
+                            <label>Notes <span class="transaction-optional">Optional</span></label>
+                            <textarea id="editNotes" class="transaction-input transaction-textarea">${escapeHtml(t.notes || "")}</textarea>
                         </div>
 
-                        <div id="editError"
-                             class="transaction-panel-error"
-                             style="display:none;"></div>
+                        <div id="editError" class="transaction-panel-error" style="display:none;"></div>
 
                         <button class="transaction-panel-primary">
-                            <i class="bi bi-save"></i>
-                            Update Transaction
+                            <i class="bi bi-save"></i> Update Transaction
                         </button>
 
                     </form>
@@ -465,11 +379,7 @@
                     .addEventListener("submit", e => updateTransaction(e, id));
 
             } catch {
-                openPanel("Edit Transaction", `
-                    <div class="transaction-panel-error">
-                        Unable to load transaction.
-                    </div>
-                `);
+                showPanelError("Edit Transaction", "Unable to load transaction.");
             }
         }
 
@@ -478,26 +388,19 @@
 
             const error = document.getElementById("editError");
 
-            const amount = Number(document.getElementById("editAmount").value);
-            const categoryID = Number(document.getElementById("editCategory").value);
-            const type = document.getElementById("editType").value;
-            const date = document.getElementById("editDate").value;
-            const notes = document.getElementById("editNotes").value.trim();
+            const data = {
+                amount: Number(document.getElementById("editAmount").value),
+                categoryID: Number(document.getElementById("editCategory").value),
+                type: document.getElementById("editType").value,
+                date: document.getElementById("editDate").value,
+                notes: document.getElementById("editNotes").value.trim() || null
+            };
 
             try {
                 const response = await fetch(`/api/Transactions/${id}`, {
                     method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: "Bearer " + token
-                    },
-                    body: JSON.stringify({
-                        amount,
-                        categoryID,
-                        type,
-                        date,
-                        notes: notes || null
-                    })
+                    headers: { ...headers, "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
                 });
 
                 if (!response.ok) throw new Error();
@@ -520,27 +423,18 @@
                     </div>
 
                     <h3>Delete Transaction?</h3>
-
-                    <p>
-                        Are you sure you want to delete this transaction?
-                    </p>
+                    <p>Are you sure you want to delete this transaction?</p>
 
                     <div class="transaction-delete-actions">
-
-                        <button type="button"
-                                class="transaction-panel-cancel"
-                                onclick="closePanel()">
+                        <button type="button" class="transaction-panel-cancel" onclick="closePanel()">
                             Cancel
                         </button>
 
-                        <button type="button"
-                                class="transaction-panel-danger"
-                                onclick="deleteTransaction(${id})">
-                            <i class="bi bi-trash"></i>
-                            Delete
+                        <button type="button" class="transaction-panel-danger" onclick="deleteTransaction(${id})">
+                            <i class="bi bi-trash"></i> Delete
                         </button>
-
                     </div>
+
                 </div>
             `);
         }
@@ -549,7 +443,7 @@
             try {
                 const response = await fetch(`/api/Transactions/${id}`, {
                     method: "DELETE",
-                    headers: { Authorization: "Bearer " + token }
+                    headers
                 });
 
                 if (!response.ok) throw new Error();
@@ -558,14 +452,22 @@
                 loadTransactions();
 
             } catch {
-                openPanel("Delete Transaction", `
-                    <div class="transaction-panel-error">
-                        Unable to delete transaction.
-                    </div>
-                `);
+                showPanelError("Delete Transaction", "Unable to delete transaction.");
             }
         }
 
+        function showPanelError(title, message) {
+            openPanel(title, `<div class="transaction-panel-error">${message}</div>`);
+        }
+
         loadTransactions();
+
+        const requestedType = new URLSearchParams(location.search).get("type");
+
+        if (requestedType === "Income" || requestedType === "Expense") {
+            showCreatePanel(requestedType);
+        }
     </script>
+
+    <script src="~/js/authGuard.js"></script>
 }

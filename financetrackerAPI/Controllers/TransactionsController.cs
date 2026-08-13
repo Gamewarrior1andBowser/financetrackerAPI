@@ -22,12 +22,11 @@ public class TransactionsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(Transaction transaction)
     {
-        var userID = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id")!.Value);
 
-        var categoryExists = await _context.Categories
-            .AnyAsync(c =>
-                c.categoryID == transaction.categoryID &&
-                c.userID == userID);
+        var categoryExists = await _context.Categories.AnyAsync(c =>
+            c.categoryID == transaction.categoryID &&
+            c.userID == userID);
 
         if (!categoryExists)
             return BadRequest("Invalid category");
@@ -41,35 +40,36 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var userID = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id")!.Value);
 
-        var transactions = _context.Transactions
+        var transactions = await _context.Transactions
             .Include(t => t.Category)
             .Where(t => t.userID == userID)
             .Select(t => new
             {
                 t.transactionsID,
                 t.amount,
-                t.date,
                 t.categoryID,
+                t.type,
+                t.date,
                 t.notes,
                 CategoryName = t.Category != null
                     ? t.Category.name
                     : "No Category"
             })
-            .ToList();
+            .ToListAsync();
 
         return Ok(transactions);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var userID = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id")!.Value);
 
-        var transaction = _context.Transactions
+        var transaction = await _context.Transactions
             .Include(t => t.Category)
             .Where(t =>
                 t.transactionsID == id &&
@@ -78,14 +78,15 @@ public class TransactionsController : ControllerBase
             {
                 t.transactionsID,
                 t.amount,
-                t.date,
                 t.categoryID,
+                t.type,
+                t.date,
                 t.notes,
                 CategoryName = t.Category != null
                     ? t.Category.name
                     : "No Category"
             })
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
 
         if (transaction == null)
             return NotFound("Transaction not found");
@@ -98,7 +99,7 @@ public class TransactionsController : ControllerBase
         int id,
         Transaction updatedTransaction)
     {
-        var userID = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id")!.Value);
 
         var transaction = await _context.Transactions
             .FirstOrDefaultAsync(t =>
@@ -110,6 +111,7 @@ public class TransactionsController : ControllerBase
 
         transaction.amount = updatedTransaction.amount;
         transaction.categoryID = updatedTransaction.categoryID;
+        transaction.type = updatedTransaction.type;
         transaction.date = updatedTransaction.date;
         transaction.notes = updatedTransaction.notes;
 
@@ -121,7 +123,7 @@ public class TransactionsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var userID = int.Parse(User.FindFirst("id").Value);
+        var userID = int.Parse(User.FindFirst("id")!.Value);
 
         var transaction = await _context.Transactions
             .FirstOrDefaultAsync(t =>
@@ -132,7 +134,6 @@ public class TransactionsController : ControllerBase
             return NotFound("Transaction not found");
 
         _context.Transactions.Remove(transaction);
-
         await _context.SaveChangesAsync();
 
         return Ok("Transaction deleted");

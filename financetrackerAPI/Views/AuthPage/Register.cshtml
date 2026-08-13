@@ -5,60 +5,38 @@
 <div class="row justify-content-center auth-page mt-5" id="RegisterCard">
 
     <div class="col-md-5">
-
         <div class="card shadow border-0 p-4">
 
             <div class="text-center mb-4">
-
                 <h2 class="fw-bold">
                     <i class="bi bi-person-plus-fill me-2"></i>
                     Create Account
                 </h2>
-
-                <p class="text-muted">
-                    Register to start managing your finances
-                </p>
-
+                <p class="text-muted">Register to start managing your finances</p>
             </div>
 
             <div class="mb-3">
-
                 <label class="form-label">
-                    <i class="bi bi-user-fill me-2"></i>
-                    Username
+                    <i class="bi bi-user-fill me-2"></i> Username
                 </label>
-
-                <input id="username"
-                       type="text"
-                       class="form-control"
+                <input id="username" type="text" class="form-control"
                        placeholder="Enter your name" />
-
             </div>
 
             <div class="mb-3">
-
                 <label class="form-label">
-                    <i class="bi bi-envelope-fill me-2"></i>
-                    Email
+                    <i class="bi bi-envelope-fill me-2"></i> Email
                 </label>
-
-                <input id="email"
-                       type="email"
-                       class="form-control"
+                <input id="email" type="email" class="form-control"
                        placeholder="Enter your email" />
-
             </div>
 
-            <div class="mb-3 position-relative">
-
+            <div class="mb-3">
                 <label class="form-label">
-                    <i class="bi bi-lock-fill me-2"></i>
-                    Password
+                    <i class="bi bi-lock-fill me-2"></i> Password
                 </label>
 
-                <input id="password"
-                       type="password"
-                       class="form-control"
+                <input id="password" type="password" class="form-control"
                        placeholder="Create your password"
                        oninput="checkPasswordStrength(); checkPasswordMatch();" />
 
@@ -70,19 +48,14 @@
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
                     Please choose a stronger password. Try a mix of letters, numbers, and symbols.
                 </div>
-
             </div>
 
-            <div class="mb-4 position-relative">
-
+            <div class="mb-4">
                 <label class="form-label">
-                    <i class="bi bi-lock-fill me-2"></i>
-                    Confirm Password
+                    <i class="bi bi-lock-fill me-2"></i> Confirm Password
                 </label>
 
-                <input id="confirmPassword"
-                       type="password"
-                       class="form-control"
+                <input id="confirmPassword" type="password" class="form-control"
                        placeholder="Re-enter your password"
                        oninput="checkPasswordMatch()" />
 
@@ -90,95 +63,76 @@
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
                     Passwords do not match
                 </div>
-
             </div>
 
-            <button class="btn btn-primary w-100"
-                    onclick="register()">
-
+            <button class="btn btn-primary w-100" onclick="register()">
                 <i class="bi bi-person-check-fill me-2"></i>
                 Register
-
             </button>
 
             <hr class="my-4">
 
             <div class="d-flex justify-content-center align-items-center gap-4">
-
                 <span>
                     Already have an account?
-                    <a asp-controller="AuthPage"
-                       asp-action="Login">
-
+                    <a asp-controller="AuthPage" asp-action="Login">
                         <i class="bi bi-box-arrow-in-right"></i>
                         Login here
-
                     </a>
                 </span>
 
-                <a asp-controller="Home"
-                   asp-action="Index">
-
+                <a asp-controller="Home" asp-action="Index">
                     <i class="bi bi-arrow-left-circle"></i>
                     Back to Home
-
                 </a>
-
             </div>
 
         </div>
-
     </div>
-
 </div>
 
 @section Scripts {
     <script>
-        // Returns true if the password fails our strength rules:
-        // - must be at least 8 characters
-        // - must not consist of a single character repeated throughout
         function isWeakPassword(password) {
             if (password.length < 8) {
                 return true;
             }
 
-            const allSameChar = password.split("").every(ch => ch === password[0]);
-            if (allSameChar) {
-                return true;
+            let same = true;
+
+            for (let i = 1; i < password.length; i++) {
+                if (password[i] !== password[0]) {
+                    same = false;
+                    break;
+                }
             }
 
-            return false;
+            return same;
         }
 
-        // Anchored strictly under #password: toggles between the persistent
-        // hint text and the strength error message as the user types.
         function checkPasswordStrength() {
             const password = document.getElementById("password").value;
-            const defaultHint = document.getElementById("passwordHint");
-            const strengthError = document.getElementById("passwordStrengthError");
+            const hint = document.getElementById("passwordHint");
+            const error = document.getElementById("passwordStrengthError");
 
             if (password.length === 0) {
-                defaultHint.classList.remove("d-none");
-                strengthError.classList.add("d-none");
-                return;
-            }
-
-            if (isWeakPassword(password)) {
-                defaultHint.classList.add("d-none");
-                strengthError.classList.remove("d-none");
+                hint.classList.remove("d-none");
+                error.classList.add("d-none");
+            } else if (isWeakPassword(password)) {
+                hint.classList.add("d-none");
+                error.classList.remove("d-none");
             } else {
-                defaultHint.classList.remove("d-none");
-                strengthError.classList.add("d-none");
+                hint.classList.remove("d-none");
+                error.classList.add("d-none");
             }
         }
 
-        // Anchored strictly under #confirmPassword: unchanged mismatch popup logic.
         function checkPasswordMatch() {
             const password = document.getElementById("password").value;
             const confirmPassword = document.getElementById("confirmPassword").value;
             const popup = document.getElementById("passwordMismatch");
 
-            if (confirmPassword.length > 0 && password !== confirmPassword) {
+            if (confirmPassword && password !== confirmPassword) {
                 popup.classList.add("show");
             } else {
                 popup.classList.remove("show");
@@ -186,8 +140,8 @@
         }
 
         async function register() {
-            const email = document.getElementById("email").value;
             const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             const confirmPassword = document.getElementById("confirmPassword").value;
 
@@ -207,11 +161,10 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-
                 body: JSON.stringify({
-                    email,
-                    username,
-                    password
+                    email: email,
+                    username: username,
+                    password: password
                 })
             });
 
