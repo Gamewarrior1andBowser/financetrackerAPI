@@ -4,10 +4,11 @@
 
 <div class="home-page">
 
-    <!-- HERO -->
     <section class="home-hero">
         <div class="home-hero-text">
-            <span class="home-badge"><i class="bi bi-stars"></i> Built for everyday budgets</span>
+            <span class="home-badge">
+                <i class="bi bi-stars"></i> Built for everyday budgets
+            </span>
 
             <h1>Know exactly where your money goes.</h1>
 
@@ -18,10 +19,13 @@
             </p>
 
             <div class="home-hero-actions">
-                <a asp-controller="AuthPage" asp-action="Register" class="home-btn home-btn-primary">
-                    <i class="bi bi-rocket-takeoff-fill me-2"></i>Get Started Free
+                <a asp-controller="AuthPage" asp-action="Register"
+                   class="home-btn home-btn-primary">
+                    <i class="bi bi-rocket-takeoff-fill me-2"></i> Get Started Free
                 </a>
-                <a asp-controller="AuthPage" asp-action="Login" class="home-btn home-btn-ghost">
+
+                <a asp-controller="AuthPage" asp-action="Login"
+                   class="home-btn home-btn-ghost">
                     Sign In
                 </a>
             </div>
@@ -33,6 +37,7 @@
                 No spreadsheets, no guesswork — just a running total of what's
                 coming in, what's going out, and what's left over.
             </p>
+
             <ul class="home-hero-points">
                 <li><i class="bi bi-check-circle-fill"></i> Every transaction in one place</li>
                 <li><i class="bi bi-check-circle-fill"></i> Budgets that warn you before you overspend</li>
@@ -41,29 +46,34 @@
         </div>
     </section>
 
-    <!-- FEATURES -->
     <section class="home-feature-grid">
 
         <a asp-controller="AuthPage" asp-action="Register">
             <div class="home-feature-card">
-                <div class="home-feature-icon purple"><i class="bi bi-cash-stack"></i></div>
-                <h4>Log It in Seconds</h4>
+                <div class="home-feature-icon purple">
+                    <i class="bi bi-receipt me-2"></i>
+                </div>
+                <h4>Track Transactions</h4>
                 <p>Add income and expenses as they happen, so nothing slips through the cracks.</p>
             </div>
         </a>
 
         <a asp-controller="AuthPage" asp-action="Register">
             <div class="home-feature-card">
-                <div class="home-feature-icon amber"><i class="bi bi-tags-fill"></i></div>
-                <h4>Sort by Category</h4>
+                <div class="home-feature-icon amber">
+                    <i class="bi bi-tags-fill"></i>
+                </div>
+                <h4>Sort Category</h4>
                 <p>Group spending into categories that actually mean something to you.</p>
             </div>
         </a>
 
         <a asp-controller="AuthPage" asp-action="Register">
             <div class="home-feature-card">
-                <div class="home-feature-icon blue"><i class="bi bi-bar-chart-fill"></i></div>
-                <h4>See the Bigger Picture</h4>
+                <div class="home-feature-icon blue">
+                    <i class="bi bi-bar-chart-fill"></i>
+                </div>
+                <h4>Finanace Reports</h4>
                 <p>Reports and trends make it easy to spot habits before they become problems.</p>
             </div>
         </a>
@@ -138,7 +148,6 @@
         let demoCategoryChartInstance = null;
 
         async function loadDemoData() {
-
             const response = await fetch("/data/demo-data.json");
             const data = await response.json();
 
@@ -152,7 +161,11 @@
                 rows += `
                             <tr>
                                 <td>${transaction.category}</td>
-                                <td><span class="home-type-pill ${transaction.type.toLowerCase()}">${transaction.type}</span></td>
+                                <td>
+                                    <span class="home-type-pill ${transaction.type.toLowerCase()}">
+                                        ${transaction.type}
+                                    </span>
+                                </td>
                                 <td>$${transaction.amount}</td>
                                 <td>${transaction.date}</td>
                             </tr>
