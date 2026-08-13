@@ -2,307 +2,198 @@
     ViewData["Title"] = "Create Transaction";
 }
 
-<div class="container">
+<div class="transaction-page">
 
-
-    <div class="row justify-content-center">
-
-
-        <div class="col-md-6">
-            <div class="card shadow p-4">
-
-
-            <div class="card shadow border-0 p-4">
-
-
-                <h2 class="mb-4 fw-bold">
-
-                    <i class="bi bi-plus-circle-fill me-2"></i>
-                    Add Transaction
-                </h2>
-
+    <div class="transaction-header">
+        <div>
+            <h1 class="transaction-title">
+                <i class="bi bi-receipt me-2"></i>
+                Add Transaction
+            </h1>
+            <p class="transaction-description">
+                Add a new transaction to your account.
+            </p>
+        </div>
     </div>
 
-    <div class="transaction-card transaction-form-card">
+    <div class="transaction-content">
+        <div class="transaction-form-card">
 
+            <form id="createTransactionForm">
 
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Amount
-                    </label>
-
-                <label>Amount</label>
-
+                <div class="transaction-form-group">
+                    <label for="amount">Amount</label>
                     <input id="amount"
                            type="number"
+                           min="0.01"
                            step="0.01"
-                           class="form-control"
-                           placeholder="Enter amount" />
-
+                           class="transaction-input"
+                           placeholder="Enter amount"
+                           required>
                 </div>
 
-            <div class="transaction-form-group">
-
-                <label>Category</label>
-
-
-
-
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Category
-                    </label>
-
-
+                <div class="transaction-form-group">
+                    <label for="categoryID">Category</label>
                     <select id="categoryID"
-                            class="form-select">
-
-                        <option>
-                            Loading categories...
-                        </option>
-
+                            class="transaction-input"
+                            required>
+                        <option value="">Loading categories...</option>
                     </select>
-
-
                 </div>
 
-            <div class="transaction-form-group">
+                <div class="transaction-form-group">
+                    <label for="type">Type</label>
+                    <select id="type" class="transaction-input">
+                        <option value="Expense">Expense</option>
+                        <option value="Income">Income</option>
+                    </select>
+                </div>
 
-                <label>Type</label>
+                <div class="transaction-form-group">
+                    <label for="date">Date</label>
+                    <input id="date"
+                           type="date"
+                           class="transaction-input"
+                           required>
+                </div>
 
-
-
-
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Type
+                <div class="transaction-form-group">
+                    <label for="notes">
+                        Notes
+                        <span class="transaction-optional">Optional</span>
                     </label>
-
-
-                    <select id="type"
-                            class="form-select">
-
-
-                        <option value="Expense">
-                            Expense
-                        </option>
-
-
-                        <option value="Income">
-                            Income
-                        </option>
-
-
-                    </select>
-
-
+                    <textarea id="notes"
+                              class="transaction-input transaction-textarea"
+                              placeholder="Add a note if you want..."></textarea>
                 </div>
 
-            <div class="transaction-form-group">
-
-                <label>Date</label>
-
-
-
-
-
-                <div class="mb-4">
-                    <label class="form-label">Date</label>
-                    <input id="date" type="date" class="form-control" />
+                <div id="createError"
+                     class="transaction-panel-error"
+                     style="display:none;">
                 </div>
 
-                <div id="budgetPopup" class="alert alert-danger" style="display:none;"></div>
-
-                <label>
-                    Notes
-                    <span class="transaction-optional">
-                        Optional
-                    </span>
-                </label>
-
-                <textarea id="notes"
-                          class="transaction-input transaction-textarea"
-                          placeholder="Add a note if you want..."></textarea>
-
-
-                <div class="d-flex gap-2">
-
-
-                    <button class="btn btn-success"
-                            onclick="createTransaction()">
-
-
-                        <i class="bi bi-check-circle me-1"></i>
-                        Save
-
-
+                <div class="transaction-form-actions">
+                    <button type="submit"
+                            class="transaction-panel-primary">
+                        <i class="bi bi-check-circle"></i>
+                        Save Transaction
                     </button>
-
-
-
 
                     <a asp-controller="TransactionPage"
                        asp-action="Index"
-                       class="btn btn-secondary">
-
-
-                        <i class="bi bi-arrow-left-circle me-1"></i>
+                       class="transaction-panel-cancel">
+                        <i class="bi bi-arrow-left"></i>
                         Back
-
-
                     </a>
                 </div>
 
-
-
-            </div>
+            </form>
 
         </div>
+    </div>
 
 </div>
-
-
-</div>
-
-
-
-
-
-
 
 @section Scripts {
-<script>
+    <script>
+        const token = localStorage.getItem("token");
 
-const token = localStorage.getItem("token");
-        loadCategories();
+        document.getElementById("date").value =
+            new Date().toISOString().substring(0, 10);
+
         async function loadCategories() {
-            const response = await fetch("/api/Category",
-                {
-                    headers:
-                    {
-                        "Authorization": "Bearer " + token
-                    }
+            const response = await fetch("/api/Category", {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            });
+
+            const dropdown = document.getElementById("categoryID");
+
+            if (!response.ok) {
+                dropdown.innerHTML = `<option value="">Unable to load categories</option>`;
+                return;
+            }
+
+            const categories = await response.json();
+
+            if (!categories.length) {
+                dropdown.innerHTML = `<option value="">No categories available</option>`;
+                return;
+            }
+
+            dropdown.innerHTML =
+                `<option value="">Select a category</option>` +
+                categories.map(c =>
+                    `<option value="${c.categoryID}">${c.name}</option>`
+                ).join("");
+        }
+
+        document
+            .getElementById("createTransactionForm")
+            .addEventListener("submit", async e => {
+
+                e.preventDefault();
+
+                const error = document.getElementById("createError");
+
+                const amount = Number(
+                    document.getElementById("amount").value
+                );
+
+                const categoryID = Number(
+                    document.getElementById("categoryID").value
+                );
+
+                const type =
+                    document.getElementById("type").value;
+
+                const date =
+                    document.getElementById("date").value;
+
+                const notes =
+                    document.getElementById("notes").value.trim();
+
+                error.style.display = "none";
+
+                if (!amount || amount <= 0) {
+                    error.textContent = "Please enter a valid amount.";
+                    error.style.display = "block";
+                    return;
+                }
+
+                if (!categoryID) {
+                    error.textContent = "Please select a category.";
+                    error.style.display = "block";
+                    return;
+                }
+
+                const response = await fetch("/api/Transactions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token
+                    },
+                    body: JSON.stringify({
+                        amount,
+                        categoryID,
+                        type,
+                        date,
+                        notes: notes || null
+                    })
                 });
 
-        const categories = await response.json();
-        const dropdown = document.getElementById("categoryID");
+                if (response.ok) {
+                    window.location.href = "/TransactionPage";
+                    return;
+                }
 
-    if (categories.length === 0) {
-        dropdown.innerHTML = `<option value="">No categories available</option>`;
-        return;
-    }
-    if (!response.ok) {
+                error.textContent =
+                    await response.text() ||
+                    "Unable to create transaction.";
 
-        document.getElementById("categoryID").innerHTML =
-            "<option>No Categories</option>";
-
-        return;
-
-    }
-
-    let options = "";
-    categories.forEach(category => {
-                options += `
-                <option value="${category.categoryID}">
-                    ${category.name}
-                </option>
-                `;
+                error.style.display = "block";
             });
-    dropdown.innerHTML = options;
-}
-
-    function showError(message)
-    {
-
-        const box = document.getElementById("createError");
-
-        box.innerText = message;
-
-        box.style.display = "block";
-
-    }
-
-    function hideBudgetPopup() {
-        document.getElementById("budgetPopup").style.display = "none";
-    }
-
-    async function getBudgetStatus(categoryID, excludeTransactionID) {
-
-        const [budgetsRes, transactionsRes] = await Promise.all([
-            fetch("/api/Budget", { headers: { "Authorization": "Bearer " + token } }),
-            fetch("/api/Transactions", { headers: { "Authorization": "Bearer " + token } })
-        ]);
-
-        const budgets = budgetsRes.ok ? await budgetsRes.json() : [];
-        const transactions = transactionsRes.ok ? await transactionsRes.json() : [];
-
-        const budget = budgets.find(b => b.categoryID === categoryID);
-
-        const spent = transactions
-            .filter(t => t.categoryID === categoryID && t.transactionsID !== excludeTransactionID)
-            .reduce((sum, t) => sum + t.amount, 0);
-
-        if (!budget) {
-            return { hasBudget: false, limit: 0, spent: spent, remaining: null };
-        }
-    }
-
-
-async function createTransaction() {
-
-        hideBudgetPopup();
-
-        const categoryID = Number(document.getElementById("categoryID").value);
-        const amount = Number(document.getElementById("amount").value);
-
-        if (!categoryID) {
-            showBudgetPopup("Please create a category first.");
-            return;
-        }
-
-        if (!amount || amount <= 0) {
-            showBudgetPopup("Please enter an amount greater than 0.");
-            return;
-        }
-
-        const status = await getBudgetStatus(categoryID, null);
-
-        if (status.hasBudget && amount > status.remaining) {
-            showBudgetPopup(
-                "This transaction cannot go through because it would put this category over its budget. " +
-                "Please enter an amount less than or equal to $" + Math.max(status.remaining, 0).toFixed(2) + "."
-            );
-            return;
-        }
-
-        const transaction = {
-            amount: amount,
-            categoryID: categoryID,
-            date: document.getElementById("date").value
-        };
-
-        const response = await fetch("/api/Transactions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            },
-            body: JSON.stringify(transaction)
-        });
-
-        if (response.ok) {
-            window.location.href = "/TransactionPage";
-        } else {
-            const error = await response.text();
-            showBudgetPopup(error || "Unable to create transaction.");
-        }
-    }
 
         loadCategories();
     </script>
