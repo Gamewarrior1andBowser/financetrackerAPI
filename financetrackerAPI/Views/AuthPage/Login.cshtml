@@ -1,305 +1,88 @@
-﻿@* @{
+﻿@{
     ViewData["Title"] = "Login";
 }
-
-<div class="row justify-content-center" id="LoginCard">
-
-    <div class="col-md-5 ">
-
-        <div class="card shadow border-0 p-4">
-
-            <div class="text-center mb-4">
-
-                <h2 class="fw-bold">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>
-                    Welcome Back
-                </h2>
-
-                <p class="text-muted">
-                    Login to manage your finances
-                </p>
-
-            </div>
-
-            <div class="mb-3">
-
-                <label class="form-label">
-                    <i class="bi bi-envelope-fill me-2"></i>
-                    Email
-                </label>
-
-                <input id="email"
-                       type="email"
-                       class="form-control"
-                       placeholder="Enter your email" />
-
-            </div>
-
-            <div class="mb-4">
-
-                <label class="form-label">
-                    <i class="bi bi-lock-fill me-2"></i>
-                    Password
-                </label>
-
-                <input id="password"
-                       type="password"
-                       class="form-control"
-                       placeholder="Enter your password" />
-
-            </div>
-
-            <div id="loginError"
-                 class="alert alert-danger"
-                 style="display:none;">
-            </div>
-
-            <button class="btn btn-primary w-100"
-                    onclick="login()">
-
-                <i class="bi bi-box-arrow-in-right me-2"></i>
-                Login
-
-            </button>
-
-            <hr class="my-4">
-
-            <p class="text-center">
-
-                New user?
-
-                <a asp-controller="AuthPage"
-                   asp-action="Register">
-
-                    <i class="bi bi-person-plus-fill"></i>
-                    Register here
-
-                </a>
-
-            </p>
-
-            <p class="text-center">
-
-                <a asp-controller="Home"
-                   asp-action="Index">
-
-                    <i class="bi bi-arrow-left-circle"></i>
-                    Back to Home
-
-                </a>
-
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-@section Scripts {
-
-    <script>
-
-        async function login() {
-
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value;
-
-            const errorBox = document.getElementById("loginError");
-
-            errorBox.style.display = "none";
-
-            if (!email) {
-                errorBox.innerText = "Please enter your email.";
-                errorBox.style.display = "block";
-                return;
-            }
-
-            if (!password) {
-                errorBox.innerText = "Please enter your password.";
-                errorBox.style.display = "block";
-                return;
-            }
-
-            try {
-
-                const response = await fetch("/api/Auth/login", {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        usernameOrEmail: email,
-                        password: password
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-
-                    localStorage.setItem("token", data.token);
-
-                    window.location.href = "/Dashboard";
-
-                } else {
-
-                    errorBox.innerText =
-                        data || "Invalid username/email or password.";
-
-                    errorBox.style.display = "block";
-                }
-
-            } catch (error) {
-
-                errorBox.innerText =
-                    "Unable to connect to the server.";
-
-                errorBox.style.display = "block";
-            }
-        }
-
-    </script>
-
-    <script src="~/js/authGuard.js"></script>
-
-} *@
-
-
-
-@{
-    ViewData["Title"] = "Login";
-}
-
-
 
 <div class="row justify-content-center auth-page" id="LoginCard">
-
-    <div class="col-md-5 ">
-
+    <div class="col-md-5">
         <div class="card shadow border-0 p-4">
 
             <div class="text-center mb-4">
-
                 <h2 class="fw-bold">
                     <i class="bi bi-box-arrow-in-right me-2"></i>
                     Welcome Back
                 </h2>
-
-                <p class="text-muted">
-                    Login to manage your finances
-                </p>
-
+                <p class="text-muted">Login to manage your finances</p>
             </div>
 
             <div class="mb-3">
-
                 <label class="form-label">
-                    <i class="bi bi-envelope-fill me-2"></i>
-                    Email
+                    <i class="bi bi-envelope-fill me-2"></i> Email
                 </label>
-
-                <input id="email"
-                       type="email"
-                       class="form-control"
+                <input id="email" type="email" class="form-control"
                        placeholder="Enter your email" />
-
             </div>
 
             <div class="mb-4">
-
                 <label class="form-label">
-                    <i class="bi bi-lock-fill me-2"></i>
-                    Password
+                    <i class="bi bi-lock-fill me-2"></i> Password
                 </label>
-
-                <input id="password"
-                       type="password"
-                       class="form-control"
+                <input id="password" type="password" class="form-control"
                        placeholder="Enter your password" />
-
             </div>
 
-            <div id="loginError"
-                 class="alert alert-danger"
-                 style="display:none;">
-            </div>
+            <div id="loginError" class="alert alert-danger" style="display:none;"></div>
 
-            <button class="btn btn-primary w-100"
-                    onclick="login()">
-
+            <button class="btn btn-primary w-100" onclick="login()">
                 <i class="bi bi-box-arrow-in-right me-2"></i>
                 Login
-
             </button>
 
             <hr class="my-4">
 
             <div class="d-flex justify-content-center align-items-center gap-4 p-3">
-
                 <span>
                     New user?
-                    <a asp-controller="AuthPage"
-                       asp-action="Register">
-
+                    <a asp-controller="AuthPage" asp-action="Register">
                         <i class="bi bi-person-plus-fill"></i>
                         Register here
-
                     </a>
                 </span>
 
-                <a asp-controller="Home"
-                   asp-action="Index">
-
+                <a asp-controller="Home" asp-action="Index">
                     <i class="bi bi-arrow-left-circle"></i>
                     Back to Home
-
                 </a>
-
             </div>
 
         </div>
-
     </div>
-
 </div>
 
 @section Scripts {
-
     <script>
-
         async function login() {
-
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value;
-
             const errorBox = document.getElementById("loginError");
 
             errorBox.style.display = "none";
 
             if (!email) {
-                errorBox.innerText = "Please enter your email.";
-                errorBox.style.display = "block";
+                showError("Please enter your email.");
                 return;
             }
 
             if (!password) {
-                errorBox.innerText = "Please enter your password.";
-                errorBox.style.display = "block";
+                showError("Please enter your password.");
                 return;
             }
 
             try {
-
                 const response = await fetch("/api/Auth/login", {
                     method: "POST",
-
                     headers: {
                         "Content-Type": "application/json"
                     },
-
                     body: JSON.stringify({
                         usernameOrEmail: email,
                         password: password
@@ -309,30 +92,22 @@
                 const data = await response.json();
 
                 if (response.ok) {
-
                     localStorage.setItem("token", data.token);
-
                     window.location.href = "/Dashboard";
-
                 } else {
-
-                    errorBox.innerText =
-                        data || "Invalid username/email or password.";
-
-                    errorBox.style.display = "block";
+                    showError(data || "Invalid username/email or password.");
                 }
-
-            } catch (error) {
-
-                errorBox.innerText =
-                    "Unable to connect to the server.";
-
-                errorBox.style.display = "block";
+            } catch {
+                showError("Unable to connect to the server.");
             }
         }
 
+        function showError(message) {
+            const errorBox = document.getElementById("loginError");
+            errorBox.innerText = message;
+            errorBox.style.display = "block";
+        }
     </script>
 
     <script src="~/js/authGuard.js"></script>
-
 }
