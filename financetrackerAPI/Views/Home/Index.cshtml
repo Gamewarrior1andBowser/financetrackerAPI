@@ -80,113 +80,6 @@
 
     </section>
 
-@*     <!-- PREVIEW INTRO -->
-    <section class="home-preview-intro">
-        <h2>Take a look inside</h2>
-        <p>A sample of what your dashboard looks like once your data is in.</p>
-    </section>
-
-    <section class="home-summary-cards">
-
-        <div class="home-summary-card income">
-            <span>Total Income</span>
-            <strong id="income">$0</strong>
-        </div>
-
-        <div class="home-summary-card expense">
-            <span>Total Expenses</span>
-            <strong id="expenses">$0</strong>
-        </div>
-
-        <div class="home-summary-card balance">
-            <span>Remaining Balance</span>
-            <strong id="balance">$0</strong>
-        </div>
-
-    </section>
-
-    <section class="home-panel-grid">
-
-        <div class="home-panel">
-            <h3>
-                <i class="bi bi-wallet2 me-2"></i> Budget Preview
-            </h3>
-            <hr />
-
-            <div class="home-panel-row">
-                <span>Monthly Budget</span>
-                <strong id="budgetlimits">$0</strong>
-            </div>
-
-            <div class="home-panel-row">
-                <span>Amount Used</span>
-                <strong id="budgetUsed">$0</strong>
-            </div>
-
-            <div class="home-panel-row">
-                <span>Remaining</span>
-                <strong class="positive" id="budgetRemaining">$0</strong>
-            </div>
-
-            <div class="home-progress">
-                <div class="home-progress-bar" id="budgetProgressBar"></div>
-            </div>
-
-            <span class="home-progress-label" id="budgetPercentage">
-                0% used
-            </span>
-        </div>
-
-        <div class="home-panel">
-            <h3>
-                <i class="bi bi-piggy-bank-fill me-2"></i> Savings Goal
-            </h3>
-            <hr />
-
-            <div class="home-panel-row">
-                <span>Goal Amount</span>
-                <strong id="savingGoal">$0</strong>
-            </div>
-
-            <div class="home-panel-row">
-                <span>Current Savings</span>
-                <strong class="accent" id="savingCurrent">$0</strong>
-            </div>
-
-            <div class="home-panel-row">
-                <span>Remaining</span>
-                <strong class="negative" id="savingRemaining">$0</strong>
-            </div>
-
-            <div class="home-progress">
-                <div class="home-progress-bar savings" id="savingProgressBar"></div>
-            </div>
-
-            <span class="home-progress-label" id="savingProgress">
-                0% reached
-            </span>
-        </div>
-
-    </section>
-
-    <section class="home-table-card">
-        <h3>Recent Transactions Preview</h3>
-
-        <table class="home-table">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-
-            <tbody id="demoTransactions"></tbody>
-        </table>
-    </section>
-
-</div> *@
 <!-- PREVIEW INTRO -->
     <section class="home-preview-intro">
         <h2>Take a look inside</h2>
@@ -213,56 +106,18 @@
 
     </section>
 
-    <!-- BUDGET + SAVINGS PREVIEW -->
-    @* <section class="home-panel-grid">
+    <!-- CATEGORY CHART PREVIEW -->
+    <section class="home-chart-card reveal-left">
+        <h3><i class="bi bi-pie-chart-fill me-2"></i>Spend by Category Preview</h3>
+        <hr />
 
-        <div class="home-panel reveal-left">
-            <h3><i class="bi bi-wallet2 me-2"></i>Budget Preview</h3>
-            <hr />
-
-            <div class="home-panel-row">
-                <span>Monthly Budget</span>
-                <strong id="budgetlimits">$0</strong>
+        <div class="home-chart-layout">
+            <div class="home-chart-container">
+                <canvas id="demoCategoryChart"></canvas>
             </div>
-            <div class="home-panel-row">
-                <span>Amount Used</span>
-                <strong id="budgetUsed">$0</strong>
-            </div>
-            <div class="home-panel-row">
-                <span>Remaining</span>
-                <strong class="positive" id="budgetRemaining">$0</strong>
-            </div>
-
-            <div class="home-progress">
-                <div class="home-progress-bar" id="budgetProgressBar"></div>
-            </div>
-            <span class="home-progress-label" id="budgetPercentage">0% used</span>
+            <div id="demoCategoryLegend" class="home-chart-legend"></div>
         </div>
-
-        <div class="home-panel reveal-left">
-            <h3><i class="bi bi-piggy-bank-fill me-2"></i>Savings Goal</h3>
-            <hr />
-
-            <div class="home-panel-row">
-                <span>Goal Amount</span>
-                <strong id="savingGoal">$0</strong>
-            </div>
-            <div class="home-panel-row">
-                <span>Current Savings</span>
-                <strong class="accent" id="savingCurrent">$0</strong>
-            </div>
-            <div class="home-panel-row">
-                <span>Remaining</span>
-                <strong class="negative" id="savingRemaining">$0</strong>
-            </div>
-
-            <div class="home-progress">
-                <div class="home-progress-bar savings" id="savingProgressBar"></div>
-            </div>
-            <span class="home-progress-label" id="savingProgress">0% reached</span>
-        </div>
-
-    </section>  *@
+    </section>
 
     <!-- DEMO TRANSACTIONS -->
     <section class="home-table-card reveal-left">
@@ -282,10 +137,16 @@
     </section>
 
 </div>
-
-
+  
 @section Scripts {
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
+
+        let demoCategoryChartInstance = null;
+
         async function loadDemoData() {
             const response = await fetch("/data/demo-data.json");
             const data = await response.json();
@@ -293,40 +154,6 @@
             document.getElementById("income").innerHTML = "$" + data.income;
             document.getElementById("expenses").innerHTML = "$" + data.expenses;
             document.getElementById("balance").innerHTML = "$" + data.balance;
-
-            document.getElementById("budgetlimits").innerHTML =
-                "$" + data.budget.monthlylimits;
-
-            document.getElementById("budgetUsed").innerHTML =
-                "$" + data.budget.used;
-
-            document.getElementById("budgetRemaining").innerHTML =
-                "$" + data.budget.remaining;
-
-            const budgetPercent = data.budget.usagePercentage;
-
-            document.getElementById("budgetPercentage").innerHTML =
-                budgetPercent + "% used";
-
-            document.getElementById("budgetProgressBar").style.width =
-                Math.min(budgetPercent, 100) + "%";
-
-            document.getElementById("savingGoal").innerHTML =
-                "$" + data.savingsGoal.goal;
-
-            document.getElementById("savingCurrent").innerHTML =
-                "$" + data.savingsGoal.current;
-
-            document.getElementById("savingRemaining").innerHTML =
-                "$" + data.savingsGoal.remaining;
-
-            const savingPercent = data.savingsGoal.progress;
-
-            document.getElementById("savingProgress").innerHTML =
-                savingPercent + "% reached";
-
-            document.getElementById("savingProgressBar").style.width =
-                Math.min(savingPercent, 100) + "%";
 
             let rows = "";
 
@@ -346,38 +173,136 @@
             });
 
             document.getElementById("demoTransactions").innerHTML = rows;
+
+            renderDemoCategoryChart(data.transactions);
+
+        }
+
+        function renderDemoCategoryChart(transactions) {
+
+            const categoryTotals = {};
+
+            transactions.forEach(transaction => {
+
+                if (transaction.type.toLowerCase() !== "expense") {
+                    return;
+                }
+
+                categoryTotals[transaction.category] =
+                    (categoryTotals[transaction.category] || 0) + Number(transaction.amount || 0);
+
+            });
+
+            const labels = Object.keys(categoryTotals);
+            const values = Object.values(categoryTotals);
+
+            const canvas = document.getElementById("demoCategoryChart");
+
+            if (demoCategoryChartInstance) {
+                demoCategoryChartInstance.destroy();
+            }
+
+            const palette = [
+                "#4f46a5", "#6d5bd0", "#4f86c6",
+                "#f59e0b", "#fbbf24", "#9b91df",
+                "#7c74d1", "#3f8fd1"
+            ];
+
+            demoCategoryChartInstance = new Chart(canvas, {
+
+                type: "doughnut",
+
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: palette,
+                        borderWidth: 3,
+                        borderColor: "#ffffff"
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "62%",
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return "$" + Number(context.raw).toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            });
+
+            renderDemoCategoryLegend(labels, values, palette);
+
+        }
+
+        function renderDemoCategoryLegend(labels, values, palette) {
+
+            const legend = document.getElementById("demoCategoryLegend");
+
+            if (labels.length === 0) {
+                legend.innerHTML = `<span class="no-chart-data">No expense data</span>`;
+                return;
+            }
+
+            const total = values.reduce((sum, v) => sum + v, 0);
+
+            legend.innerHTML = labels.map((label, index) => {
+
+                const percentage = total > 0
+                    ? (values[index] / total * 100).toFixed(1)
+                    : 0;
+
+                return `
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background:${palette[index % palette.length]}"></span>
+                        <span>${label}</span>
+                        <strong>$${values[index].toFixed(2)}</strong>
+                        (${percentage}%)
+                    </div>
+                `;
+
+            }).join("");
+
         }
 
         loadDemoData();
 
 
- function initScrollReveal() {
-    const revealEls = document.querySelectorAll(".reveal-left");
+        function initScrollReveal() {
+            const revealEls = document.querySelectorAll(".reveal-left");
 
-    // Respect users who prefer reduced motion
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
-        revealEls.forEach(el => el.classList.add("is-visible"));
-        return;
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("is-visible");
-            } else {
-                entry.target.classList.remove("is-visible");
+            const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (prefersReducedMotion) {
+                revealEls.forEach(el => el.classList.add("is-visible"));
+                return;
             }
-        });
-    }, {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px"
-    });
 
-    revealEls.forEach(el => observer.observe(el));
-}
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                    } else {
+                        entry.target.classList.remove("is-visible");
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            });
 
-initScrollReveal();
+            revealEls.forEach(el => observer.observe(el));
+        }
+
+        initScrollReveal();
 
     </script>
 }
