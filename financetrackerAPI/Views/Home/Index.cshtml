@@ -704,7 +704,7 @@ ViewData["Title"] = "Home";
 
     </section>
 
-    <!-- PREVIEW INTRO -->
+@*     <!-- PREVIEW INTRO -->
     <section class="home-preview-intro">
         <h2>Take a look inside</h2>
         <p>A sample of what your dashboard looks like once your data is in.</p>
@@ -798,7 +798,103 @@ ViewData["Title"] = "Home";
         </table>
     </section>
 
+</div> *@
+<!-- PREVIEW INTRO -->
+    <section class="home-preview-intro">
+        <h2>Take a look inside</h2>
+        <p>A sample of what your dashboard looks like once your data is in.</p>
+    </section>
+
+    <!-- SUMMARY CARDS -->
+    <section class="home-summary-cards">
+
+        <div class="home-summary-card income reveal-left">
+            <span>Total Income</span>
+            <strong id="income">$0</strong>
+        </div>
+
+        <div class="home-summary-card expense reveal-left">
+            <span>Total Expenses</span>
+            <strong id="expenses">$0</strong>
+        </div>
+
+        <div class="home-summary-card balance reveal-left">
+            <span>Remaining Balance</span>
+            <strong id="balance">$0</strong>
+        </div>
+
+    </section>
+
+    <!-- BUDGET + SAVINGS PREVIEW -->
+    @* <section class="home-panel-grid">
+
+        <div class="home-panel reveal-left">
+            <h3><i class="bi bi-wallet2 me-2"></i>Budget Preview</h3>
+            <hr />
+
+            <div class="home-panel-row">
+                <span>Monthly Budget</span>
+                <strong id="budgetlimits">$0</strong>
+            </div>
+            <div class="home-panel-row">
+                <span>Amount Used</span>
+                <strong id="budgetUsed">$0</strong>
+            </div>
+            <div class="home-panel-row">
+                <span>Remaining</span>
+                <strong class="positive" id="budgetRemaining">$0</strong>
+            </div>
+
+            <div class="home-progress">
+                <div class="home-progress-bar" id="budgetProgressBar"></div>
+            </div>
+            <span class="home-progress-label" id="budgetPercentage">0% used</span>
+        </div>
+
+        <div class="home-panel reveal-left">
+            <h3><i class="bi bi-piggy-bank-fill me-2"></i>Savings Goal</h3>
+            <hr />
+
+            <div class="home-panel-row">
+                <span>Goal Amount</span>
+                <strong id="savingGoal">$0</strong>
+            </div>
+            <div class="home-panel-row">
+                <span>Current Savings</span>
+                <strong class="accent" id="savingCurrent">$0</strong>
+            </div>
+            <div class="home-panel-row">
+                <span>Remaining</span>
+                <strong class="negative" id="savingRemaining">$0</strong>
+            </div>
+
+            <div class="home-progress">
+                <div class="home-progress-bar savings" id="savingProgressBar"></div>
+            </div>
+            <span class="home-progress-label" id="savingProgress">0% reached</span>
+        </div>
+
+    </section>  *@
+
+    <!-- DEMO TRANSACTIONS -->
+    <section class="home-table-card reveal-left">
+        <h3>Recent Transactions Preview</h3>
+
+        <table class="home-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="demoTransactions"></tbody>
+        </table>
+    </section>
+
 </div>
+
 
 @section Scripts {
 
@@ -847,6 +943,35 @@ ViewData["Title"] = "Home";
         }
 
         loadDemoData();
+
+
+ function initScrollReveal() {
+    const revealEls = document.querySelectorAll(".reveal-left");
+
+    // Respect users who prefer reduced motion
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+        revealEls.forEach(el => el.classList.add("is-visible"));
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+            } else {
+                entry.target.classList.remove("is-visible");
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+    });
+
+    revealEls.forEach(el => observer.observe(el));
+}
+
+initScrollReveal();
 
     </script>
 
