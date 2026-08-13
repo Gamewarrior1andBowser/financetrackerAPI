@@ -1,222 +1,242 @@
 ﻿@{
-    ViewData["Title"] = "Transaction Details";
+    ViewData["Title"] = "Edit Transaction";
     var transactionID = ViewData["transactionID"];
 }
 
 <div class="transaction-page">
 
     <div class="transaction-header">
-
         <div>
-
             <h1 class="transaction-title">
-
-                <i class="bi bi-receipt"></i>
-                Transaction Details
-
+                <i class="bi bi-pencil-square me-2"></i>
+                Edit Transaction
             </h1>
-
             <p class="transaction-description">
-                View transaction information.
+                Update your transaction information.
             </p>
-
         </div>
-
     </div>
 
+    <div class="transaction-content">
+        <div class="transaction-form-card">
 
-    <div class="transaction-card transaction-form-card">
+            <form id="editTransactionForm">
 
-        <div class="transaction-detail">
+                <div class="transaction-form-group">
+                    <label for="amount">Amount</label>
+                    <input id="amount"
+                           type="number"
+                           min="0.01"
+                           step="0.01"
+                           class="transaction-input"
+                           required>
+                </div>
 
-            <div class="transaction-detail-icon">
+                <div class="transaction-form-group">
+                    <label for="categoryID">Category</label>
+                    <select id="categoryID"
+                            class="transaction-input"
+                            required>
+                    </select>
+                </div>
 
-                <i class="bi bi-receipt"></i>
+                <div class="transaction-form-group">
+                    <label for="type">Type</label>
+                    <select id="type" class="transaction-input">
+                        <option value="Expense">Expense</option>
+                        <option value="Income">Income</option>
+                    </select>
+                </div>
 
-            </div>
+                <div class="transaction-form-group">
+                    <label for="date">Date</label>
+                    <input id="date"
+                           type="date"
+                           class="transaction-input"
+                           required>
+                </div>
 
+                <div class="transaction-form-group">
+                    <label for="notes">
+                        Notes
+                        <span class="transaction-optional">Optional</span>
+                    </label>
 
-            <div class="transaction-detail-block">
+                    <textarea id="notes"
+                              class="transaction-input transaction-textarea"
+                              placeholder="Add a note if you want..."></textarea>
+                </div>
 
-                <span>Amount</span>
+                <div id="editError"
+                     class="transaction-panel-error"
+                     style="display:none;">
+                </div>
 
-                <strong id="amount">
-                    Loading...
-                </strong>
+                <div class="transaction-form-actions">
 
-            </div>
+                    <button type="submit"
+                            class="transaction-panel-primary">
+                        <i class="bi bi-save"></i>
+                        Update Transaction
+                    </button>
 
+                    <a asp-controller="TransactionPage"
+                       asp-action="Index"
+                       class="transaction-panel-cancel">
+                        <i class="bi bi-arrow-left"></i>
+                        Back
+                    </a>
 
-            <div class="transaction-detail-block">
+                </div>
 
-                <span>Category</span>
-
-                <strong id="category">
-                    Loading...
-                </strong>
-
-            </div>
-
-
-            <div class="transaction-detail-block">
-
-                <span>Type</span>
-
-                <strong id="type">
-                    Loading...
-                </strong>
-
-            </div>
-
-
-            <div class="transaction-detail-block">
-
-                <span>Date</span>
-
-                <strong id="date">
-                    Loading...
-                </strong>
-
-            </div>
-
-
-            <div class="transaction-detail-block">
-
-                <span>Notes</span>
-
-                <strong id="notes"
-                        class="transaction-notes-value">
-
-                    Loading...
-
-                </strong>
-
-            </div>
-
-
-            <div class="transaction-detail-actions">
-
-                <a asp-controller="TransactionPage"
-                   asp-action="Index"
-                   class="transaction-panel-cancel">
-
-                    <i class="bi bi-arrow-left"></i>
-                    Back
-
-                </a>
-
-            </div>
+            </form>
 
         </div>
-
     </div>
 
 </div>
 
-
 @section Scripts {
-
+<script>
 const token = localStorage.getItem("token");
+const transactionID = @transactionID;
 
+async function loadCategories(selectedID) {
 
-        const transactionID =
-            @transactionID;
-
-
-        async function loadDetails() {
-
-            try {
-
-                const response =
-                    await fetch(
-                        "/api/Transactions/" + transactionID,
-                        {
-                            headers: {
-                                "Authorization":
-                                    "Bearer " + token
-                            }
-                        }
-                    );
-
-
-                if (!response.ok)
-                    throw new Error();
-
-
-                const transaction =
-                    await response.json();
-
-
-                const amount =
-                    Number(transaction.amount) || 0;
-
-
-                document.getElementById("amount")
-                    .textContent =
-                    "$" + amount.toFixed(2);
-
-
-                document.getElementById("category")
-                    .textContent =
-                    transaction.categoryName ||
-                    "No Category";
-
-
-                document.getElementById("type")
-                    .textContent =
-                    transaction.type ||
-                    "Not Available";
-
-
-                document.getElementById("date")
-                    .textContent =
-                    transaction.date
-                        ? new Date(transaction.date)
-                            .toLocaleDateString()
-                        : "Unknown";
-
-
-                document.getElementById("notes")
-                    .textContent =
-                    transaction.notes &&
-                        transaction.notes.trim()
-                        ? transaction.notes
-                        : "N/A";
-
-
-            } catch {
-
-                document.getElementById("amount")
-                    .textContent = "Unable to load";
-
-                document.getElementById("category")
-                    .textContent = "Unable to load";
-
-                document.getElementById("type")
-                    .textContent = "Unable to load";
-
-                document.getElementById("date")
-                    .textContent = "Unable to load";
-
-                document.getElementById("notes")
-                    .textContent = "N/A";
-
-            }
-
+    const response = await fetch("/api/Category", {
+        headers: {
+            Authorization: "Bearer " + token
         }
+    });
 
+    const dropdown = document.getElementById("categoryID");
 
-async function confirmDelete() {
-
-    <script src="~/js/authGuard.js"></script>
-
-    if (response.ok) {
-        window.location.href = "/TransactionPage";
-    } else {
-        closeDeletePopup();
-        alert("Unable to delete transaction");
+    if (!response.ok) {
+        dropdown.innerHTML =
+            `<option value="">Unable to load categories</option>`;
+        return;
     }
+
+    const categories = await response.json();
+
+    dropdown.innerHTML =
+        `<option value="">Select a category</option>` +
+        categories.map(c => `
+            <option value="${c.categoryID}"
+                ${Number(c.categoryID) === Number(selectedID)
+                    ? "selected"
+                    : ""}>
+                ${c.name}
+            </option>
+        `).join("");
 }
 
+async function loadTransaction() {
+
+    const response = await fetch(
+        "/api/Transactions/" + transactionID,
+        {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }
+    );
+
+    if (!response.ok) {
+        document.getElementById("editError").textContent =
+            "Unable to load transaction.";
+        document.getElementById("editError").style.display = "block";
+        return;
+    }
+
+    const transaction = await response.json();
+
+    document.getElementById("amount").value =
+        transaction.amount;
+
+    document.getElementById("type").value =
+        transaction.type || "Expense";
+
+    document.getElementById("date").value =
+        transaction.date
+            ? transaction.date.substring(0, 10)
+            : "";
+
+    document.getElementById("notes").value =
+        transaction.notes || "";
+
+    await loadCategories(transaction.categoryID);
+}
+
+document
+    .getElementById("editTransactionForm")
+    .addEventListener("submit", async e => {
+
+        e.preventDefault();
+
+        const error = document.getElementById("editError");
+
+        const amount = Number(
+            document.getElementById("amount").value
+        );
+
+        const categoryID = Number(
+            document.getElementById("categoryID").value
+        );
+
+        const type =
+            document.getElementById("type").value;
+
+        const date =
+            document.getElementById("date").value;
+
+        const notes =
+            document.getElementById("notes").value.trim();
+
+        error.style.display = "none";
+
+        if (!amount || amount <= 0) {
+            error.textContent = "Please enter a valid amount.";
+            error.style.display = "block";
+            return;
+        }
+
+        if (!categoryID) {
+            error.textContent = "Please select a category.";
+            error.style.display = "block";
+            return;
+        }
+
+        const response = await fetch(
+            "/api/Transactions/" + transactionID,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + token
+                },
+                body: JSON.stringify({
+                    amount,
+                    categoryID,
+                    type,
+                    date,
+                    notes: notes || null
+                })
+            }
+        );
+
+        if (response.ok) {
+            window.location.href = "/TransactionPage";
+            return;
+        }
+
+        error.textContent =
+            await response.text() ||
+            "Unable to update transaction.";
+
+        error.style.display = "block";
+    });
+
+loadTransaction();
 </script>
 }
