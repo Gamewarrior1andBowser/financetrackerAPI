@@ -1,647 +1,14 @@
-﻿@* @{
-ViewData["Title"] = "Home";
-}
-
-
-<div class="container">
-
-
-    <!-- Hero Section -->
-
-    <div class="row align-items-center py-5">
-
-
-        <div class="col-md-6">
-
-
-            <h1 class="display-4 fw-bold text-primary">
-
-                <i class="bi bi-wallet2 me-2"></i>
-
-                Finance Tracker
-
-            </h1>
-
-
-            <p class="lead mt-3">
-
-                Manage your income, expenses, budgets, and financial goals easily with one simple platform.
-
-            </p>
-
-
-            <p class="mt-4 text-muted">
-
-                Explore how Finance Tracker helps users organize their money,
-                analyze spending habits, and make better financial decisions.
-
-            </p>
-
-
-        </div>
-
-
-
-        <div class="col-md-6">
-
-
-            <div class="card shadow border-0 p-4">
-
-
-                <h3 class="fw-bold">
-
-                    Why use Finance Tracker?
-
-                </h3>
-
-
-                <p>
-
-                    Track transactions, organize categories, manage budgets,
-                    and understand your financial habits through detailed reports.
-
-                </p>
-
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-
-
-
-    <!-- Features -->
-
-
-    <div class="row mt-5">
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card shadow border-0 h-100">
-
-
-                <div class="card-body text-center">
-
-
-                    <i class="bi bi-cash-stack text-success"
-                       style="font-size:50px;">
-                    </i>
-
-
-                    <h4 class="mt-3">
-
-                        Track Transactions
-
-                    </h4>
-
-
-                    <p>
-
-                        Record and monitor income and expenses.
-
-                    </p>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card shadow border-0 h-100">
-
-
-                <div class="card-body text-center">
-
-
-                    <i class="bi bi-tags-fill text-primary"
-                       style="font-size:50px;">
-                    </i>
-
-
-                    <h4 class="mt-3">
-
-                        Manage Categories
-
-                    </h4>
-
-
-                    <p>
-
-                        Organize financial activities into meaningful categories.
-
-                    </p>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card shadow border-0 h-100">
-
-
-                <div class="card-body text-center">
-
-
-                    <i class="bi bi-bar-chart-fill text-warning"
-                       style="font-size:50px;">
-                    </i>
-
-
-                    <h4 class="mt-3">
-
-                        Financial Reports
-
-                    </h4>
-
-
-                    <p>
-
-                        Analyze spending patterns and financial progress.
-
-                    </p>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-
-
-
-    <!-- Demo Preview -->
-
-
-    <div class="mt-5">
-
-
-        <h2 class="text-center fw-bold mb-4">
-
-            Finance Tracker Preview
-
-        </h2>
-
-
-        <p class="text-center text-muted">
-
-            This is an example of how your dashboard will look after creating an account.
-
-        </p>
-
-
-    </div>
-
-
-
-
-
-    <!-- Summary Cards -->
-
-
-    <div class="row g-4 mt-3">
-
-
-        <div class="col-md-4">
-
-
-            <div class="card shadow border-0 text-center p-4">
-
-
-                <h5>
-
-                    Total Income
-
-                </h5>
-
-
-                <h2 class="text-success"
-                    id="income">
-
-                    $0
-
-                </h2>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-4">
-
-
-            <div class="card shadow border-0 text-center p-4">
-
-
-                <h5>
-
-                    Total Expenses
-
-                </h5>
-
-
-                <h2 class="text-danger"
-                    id="expenses">
-
-                    $0
-
-                </h2>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-4">
-
-
-            <div class="card shadow border-0 text-center p-4">
-
-
-                <h5>
-
-                    Remaining Balance
-
-                </h5>
-
-
-                <h2 class="text-primary"
-                    id="balance">
-
-                    $0
-
-                </h2>
-
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-    <!-- Budget and Savings Preview -->
-
-
-    <div class="row mt-5">
-
-
-        <div class="col-md-6">
-
-
-            <div class="card shadow border-0 p-4">
-
-
-                <h3>
-
-                    <i class="bi bi-wallet2 me-2"></i>
-
-                    Budget Preview
-
-                </h3>
-
-
-                <hr />
-
-
-                <p>
-
-                    Monthly Budget:
-
-                    <strong id="budgetlimits">
-                        $0
-                    </strong>
-
-                </p>
-
-
-
-                <p>
-
-                    amount Used:
-
-                    <strong id="budgetUsed">
-                        $0
-                    </strong>
-
-                </p>
-
-
-
-                <p>
-
-                    Remaining:
-
-                    <strong class="text-success"
-                            id="budgetRemaining">
-                        $0
-                    </strong>
-
-                </p>
-
-                
-                <p>
-
-                    Percentage:
-
-                    <strong class="text-success"
-                            id="budgetPercentage">
-                        $0
-                    </strong>
-
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-6">
-
-
-            <div class="card shadow border-0 p-4">
-
-
-                <h3>
-
-                    <i class="bi bi-piggy-bank-fill me-2"></i>
-
-                    Savings Goal
-
-                </h3>
-
-
-                <hr />
-
-
-                <p>
-
-                    Goal amount:
-
-                    <strong id="savingGoal">
-                        $0
-                    </strong>
-
-                </p>
-
-
-
-                <p>
-
-                    Current Savings:
-
-                    <strong class="text-primary"
-                            id="savingCurrent">
-                        $0
-                    </strong>
-
-                </p>
-                <p>
-                    Remaining:
-
-                    <strong class="text-danger"
-                            id="savingRemaining">
-                        $0
-                    </strong>
-                </p>
-
-
-                <p>
-                    Progress:
-
-                    <strong class="text-success"
-                            id="savingProgress">
-                        0%
-                    </strong>
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- Demo Transactions -->
-
-
-    <div class="card shadow border-0 mt-5 p-4">
-
-
-        <h3>
-
-            Recent Transactions Preview
-
-        </h3>
-
-
-        <table class="table table-hover mt-3">
-
-
-            <thead>
-
-                <tr>
-
-
-                    <th>Category</th>
-
-                    <th>Type</th>
-
-                    <th>amount</th>
-
-                    <th>date</th>
-
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="demoTransactions">
-            </tbody>
-
-
-        </table>
-
-
-    </div>
-
-
-</div>
-
-
-
-
-
-@section Scripts {
-
-
-    <script>
-
-
-        async function loadDemoData() {
-
-
-            const response = await fetch("/data/demo-data.json");
-
-
-            const data = await response.json();
-
-
-
-            document.getElementById("income").innerHTML =
-                "$" + data.income;
-
-
-
-            document.getElementById("expenses").innerHTML =
-                "$" + data.expenses;
-
-
-
-            document.getElementById("balance").innerHTML =
-                "$" + data.balance;
-
-            document.getElementById("budgetlimits").innerHTML =
-                "$" + data.budget.monthlylimits;
-
-
-            document.getElementById("budgetUsed").innerHTML =
-                "$" + data.budget.used;
-
-
-            document.getElementById("budgetRemaining").innerHTML =
-                "$" + data.budget.remaining;
-
-                  document.getElementById("budgetPercentage").innerHTML =
-                 + data.budget.usagePercentage + "%";
-
-            document.getElementById("savingGoal").innerHTML =
-                "$" + data.savingsGoal.goal;
-
-
-            document.getElementById("savingCurrent").innerHTML =
-                "$" + data.savingsGoal.current;
-
-                 document.getElementById("savingRemaining").innerHTML =
-                "$" + data.savingsGoal.remaining;
-
-                 document.getElementById("savingProgress").innerHTML =
-                "$" + data.savingsGoal.progress;
-
-            let rows = "";
-
-
-
-            data.transactions.forEach(transaction => {
-
-
-                rows += `
-
-                        <tr>
-
-
-                            <td>${transaction.category}</td>
-
-                            <td>${transaction.type}</td>
-
-                            <td>$${transaction.amount}</td>
-
-                            <td>${transaction.date}</td>
-
-
-                        </tr>
-
-                        `;
-
-
-            });
-
-
-
-            document.getElementById("demoTransactions").innerHTML = rows;
-
-
-        }
-
-
-
-        loadDemoData();
-
-
-    </script>
-
-
-} *@
-
-
-
-
-
-
-
-@{
+﻿@{
     ViewData["Title"] = "Home";
 }
 
 <div class="home-page">
 
-    <!-- HERO -->
     <section class="home-hero">
         <div class="home-hero-text">
-            <span class="home-badge"><i class="bi bi-stars"></i> Built for everyday budgets</span>
+            <span class="home-badge">
+                <i class="bi bi-stars"></i> Built for everyday budgets
+            </span>
 
             <h1>Know exactly where your money goes.</h1>
 
@@ -652,10 +19,13 @@ ViewData["Title"] = "Home";
             </p>
 
             <div class="home-hero-actions">
-                <a asp-controller="AuthPage" asp-action="Register" class="home-btn home-btn-primary">
-                    <i class="bi bi-rocket-takeoff-fill me-2"></i>Get Started Free
+                <a asp-controller="AuthPage" asp-action="Register"
+                   class="home-btn home-btn-primary">
+                    <i class="bi bi-rocket-takeoff-fill me-2"></i> Get Started Free
                 </a>
-                <a asp-controller="AuthPage" asp-action="Login" class="home-btn home-btn-ghost">
+
+                <a asp-controller="AuthPage" asp-action="Login"
+                   class="home-btn home-btn-ghost">
                     Sign In
                 </a>
             </div>
@@ -667,6 +37,7 @@ ViewData["Title"] = "Home";
                 No spreadsheets, no guesswork — just a running total of what's
                 coming in, what's going out, and what's left over.
             </p>
+
             <ul class="home-hero-points">
                 <li><i class="bi bi-check-circle-fill"></i> Every transaction in one place</li>
                 <li><i class="bi bi-check-circle-fill"></i> Budgets that warn you before you overspend</li>
@@ -675,29 +46,34 @@ ViewData["Title"] = "Home";
         </div>
     </section>
 
-    <!-- FEATURES -->
     <section class="home-feature-grid">
 
         <a asp-controller="AuthPage" asp-action="Register">
             <div class="home-feature-card">
-                <div class="home-feature-icon purple"><i class="bi bi-cash-stack"></i></div>
-                <h4>Log It in Seconds</h4>
+                <div class="home-feature-icon purple">
+                    <i class="bi bi-receipt me-2"></i>
+                </div>
+                <h4>Track Transactions</h4>
                 <p>Add income and expenses as they happen, so nothing slips through the cracks.</p>
             </div>
         </a>
 
         <a asp-controller="AuthPage" asp-action="Register">
             <div class="home-feature-card">
-                <div class="home-feature-icon amber"><i class="bi bi-tags-fill"></i></div>
-                <h4>Sort by Category</h4>
+                <div class="home-feature-icon amber">
+                    <i class="bi bi-tags-fill"></i>
+                </div>
+                <h4>Sort Category</h4>
                 <p>Group spending into categories that actually mean something to you.</p>
             </div>
         </a>
 
         <a asp-controller="AuthPage" asp-action="Register">
             <div class="home-feature-card">
-                <div class="home-feature-icon blue"><i class="bi bi-bar-chart-fill"></i></div>
-                <h4>See the Bigger Picture</h4>
+                <div class="home-feature-icon blue">
+                    <i class="bi bi-bar-chart-fill"></i>
+                </div>
+                <h4>Finanace Reports</h4>
                 <p>Reports and trends make it easy to spot habits before they become problems.</p>
             </div>
         </a>
@@ -710,7 +86,6 @@ ViewData["Title"] = "Home";
         <p>A sample of what your dashboard looks like once your data is in.</p>
     </section>
 
-    <!-- SUMMARY CARDS -->
     <section class="home-summary-cards">
 
         <div class="home-summary-card income">
@@ -730,21 +105,24 @@ ViewData["Title"] = "Home";
 
     </section>
 
-    <!-- BUDGET + SAVINGS PREVIEW -->
     <section class="home-panel-grid">
 
         <div class="home-panel">
-            <h3><i class="bi bi-wallet2 me-2"></i>Budget Preview</h3>
+            <h3>
+                <i class="bi bi-wallet2 me-2"></i> Budget Preview
+            </h3>
             <hr />
 
             <div class="home-panel-row">
                 <span>Monthly Budget</span>
                 <strong id="budgetlimits">$0</strong>
             </div>
+
             <div class="home-panel-row">
                 <span>Amount Used</span>
                 <strong id="budgetUsed">$0</strong>
             </div>
+
             <div class="home-panel-row">
                 <span>Remaining</span>
                 <strong class="positive" id="budgetRemaining">$0</strong>
@@ -753,21 +131,28 @@ ViewData["Title"] = "Home";
             <div class="home-progress">
                 <div class="home-progress-bar" id="budgetProgressBar"></div>
             </div>
-            <span class="home-progress-label" id="budgetPercentage">0% used</span>
+
+            <span class="home-progress-label" id="budgetPercentage">
+                0% used
+            </span>
         </div>
 
         <div class="home-panel">
-            <h3><i class="bi bi-piggy-bank-fill me-2"></i>Savings Goal</h3>
+            <h3>
+                <i class="bi bi-piggy-bank-fill me-2"></i> Savings Goal
+            </h3>
             <hr />
 
             <div class="home-panel-row">
                 <span>Goal Amount</span>
                 <strong id="savingGoal">$0</strong>
             </div>
+
             <div class="home-panel-row">
                 <span>Current Savings</span>
                 <strong class="accent" id="savingCurrent">$0</strong>
             </div>
+
             <div class="home-panel-row">
                 <span>Remaining</span>
                 <strong class="negative" id="savingRemaining">$0</strong>
@@ -776,12 +161,14 @@ ViewData["Title"] = "Home";
             <div class="home-progress">
                 <div class="home-progress-bar savings" id="savingProgressBar"></div>
             </div>
-            <span class="home-progress-label" id="savingProgress">0% reached</span>
+
+            <span class="home-progress-label" id="savingProgress">
+                0% reached
+            </span>
         </div>
 
     </section>
 
-    <!-- DEMO TRANSACTIONS -->
     <section class="home-table-card">
         <h3>Recent Transactions Preview</h3>
 
@@ -794,6 +181,7 @@ ViewData["Title"] = "Home";
                     <th>Date</th>
                 </tr>
             </thead>
+
             <tbody id="demoTransactions"></tbody>
         </table>
     </section>
@@ -897,11 +285,8 @@ ViewData["Title"] = "Home";
 
 
 @section Scripts {
-
     <script>
-
         async function loadDemoData() {
-
             const response = await fetch("/data/demo-data.json");
             const data = await response.json();
 
@@ -909,21 +294,39 @@ ViewData["Title"] = "Home";
             document.getElementById("expenses").innerHTML = "$" + data.expenses;
             document.getElementById("balance").innerHTML = "$" + data.balance;
 
-            document.getElementById("budgetlimits").innerHTML = "$" + data.budget.monthlylimits;
-            document.getElementById("budgetUsed").innerHTML = "$" + data.budget.used;
-            document.getElementById("budgetRemaining").innerHTML = "$" + data.budget.remaining;
+            document.getElementById("budgetlimits").innerHTML =
+                "$" + data.budget.monthlylimits;
 
-            const budgetPct = data.budget.usagePercentage;
-            document.getElementById("budgetPercentage").innerHTML = budgetPct + "% used";
-            document.getElementById("budgetProgressBar").style.width = Math.min(budgetPct, 100) + "%";
+            document.getElementById("budgetUsed").innerHTML =
+                "$" + data.budget.used;
 
-            document.getElementById("savingGoal").innerHTML = "$" + data.savingsGoal.goal;
-            document.getElementById("savingCurrent").innerHTML = "$" + data.savingsGoal.current;
-            document.getElementById("savingRemaining").innerHTML = "$" + data.savingsGoal.remaining;
+            document.getElementById("budgetRemaining").innerHTML =
+                "$" + data.budget.remaining;
 
-            const savingPct = data.savingsGoal.progress;
-            document.getElementById("savingProgress").innerHTML = savingPct + "% reached";
-            document.getElementById("savingProgressBar").style.width = Math.min(savingPct, 100) + "%";
+            const budgetPercent = data.budget.usagePercentage;
+
+            document.getElementById("budgetPercentage").innerHTML =
+                budgetPercent + "% used";
+
+            document.getElementById("budgetProgressBar").style.width =
+                Math.min(budgetPercent, 100) + "%";
+
+            document.getElementById("savingGoal").innerHTML =
+                "$" + data.savingsGoal.goal;
+
+            document.getElementById("savingCurrent").innerHTML =
+                "$" + data.savingsGoal.current;
+
+            document.getElementById("savingRemaining").innerHTML =
+                "$" + data.savingsGoal.remaining;
+
+            const savingPercent = data.savingsGoal.progress;
+
+            document.getElementById("savingProgress").innerHTML =
+                savingPercent + "% reached";
+
+            document.getElementById("savingProgressBar").style.width =
+                Math.min(savingPercent, 100) + "%";
 
             let rows = "";
 
@@ -931,7 +334,11 @@ ViewData["Title"] = "Home";
                 rows += `
                             <tr>
                                 <td>${transaction.category}</td>
-                                <td><span class="home-type-pill ${transaction.type.toLowerCase()}">${transaction.type}</span></td>
+                                <td>
+                                    <span class="home-type-pill ${transaction.type.toLowerCase()}">
+                                        ${transaction.type}
+                                    </span>
+                                </td>
                                 <td>$${transaction.amount}</td>
                                 <td>${transaction.date}</td>
                             </tr>
@@ -939,7 +346,6 @@ ViewData["Title"] = "Home";
             });
 
             document.getElementById("demoTransactions").innerHTML = rows;
-
         }
 
         loadDemoData();
@@ -974,5 +380,4 @@ ViewData["Title"] = "Home";
 initScrollReveal();
 
     </script>
-
 }

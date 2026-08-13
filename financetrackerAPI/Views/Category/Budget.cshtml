@@ -7,9 +7,12 @@
         <div class="col-md-6">
             <div class="card shadow p-4" id="budgetCard">
                 <h2 id="budgetname" class="mb-4"></h2>
+
                 <p><strong>Created:</strong> <span id="budgetdate"></span></p>
-                <p><strong>limits:</strong> <span id="budgetlimits"></span></p>
-                <a asp-controller="CategoryPage" asp-action="Index" class="btn btn-secondary mt-3">
+                <p><strong>Limits:</strong> <span id="budgetlimits"></span></p>
+
+                <a asp-controller="CategoryPage" asp-action="Index"
+                   class="btn btn-secondary mt-3">
                     <i class="bi bi-arrow-left-circle me-1"></i> Back
                 </a>
             </div>
@@ -21,18 +24,13 @@
     <script>
         const categoryId = @ViewData["CategoryId"];
         const token = localStorage.getItem("token");
+        const headers = { Authorization: "Bearer " + token };
 
         async function loadBudgetSummary() {
-            // Get category (for the name)
-            const catResponse = await fetch(`/api/Category/${categoryId}`, {
-                headers: { Authorization: "Bearer " + token }
-            });
-            const category = await catResponse.json();
+            const categoryResponse = await fetch(`/api/Category/${categoryId}`, { headers });
+            const category = await categoryResponse.json();
 
-            // GetAll is the only option since there's no get-by-category endpoint
-            const budgetResponse = await fetch("/api/Budget", {
-                headers: { Authorization: "Bearer " + token }
-            });
+            const budgetResponse = await fetch("/api/Budget", { headers });
             const budgets = await budgetResponse.json();
 
             const budget = budgets.find(b => b.categoryID == categoryId);
@@ -43,9 +41,14 @@
                 return;
             }
 
-            document.getElementById("budgetname").textContent = category.name + " Budget";
-            document.getElementById("budgetdate").textContent = new Date(budget.date).toLocaledateString();
-            document.getElementById("budgetlimits").textContent = budget.limit;
+            document.getElementById("budgetname").textContent =
+                category.name + " Budget";
+
+            document.getElementById("budgetdate").textContent =
+                new Date(budget.date).toLocaleDateString();
+
+            document.getElementById("budgetlimits").textContent =
+                "$" + budget.limit;
         }
 
         loadBudgetSummary();
