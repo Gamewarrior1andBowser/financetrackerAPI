@@ -1,16 +1,16 @@
 
 using financetrackerAPI.Data;
 using financetrackerAPI.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-
 namespace financetrackerAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CategoryController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -41,6 +41,16 @@ public class CategoryController : ControllerBase
         if (string.IsNullOrEmpty(category.Type))
         {
             return BadRequest("Category type is required");
+        }
+
+        Category? existingCategory = await _context.Categories
+            .FirstOrDefaultAsync(c =>
+                c.userID == userID &&
+                c.name == category.name);
+
+        if (existingCategory != null)
+        {
+            return BadRequest("You already have a category with this name.");
         }
 
         category.userID = userID;
@@ -123,6 +133,28 @@ public class CategoryController : ControllerBase
             return NotFound("Category not found");
         }
 
+        Category? existingCategory = await _context.Categories
+            .FirstOrDefaultAsync(c =>
+                c.userID == userID &&
+                c.name == updatedCategory.name &&
+                c.categoryID != id);
+
+        if (existingCategory != null)
+        {
+            return BadRequest("You already have a category with this name.");
+        }
+
+        if (string.IsNullOrEmpty(updatedCategory.name))
+        {
+            return BadRequest("Category name is required");
+        }
+
+        if (string.IsNullOrEmpty(updatedCategory.Type))
+        {
+            return BadRequest("Category type is required");
+        }
+
+        category.name = updatedCategory.name ;
         category.name = updatedCategory.name;
         category.Type = updatedCategory.Type;
 
@@ -161,4 +193,3 @@ public class CategoryController : ControllerBase
         return Ok("Category deleted");
     }
 }
-
