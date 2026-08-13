@@ -4,67 +4,112 @@
 
 <div class="reports-page">
 
+    <!-- PAGE HEADING -->
+
     <div class="page-heading">
         <div>
             <h1>
                 <i class="bi bi-bar-chart-fill"></i>
                 Financial Reports
             </h1>
-            <p>Track your income, expenses, and spending patterns.</p>
+
+            <p>
+                Track your income, expenses, and spending patterns.
+            </p>
         </div>
     </div>
 
 
+    <!-- SUMMARY -->
+
     <div class="summary-grid">
+
         <div class="summary-card">
             <div class="summary-label">TOTAL INCOME</div>
-            <div id="totalIncome" class="summary-value income">$0.00</div>
+
+            <div id="totalIncome"
+                 class="summary-value income">
+                $0.00
+            </div>
+
             <div class="summary-change income">
-                <i class="bi bi-arrow-up"></i> Income
+                <i class="bi bi-arrow-up"></i>
+                Income
             </div>
         </div>
+
 
         <div class="summary-card">
             <div class="summary-label">TOTAL EXPENSES</div>
-            <div id="totalExpenses" class="summary-value expense">$0.00</div>
+
+            <div id="totalExpenses"
+                 class="summary-value expense">
+                $0.00
+            </div>
+
             <div class="summary-change expense">
-                <i class="bi bi-arrow-down"></i> Expenses
+                <i class="bi bi-arrow-down"></i>
+                Expenses
             </div>
         </div>
 
+
         <div class="summary-card">
             <div class="summary-label">REMAINING BALANCE</div>
-            <div id="remainingBalance" class="summary-value balance">$0.00</div>
-            <div class="summary-change balance">Income minus expenses</div>
+
+            <div id="remainingBalance"
+                 class="summary-value balance">
+                $0.00
+            </div>
+
+            <div class="summary-change balance">
+                Income minus expenses
+            </div>
         </div>
+
     </div>
+
+
+    <!-- CHARTS -->
 
     <div class="charts-grid">
 
         <div class="report-card">
+
             <div class="report-card-header">
                 <div>
-                    <h5 class="report-card-title">Income vs Expenses</h5>
+                    <h5 class="report-card-title">
+                        Income vs Expenses
+                    </h5>
+
                     <div class="report-card-subtitle">
                         Compare your total income and spending
                     </div>
                 </div>
+
                 <i class="bi bi-three-dots"></i>
             </div>
 
             <div class="reports-chart-container">
                 <canvas id="incomeExpenseChart"></canvas>
             </div>
+
         </div>
 
+
         <div class="report-card">
+
             <div class="report-card-header">
                 <div>
-                    <h5 class="report-card-title">Spending by Category</h5>
+                    <h5 class="report-card-title">
+                        Spending by Category
+                    </h5>
+
                     <div class="report-card-subtitle">
                         Where your money is going
                     </div>
                 </div>
+
                 <i class="bi bi-three-dots"></i>
             </div>
 
@@ -73,12 +118,142 @@
             </div>
 
             <div id="categoryList" class="category-list"></div>
+
         </div>
 
     </div>
+
+
+    <!-- WHAT REPORTS TELL YOU -->
+
+    <section class="reports-insights">
+
+        <div class="reports-section-heading">
+            <span>WHAT YOUR REPORTS TELL YOU</span>
+
+            <h2>Turn Your Financial Data Into Useful Insights</h2>
+
+            <p>
+                Your reports help you understand your financial habits,
+                recognize spending patterns, and make more informed decisions.
+            </p>
+        </div>
+
+
+        <div class="reports-insight-grid">
+
+            <article class="reports-insight-card">
+
+                <img src="~/images/reports/grow.avif"
+                     class="reports-insight-image"
+                     alt="Tracking flow">
+
+                <div class="reports-insight-content">
+
+
+                    <h3>Track Your Flow</h3>
+
+                    <p>
+                        See how much money is coming in and going out so you
+                        can understand your overall financial position.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <article class="reports-insight-card">
+
+                <img src="~/images/reports/upgrade.webp"
+                     class="reports-insight-image"
+                     alt="Identifying spending habits">
+
+                <div class="reports-insight-content">
+
+                    <h3>Identify Spending Habits</h3>
+
+                    <p>
+                        Use category information to recognize where your money
+                        is being spent and find patterns over time.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <article class="reports-insight-card">
+
+                <img src="~/images/reports/decision.avif"
+                     class="reports-insight-image"
+                     alt="Making better financial decisions">
+
+                <div class="reports-insight-content">
+
+                    <h3>Make Better Decisions</h3>
+
+                    <p>
+                        Use the information in your reports to plan your
+                        spending and make smarter financial choices.
+                    </p>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- FINANCIAL PICTURE -->
+
+    <section class="reports-picture">
+
+        <div class="reports-picture-image">
+
+            <img src="~/images/reports/finance.avif"
+                 alt="Understanding your financial picture">
+
+        </div>
+
+
+        <div class="reports-picture-content">
+
+            <span>
+                <i class="bi bi-lightbulb-fill"></i>
+                UNDERSTAND YOUR FINANCIAL PICTURE
+            </span>
+
+            <h2>
+                See More Than Just Numbers
+            </h2>
+
+            <p>
+                Financial reports bring your income, expenses, balance, and
+                spending categories together in one place. Instead of looking
+                at individual transactions, you can see the bigger picture
+                of how your money is being managed.
+            </p>
+
+            <p>
+                Reviewing these patterns regularly can help you understand
+                your financial activity, recognize areas that may need
+                attention, and make better decisions about your money.
+            </p>
+
+        </div>
+
+    </section>
+
 </div>
 
+
 @section Scripts {
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="~/js/reports.js"></script>
+
+    <script src="~/js/reports.js" asp-append-version="true"></script>
+
 }
