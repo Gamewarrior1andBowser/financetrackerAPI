@@ -13,7 +13,7 @@ namespace financetrackerAPI.Models
 
         public string username { get; set; } = string.Empty;
 
-        public decimal limits { get; set; }
+        public int limits { get; set; }
 
         public DateTime date { get; set; } = DateTime.Now;
     }
