@@ -3,15 +3,12 @@
 }
 
 <div class="transaction-page">
-
     <div class="transaction-header">
         <div>
             <h1 class="transaction-title">
                 <i class="bi bi-receipt"></i> Transactions
             </h1>
-            <p class="transaction-description">
-                View and manage your transactions.
-            </p>
+            <p class="transaction-description">View and manage your transactions.</p>
         </div>
 
         <button type="button" class="transaction-add-btn" onclick="showCreatePanel()">
@@ -20,7 +17,6 @@
     </div>
 
     <div class="transaction-content">
-
         <main class="transaction-main">
             <div id="transactionGrid" class="transaction-grid"></div>
 
@@ -52,7 +48,6 @@
             </div>
             <div id="panelContent" class="transaction-panel-content"></div>
         </aside>
-
     </div>
 </div>
 
@@ -60,7 +55,6 @@
     <script>
         const token = localStorage.getItem("token");
         const headers = { Authorization: "Bearer " + token };
-
         const grid = document.getElementById("transactionGrid");
         const empty = document.getElementById("transactionEmpty");
         const errorBox = document.getElementById("transactionError");
@@ -110,14 +104,13 @@
                     return `
                         <article class="transaction-card">
                             <div class="transaction-card-body">
-
                                 <div class="transaction-card-icon">
                                     <i class="bi bi-receipt"></i>
                                 </div>
 
                                 <h2>${escapeHtml(t.categoryName || "No Category")}</h2>
 
-                                <div class="transaction-type-amount">
+                                <div class="transaction-summary">
                                     <span class="transaction-type ${income ? "income" : "expense"}">
                                         ${income ? "Income" : "Expense"}
                                     </span>
@@ -127,15 +120,13 @@
                                 </div>
 
                                 <div class="transaction-date">
-                                    <i class="bi bi-calendar3"></i>
-                                    ${date}
+                                    <i class="bi bi-calendar3"></i> ${date}
                                 </div>
 
                                 <div class="transaction-note">
                                     <i class="bi bi-sticky"></i>
                                     <span>${escapeHtml(t.notes?.trim() || "N/A")}</span>
                                 </div>
-
                             </div>
 
                             <div class="transaction-card-actions">
@@ -154,8 +145,7 @@
                                     <i class="bi bi-trash"></i> Delete
                                 </button>
                             </div>
-                        </article>
-                    `;
+                        </article>`;
                 }).join("");
 
             } catch {
@@ -176,8 +166,7 @@
                         ${Number(c.categoryID) === Number(selected) ? "selected" : ""}>
                         ${escapeHtml(c.name)}
                     </option>
-                `).join("")}
-            `;
+                `).join("")}`;
         }
 
         function showCreatePanel(type = "Expense") {
@@ -221,8 +210,7 @@
                     <button class="transaction-panel-primary">
                         <i class="bi bi-check-circle"></i> Save Transaction
                     </button>
-                </form>
-            `);
+                </form>`);
 
             loadCategories().then(options => {
                 document.getElementById("createCategory").innerHTML = options;
@@ -262,7 +250,6 @@
 
                 closePanel();
                 loadTransactions();
-
             } catch {
                 error.textContent = "Unable to create transaction.";
                 error.style.display = "block";
@@ -279,7 +266,6 @@
 
                 openPanel("Transaction Details", `
                     <div class="transaction-detail">
-
                         <div class="transaction-detail-icon">
                             <i class="bi bi-receipt"></i>
                         </div>
@@ -314,10 +300,7 @@
                                 ${escapeHtml(t.notes?.trim() || "N/A")}
                             </strong>
                         </div>
-
-                    </div>
-                `);
-
+                    </div>`);
             } catch {
                 showPanelError("Transaction Details", "Unable to load transaction.");
             }
@@ -371,9 +354,7 @@
                         <button class="transaction-panel-primary">
                             <i class="bi bi-save"></i> Update Transaction
                         </button>
-
-                    </form>
-                `);
+                    </form>`);
 
                 document.getElementById("editTransactionForm")
                     .addEventListener("submit", e => updateTransaction(e, id));
@@ -407,7 +388,6 @@
 
                 closePanel();
                 loadTransactions();
-
             } catch {
                 error.textContent = "Unable to update transaction.";
                 error.style.display = "block";
@@ -417,7 +397,6 @@
         function showDeletePanel(id) {
             openPanel("Delete Transaction", `
                 <div class="transaction-delete-box">
-
                     <div class="transaction-delete-icon">
                         <i class="bi bi-trash-fill"></i>
                     </div>
@@ -430,13 +409,12 @@
                             Cancel
                         </button>
 
-                        <button type="button" class="transaction-panel-danger" onclick="deleteTransaction(${id})">
+                        <button type="button" class="transaction-panel-danger"
+                                onclick="deleteTransaction(${id})">
                             <i class="bi bi-trash"></i> Delete
                         </button>
                     </div>
-
-                </div>
-            `);
+                </div>`);
         }
 
         async function deleteTransaction(id) {
@@ -450,7 +428,6 @@
 
                 closePanel();
                 loadTransactions();
-
             } catch {
                 showPanelError("Delete Transaction", "Unable to delete transaction.");
             }
