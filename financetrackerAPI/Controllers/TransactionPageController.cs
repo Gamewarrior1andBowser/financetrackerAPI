@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace financetrackerAPI.Controllers;
 
+[Authorize]
 public class TransactionPageController : Controller
 {
     // GET /TransactionPage
