@@ -117,7 +117,7 @@
     color: #fff;
     border-radius: 22px;
     padding: 30px 28px;
-    box-shadow: 0 12px 32px rgba(60,50,140,.22);
+
 }
 
     .home-hero-card::before {
@@ -477,4 +477,39 @@
     .home-panel-grid {
         grid-template-columns: 1fr 1fr;
     }
+}
+
+
+/* Scroll-reveal: slide in from the left */
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: opacity 1.4s ease-out, transform 1.4s ease-out;
+    will-change: opacity, transform;
+}
+
+    .reveal-left.is-visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+/* Stagger the summary cards a bit so they don't all pop in at once */
+.home-summary-cards .reveal-left:nth-child(1) {
+    transition-delay: 0s;
+}
+
+.home-summary-cards .reveal-left:nth-child(2) {
+    transition-delay: 0.15s;
+}
+
+.home-summary-cards .reveal-left:nth-child(3) {
+    transition-delay: 0.3s;
+}
+
+.home-panel-grid .reveal-left:nth-child(1) {
+    transition-delay: 0s;
+}
+
+.home-panel-grid .reveal-left:nth-child(2) {
+    transition-delay: 0.2s;
 }
