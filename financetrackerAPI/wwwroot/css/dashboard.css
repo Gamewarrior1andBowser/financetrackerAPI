@@ -221,7 +221,7 @@
     .summary-card-head span {
         font-size: .8rem;
         font-weight: 700;
-        color: var(--muted);
+        color: white;
         text-transform: uppercase;
         letter-spacing: .04em;
     }
