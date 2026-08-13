@@ -1,0 +1,479 @@
+﻿/* ============================================================
+   Home / landing page styles — scoped under .home-page so nothing
+   on other pages is affected.
+   Palette matches dashboard.css: purple/indigo gradient
+   (#4f46a5 → #6d5bd0 → #4f86c6) + the amber accent (#f59e0b).
+
+   Margin-wrap follows the same pattern as .finance-dashboard:
+   margin: 0 32px, collapsing to 16px on small screens.
+============================================================ */
+.home-page {
+    --purple-1: #4f46a5;
+    --purple-2: #6d5bd0;
+    --blue-1: #4f86c6;
+    --amber: #f59e0b;
+    --amber-soft: #fff7e6;
+    --ink: #252535;
+    --muted: #6b6b85;
+    --line: #e2e4ea;
+    margin: 0 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 20px 0 40px;
+}
+
+@media (max-width: 600px) {
+    .home-page {
+        margin: 0 16px;
+    }
+}
+
+/* ---------- Hero ---------- */
+.home-hero {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: center;
+}
+
+.home-hero-text h1 {
+    margin: 14px 0 12px;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--ink);
+}
+
+.home-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 99px;
+    background: var(--amber-soft);
+    color: var(--purple-1);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+}
+
+.home-hero-lead {
+    margin: 0 0 22px;
+    font-size: 1.02rem;
+    color: var(--muted);
+    max-width: 520px;
+}
+
+.home-hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 26px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: .92rem;
+    text-decoration: none;
+    transition: .2s ease;
+    border: 2px solid transparent;
+}
+
+.home-btn-primary {
+    background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+    color: #fff;
+}
+
+    .home-btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(79,70,165,.28);
+        color: #fff;
+    }
+
+.home-btn-ghost {
+    background: #fff;
+    color: var(--purple-1);
+    border-color: var(--line);
+}
+
+    .home-btn-ghost:hover {
+        border-color: var(--purple-2);
+        color: var(--purple-1);
+        transform: translateY(-2px);
+    }
+
+.home-hero-card {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(120deg, var(--purple-1), var(--purple-2) 55%, var(--blue-1));
+    color: #fff;
+    border-radius: 22px;
+    padding: 30px 28px;
+    box-shadow: 0 12px 32px rgba(60,50,140,.22);
+}
+
+    .home-hero-card::before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.08);
+        top: -110px;
+        right: -60px;
+    }
+
+    .home-hero-card::after {
+        content: "";
+        position: absolute;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.06);
+        bottom: -90px;
+        right: 60px;
+    }
+
+    .home-hero-card h3 {
+        position: relative;
+        z-index: 1;
+        margin: 0 0 10px;
+        font-size: 1.1rem;
+        font-weight: 800;
+    }
+
+    .home-hero-card > p {
+        position: relative;
+        z-index: 1;
+        margin: 0 0 18px;
+        font-size: .9rem;
+        color: rgba(255,255,255,.85);
+    }
+
+.home-hero-points {
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    .home-hero-points li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: .88rem;
+    }
+
+    .home-hero-points i {
+        color: var(--amber);
+    }
+
+/* ---------- Features ---------- */
+.home-feature-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+    .home-feature-grid > a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+
+.home-feature-card {
+    height: 100%;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 26px 22px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(30,30,60,.05);
+    transition: .25s ease;
+}
+
+.home-feature-grid > a:hover .home-feature-card {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(30,30,60,.1);
+    border-color: var(--purple-2);
+}
+
+.home-feature-card h4 {
+    margin: 16px 0 8px;
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--ink);
+}
+
+.home-feature-card p {
+    margin: 0;
+    font-size: .86rem;
+    color: var(--muted);
+}
+
+.home-feature-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: #fff;
+}
+
+    .home-feature-icon.purple {
+        background: var(--purple-1);
+    }
+
+    .home-feature-icon.amber {
+        background: var(--amber);
+    }
+
+    .home-feature-icon.blue {
+        background: var(--blue-1);
+    }
+
+/* ---------- Preview intro ---------- */
+.home-preview-intro {
+    text-align: center;
+}
+
+    .home-preview-intro h2 {
+        margin: 0 0 6px;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--ink);
+    }
+
+    .home-preview-intro p {
+        margin: 0;
+        color: var(--muted);
+        font-size: .92rem;
+    }
+
+/* ---------- Summary cards ---------- */
+.home-summary-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.home-summary-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(30,30,60,.05);
+    border-top: 4px solid var(--purple-2);
+    transition: .25s ease;
+}
+
+    .home-summary-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 24px rgba(30,30,60,.1);
+    }
+
+    .home-summary-card span {
+        display: block;
+        font-size: .78rem;
+        font-weight: 700;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        margin-bottom: 8px;
+    }
+
+    .home-summary-card strong {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--ink);
+    }
+
+    .home-summary-card.expense {
+        border-top-color: var(--amber);
+    }
+
+    .home-summary-card.balance {
+        border-top-color: var(--blue-1);
+    }
+
+/* ---------- Budget / savings panels ---------- */
+.home-panel-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.home-panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(30,30,60,.05);
+}
+
+    .home-panel h3 {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--ink);
+    }
+
+    .home-panel hr {
+        border: none;
+        border-top: 1px solid var(--line);
+        margin: 14px 0;
+    }
+
+.home-panel-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: .88rem;
+    color: var(--muted);
+}
+
+    .home-panel-row strong {
+        color: var(--ink);
+        font-weight: 700;
+    }
+
+        .home-panel-row strong.positive {
+            color: var(--purple-1);
+        }
+
+        .home-panel-row strong.negative {
+            color: var(--amber);
+        }
+
+        .home-panel-row strong.accent {
+            color: var(--blue-1);
+        }
+
+.home-progress {
+    margin-top: 14px;
+    height: 8px;
+    border-radius: 99px;
+    background: var(--line);
+    overflow: hidden;
+}
+
+.home-progress-bar {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+    width: 0%;
+    transition: width .6s ease;
+}
+
+    .home-progress-bar.savings {
+        background: linear-gradient(90deg, var(--amber), #fbbf24);
+    }
+
+.home-progress-label {
+    display: block;
+    margin-top: 8px;
+    font-size: .78rem;
+    color: var(--muted);
+}
+
+/* ---------- Demo transactions table ---------- */
+.home-table-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(30,30,60,.05);
+}
+
+    .home-table-card h3 {
+        margin: 0 0 16px;
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--ink);
+    }
+
+.home-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem;
+}
+
+    .home-table th {
+        text-align: left;
+        padding: 10px 12px;
+        color: var(--muted);
+        font-size: .76rem;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        border-bottom: 2px solid var(--line);
+    }
+
+    .home-table td {
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+        color: var(--ink);
+    }
+
+    .home-table tr:hover td {
+        background: var(--amber-soft);
+    }
+
+.home-type-pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 99px;
+    font-size: .74rem;
+    font-weight: 700;
+}
+
+    .home-type-pill.income {
+        background: #eef2ff;
+        color: var(--purple-1);
+    }
+
+    .home-type-pill.expense {
+        background: var(--amber-soft);
+        color: var(--amber);
+    }
+
+/* ---------- Responsive ----------
+   Mobile-first, one shared breakpoint — same 768px point site.css
+   uses for its html font-size bump / dashboard.css uses throughout. */
+@media (min-width: 768px) {
+    .home-hero {
+        grid-template-columns: 1.1fr .9fr;
+        gap: 40px;
+    }
+
+    .home-hero-text h1 {
+        font-size: 2.6rem;
+    }
+
+    .home-feature-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .home-summary-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .home-panel-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
