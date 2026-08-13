@@ -1,6 +1,10 @@
+console.log("AUTH GUARD IS RUNNING");
+
 const token = localStorage.getItem("token");
 
+console.log("TOKEN:", token);
+
 if (!token) {
-    alert("Please log in or register your account");
+    console.log("NO TOKEN - REDIRECTING");
     window.location.href = "/AuthPage/Login";
 }

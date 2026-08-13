@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace financetrackerAPI.Controllers;
 
+
+[Authorize]
 public class CategoryPageController : Controller
 {
     // GET /CategoryPage
@@ -31,7 +34,8 @@ public class CategoryPageController : Controller
     }
 
     // GET /CategoryPage/Delete/{id}
-    public IActionResult Delete(int id) {
+    public IActionResult Delete(int id)
+    {
         ViewData["categoryID"] = id;
         return View("~/Views/Category/Delete.cshtml");
     }

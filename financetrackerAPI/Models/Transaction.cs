@@ -7,8 +7,7 @@ namespace financetrackerAPI.Models
         [Key]
         public int transactionsID { get; set; }
 
-        public int amount { get; set; }
-
+        public decimal amount { get; set; }
         public int userID { get; set; }
 
         public int categoryID { get; set; }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 
+[AllowAnonymous]
 public class AuthPageController : Controller
 {
     public IActionResult Register()

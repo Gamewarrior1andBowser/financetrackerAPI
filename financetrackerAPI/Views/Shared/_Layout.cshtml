@@ -126,11 +126,22 @@
                         `;
             });
 
-            function logout() {
-                localStorage.removeItem("token");
-                window.location.href = "/";
-            }
-    </script>
-    @await RenderSectionAsync("Scripts", required: false)
+function logout(){
+
+    localStorage.removeItem("token");
+
+    window.location.href="/";
+
+}
+
+
+</script>
+
+
+<script src="~/js/authGuard.js"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
+
+
 </body>
 </html>
