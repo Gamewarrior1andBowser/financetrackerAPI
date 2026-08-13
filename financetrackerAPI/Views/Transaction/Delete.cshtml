@@ -1,94 +1,137 @@
 ﻿@{
-    ViewData["Title"] = "Delete Transaction";
-    var transactionID = ViewBag.catagoryID;
+    ViewData["Title"] = "Transaction Details";
+    var transactionID = ViewData["transactionID"];
 }
 
 <div class="transaction-page">
 
-    <div class="card transaction-delete-card">
+    <div class="transaction-header">
+        <div>
+            <h1 class="transaction-title">
+                <i class="bi bi-receipt me-2"></i>
+                Transaction Details
+            </h1>
 
-        <h2>
-            <i class="bi bi-trash-fill me-2"></i>
-            Delete Transaction
-        </h2>
+            <p class="transaction-description">
+                View your transaction information.
+            </p>
+        </div>
+    </div>
 
-        <p>
-            This action cannot be undone. The Transaction and its
-            related data may also be removed.
-        </p>
+    <div class="transaction-content">
+        <div class="transaction-detail-card">
 
-        <div class="transaction-delete-info">
-            <div>
-                <small>Transaction</small><br />
-                <strong id="name">Loading...</strong>
+            <div class="transaction-detail-icon">
+                <i class="bi bi-receipt"></i>
             </div>
 
-            <div class="mt-2">
-                <small>Type</small><br />
-                <strong id="type">—</strong>
+            <div class="transaction-detail-block">
+                <span>Amount</span>
+                <strong id="amount">Loading...</strong>
             </div>
+
+            <div class="transaction-detail-block">
+                <span>Category</span>
+                <strong id="category">Loading...</strong>
+            </div>
+
+            <div class="transaction-detail-block">
+                <span>Type</span>
+                <strong id="type">Loading...</strong>
+            </div>
+
+            <div class="transaction-detail-block">
+                <span>Date</span>
+                <strong id="date">Loading...</strong>
+            </div>
+
+            <div class="transaction-detail-block">
+                <span>Notes</span>
+                <strong id="notes" class="transaction-notes-value">
+                    Loading...
+                </strong>
+            </div>
+
+            <div class="transaction-detail-actions">
+
+                <a asp-controller="TransactionPage"
+                   asp-action="Index"
+                   class="transaction-panel-cancel">
+                    <i class="bi bi-arrow-left"></i>
+                    Back
+                </a>
+
+                <a href="/TransactionPage/Edit/@transactionID"
+                   class="transaction-edit-btn">
+                    <i class="bi bi-pencil-fill"></i>
+                    Edit
+                </a>
+
+                <a href="/TransactionPage/Delete/@transactionID"
+                   class="transaction-delete-btn">
+                    <i class="bi bi-trash-fill"></i>
+                    Delete
+                </a>
+
+            </div>
+
         </div>
-
-        <div id="deleteError" class="transaction-error"></div>
-
-        <div class="transaction-buttons">
-            <button class="transaction-btn transaction-danger"
-                    onclick="deleteTransaction()">
-                <i class="bi bi-trash me-1"></i>
-                Delete Transaction
-            </button>
-
-            <a asp-controller="TransactionPage"
-               asp-action="Index"
-               class="transaction-btn transaction-secondary">
-                Cancel
-            </a>
-        </div>
-
     </div>
 
 </div>
 
 @section Scripts {
-    <script>
-        const token = localStorage.getItem("token");
-        const id = @transactionID;
-        const errorBox = document.getElementById("deleteError");
+<script>
+const token = localStorage.getItem("token");
+const transactionID = @transactionID;
 
-        async function loadTransaction() {
-            try {
-                const response = await fetch(`/api/Transaction/${id}`, {
-                    headers: { Authorization: "Bearer " + token }
-                });
+async function loadDetails() {
 
-                if (!response.ok) throw new Error();
+    try {
 
-                const transaction = await response.json();
-
-                document.getElementById("name").textContent = transaction.name;
-                document.getElementById("type").textContent = transaction.type;
+        const response = await fetch(
+            "/api/Transactions/" + transactionID,
+            {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
             }
-            catch {
-                errorBox.textContent = "Unable to load transaction.";
-                errorBox.style.display = "block";
-            }
-        }
+        );
 
-        async function deleteTransaction() {
-            const response = await fetch(`/api/Transaction/${id}`, {
-                method: "DELETE",
-                headers: { Authorization: "Bearer " + token }
-            });
+        if (!response.ok)
+            throw new Error();
 
-            if (response.ok) {
-                window.location.href = "/TransactionPage";
-                return;
-            }
+        const transaction = await response.json();
 
-            errorBox.textContent = "Unable to delete transaction.";
-            errorBox.style.display = "block";
-        }
+        const amount = Number(transaction.amount) || 0;
 
-        loadTransaction();
-    </script>
+        document.getElementById("amount").textContent =
+            "$" + amount.toFixed(2);
+
+        document.getElementById("category").textContent =
+            transaction.categoryName || "No Category";
+
+        document.getElementById("type").textContent =
+            transaction.type || "Not Available";
+
+        document.getElementById("date").textContent =
+            transaction.date
+                ? new Date(transaction.date).toLocaleDateString()
+                : "Unknown";
+
+        document.getElementById("notes").textContent =
+            transaction.notes?.trim() || "No notes added";
+
+    } catch {
+
+        document.getElementById("amount").textContent = "Unable to load";
+        document.getElementById("category").textContent = "Unable to load";
+        document.getElementById("type").textContent = "Unable to load";
+        document.getElementById("date").textContent = "Unable to load";
+        document.getElementById("notes").textContent = "Unable to load";
+    }
+}
+
+loadDetails();
+</script>
 }
