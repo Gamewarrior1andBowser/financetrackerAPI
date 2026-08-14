@@ -2,18 +2,18 @@
    BUDGET PAGE
    ========================================================= */
 
-.budget-page {
+/*.budget-page {
     max-width: 1400px;
     margin: 0 auto;
     padding: 28px 32px 45px;
-}
+}*/
 
 
 /* =========================================================
    HEADER
    ========================================================= */
 
-.budget-header {
+/*.budget-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -66,14 +66,14 @@
         color: #fff;
         transform: translateY(-2px);
         box-shadow: 0 7px 18px rgba(91, 85, 182, .22);
-    }
+    }*/
 
 
 /* =========================================================
    MAIN CONTENT
    ========================================================= */
 
-.budget-content {
+/*.budget-content {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 22px;
@@ -87,25 +87,25 @@
 
 .budget-main {
     min-width: 0;
-}
+}*/
 
 
 /* =========================================================
    BUDGET GRID
    ========================================================= */
 
-.budget-grid {
+/*.budget-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
-}
+}*/
 
 
 /* =========================================================
    BUDGET CARD
    ========================================================= */
 
-.budget-card {
+/*.budget-card {
     background: #fff;
     border: 1px solid #e0e2e8;
     border-radius: 14px;
@@ -121,14 +121,14 @@
 
 .budget-card-body {
     padding: 20px;
-}
+}*/
 
 
 /* =========================================================
    PIGGY BANK ICON
    ========================================================= */
 
-.budget-card-icon {
+/*.budget-card-icon {
     width: 42px;
     height: 42px;
     display: flex;
@@ -143,27 +143,27 @@
 
     .budget-card-icon i {
         color: #5b55b6;
-    }
+    }*/
 
 
 /* =========================================================
    BUDGET NAME
    ========================================================= */
 
-.budget-card-body h2 {
+/*.budget-card-body h2 {
     margin: 0 0 17px;
     color: #292938;
     font-size: 22px;
     font-weight: 700;
     word-break: break-word;
-}
+}*/
 
 
 /* =========================================================
    LIMIT
    ========================================================= */
 
-.budget-limit {
+/*.budget-limit {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -178,14 +178,14 @@
     .budget-limit strong {
         color: #292938;
         font-size: 17px;
-    }
+    }*/
 
 
 /* =========================================================
    PROGRESS
    ========================================================= */
 
-.budget-progress {
+/*.budget-progress {
     margin-bottom: 13px;
 }
 
@@ -199,14 +199,14 @@
     .budget-progress .progress-bar {
         background: linear-gradient(90deg, #5b55b6, #6d5bd0);
         border-radius: 20px;
-    }
+    }*/
 
 
 /* =========================================================
    DATE
    ========================================================= */
 
-.budget-date {
+/*.budget-date {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -216,14 +216,14 @@
 
     .budget-date i {
         color: #5b55b6;
-    }
+    }*/
 
 
 /* =========================================================
    VIEW / EDIT / DELETE BUTTONS
    ========================================================= */
 
-.budget-card-actions {
+/*.budget-card-actions {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
@@ -245,12 +245,12 @@
     font-weight: 700;
     cursor: pointer;
     transition: .2s ease;
-}
+}*/
 
 
 /* VIEW */
 
-.budget-view-btn {
+/*.budget-view-btn {
     border: 1px solid #b9dcff;
     background: #eaf5ff;
     color: #1671c9;
@@ -260,12 +260,12 @@
         background: #1671c9;
         border-color: #1671c9;
         color: #fff;
-    }
+    }*/
 
 
 /* EDIT */
 
-.budget-edit-btn {
+/*.budget-edit-btn {
     border: 1px solid #ffd58a;
     background: #fff5df;
     color: #d98200;
@@ -275,12 +275,12 @@
         background: #d98200;
         border-color: #d98200;
         color: #fff;
-    }
+    }*/
 
 
 /* DELETE */
 
-.budget-delete-btn {
+/*.budget-delete-btn {
     border: 1px solid #ffbfc5;
     background: #fff0f2;
     color: #d93645;
@@ -290,14 +290,14 @@
         background: #d93645;
         border-color: #d93645;
         color: #fff;
-    }
+    }*/
 
 
 /* =========================================================
    RIGHT SIDE PANEL
    ========================================================= */
 
-.budget-panel {
+/*.budget-panel {
     display: none;
     min-width: 0;
     background: #fff;
@@ -322,14 +322,14 @@
         opacity: 1;
         transform: translateX(0);
     }
-}
+}*/
 
 
 /* =========================================================
    PANEL HEADER
    ========================================================= */
 
-.budget-panel-header {
+/*.budget-panel-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -364,23 +364,23 @@
     .budget-panel-close:hover {
         background: #e7e7ee;
         color: #292938;
-    }
+    }*/
 
 
 /* =========================================================
    PANEL CONTENT
    ========================================================= */
 
-.budget-panel-content {
+/*.budget-panel-content {
     padding: 22px;
-}
+}*/
 
 
 /* =========================================================
    DETAILS
    ========================================================= */
 
-.budget-detail-icon {
+/*.budget-detail-icon {
     width: 55px;
     height: 55px;
     display: flex;
@@ -408,14 +408,14 @@
     .budget-detail-block strong {
         color: #292938;
         font-size: 17px;
-    }
+    }*/
 
 
 /* =========================================================
    FORM
    ========================================================= */
 
-.budget-form-group {
+/*.budget-form-group {
     margin-bottom: 18px;
 }
 
@@ -458,14 +458,14 @@
     .budget-panel-primary:hover {
         transform: translateY(-1px);
         box-shadow: 0 6px 15px rgba(91, 85, 182, .2);
-    }
+    }*/
 
 
 /* =========================================================
    DELETE PANEL
    ========================================================= */
 
-.budget-delete-box {
+/*.budget-delete-box {
     padding: 20px 5px;
     text-align: center;
 }
@@ -531,14 +531,14 @@
 
     .budget-panel-danger:hover {
         background: #c52d3b;
-    }
+    }*/
 
 
 /* =========================================================
    PANEL ERROR
    ========================================================= */
 
-.budget-panel-error {
+/*.budget-panel-error {
     padding: 35px 15px;
     text-align: center;
     color: #be123c;
@@ -550,14 +550,14 @@
 
     .budget-panel-error p {
         margin-top: 10px;
-    }
+    }*/
 
 
 /* =========================================================
    EMPTY STATE
    ========================================================= */
 
-.budget-empty {
+/*.budget-empty {
     padding: 60px 20px;
     text-align: center;
     background: #fff;
@@ -588,28 +588,28 @@
     margin-bottom: 18px;
     color: #777d8c;
     font-size: 13px;
-}
+}*/
 
 
 /* =========================================================
    ERROR
    ========================================================= */
 
-.budget-error {
+/*.budget-error {
     padding: 20px;
     text-align: center;
     background: #fff1f2;
     border: 1px solid #fecdd3;
     border-radius: 12px;
     color: #be123c;
-}
+}*/
 
 
 /* =========================================================
    RESPONSIVE
    ========================================================= */
 
-@media (max-width: 1050px) {
+/*@media (max-width: 1050px) {
 
     .budget-content:has(.budget-panel.open) {
         grid-template-columns: minmax(0, 1fr) 340px;
@@ -656,5 +656,72 @@
 
     .budget-title {
         font-size: 26px;
+    }
+}*/
+
+
+
+
+/* ==========================================================================
+   Budgets.css
+   Page-specific styling for the Budgets view.
+
+   NOTE: This page reuses the shared .category-* classes (category-header,
+   category-hero, category-benefits, category-card, category-panel, etc.)
+   that already power the Categories and Transactions pages. Those shared
+   rules should stay in your global/shared stylesheet - this file only
+   holds the bits unique to Budgets, so it needs to load AFTER that shared
+   sheet.
+   ========================================================================== */
+
+.budget-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 32px 45px;
+}
+
+/* Hero illustration panel, matches the pattern used by
+   .transaction-hero-visual on the Transactions page */
+.budget-hero-visual {
+    flex: 1;
+    min-height: 220px;
+    border-radius: 16px;
+    /*    background: linear-gradient(135deg, #4f46a5 0%, #6d5bd0 55%, #4f86c6 100%);*/
+    position: relative;
+    background-image: linear-gradient( rgba(42,40,56,.12), rgba(42,40,56,.12) ), url('/images/budgets/budget-hero-image-again.webp');
+    overflow: hidden;
+}
+
+    /*.budget-hero-visual::before {
+        content: "\F620";*/ /* bi-piggy-bank-fill */
+        /*font-family: "bootstrap-icons";
+        position: absolute;
+        right: 24px;
+        bottom: -10px;
+        font-size: 9rem;
+        color: rgba(255, 255, 255, 0.15);
+    }*/
+
+/* Budget-flavored icon tint used inside shared .category-card-icon /
+   .category-detail-icon so budget cards read distinctly from
+   category/transaction cards while keeping the same card shell */
+.category-card-icon,
+.category-detail-icon {
+    background: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+}
+
+.category-empty-icon {
+    color: #f59e0b;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .budget-page {
+        padding: 22px 16px 35px;
+    }
+
+    .budget-hero-visual {
+        min-height: 160px;
     }
 }
