@@ -114,7 +114,7 @@
 
 .category-hero-visual {
     min-height: 400px;
-    background-image: linear-gradient( rgba(42,40,56,.12), rgba(42,40,56,.12) ), url('/images/categories/money.avif');
+    background-image: linear-gradient( rgba(42,40,56,.12), rgba(42,40,56,.12) ), url('/images/categories/think.avif');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -210,7 +210,7 @@
 
 .category-benefit-grid {
     display: grid;
-    grid-template-columns: repeat(3,minmax(0,1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
 }
 
@@ -230,11 +230,12 @@
     }
 
 .category-benefit-image {
+    display: block;
     width: calc(100% + 48px);
     height: 170px;
     margin-left: -24px;
+    margin-bottom: 25px;
     object-fit: cover;
-    display: block;
 }
 
 .category-benefit-icon {
@@ -263,7 +264,6 @@
     font-size: 13px;
     line-height: 1.6;
 }
-
 
 /* PROBLEM */
 

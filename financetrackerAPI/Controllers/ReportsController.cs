@@ -32,16 +32,24 @@ namespace financetrackerAPI.Controllers
         public IActionResult GetReportData()
         {
 
+            var userClaim = User.FindFirst("id");
+
+            if (userClaim == null) {
+                return Unauthorized("User id not found in token");
+            }
+
+            int userID = int.Parse(userClaim.Value);
+
             var income = _context.Transactions
                 .Include(t => t.Category)
-                .Where(t => t.Category.Type == "Income")
+                .Where(t => t.Category.Type == "Income" && t.userID == userID)
                 .Sum(t => t.amount);
 
 
 
             var expenses = _context.Transactions
                 .Include(t => t.Category)
-                .Where(t => t.Category.Type == "Expense")
+                .Where(t => t.Category.Type == "Expense" && t.userID == userID)
                 .Sum(t => t.amount);
 
 
@@ -50,7 +58,7 @@ namespace financetrackerAPI.Controllers
 
             var categoryData = _context.Transactions
                 .Include(t => t.Category)
-                .Where(t => t.Category.Type == "Expense")
+                .Where(t => t.Category.Type == "Expense" && t.Category.userID == userID)
                 .GroupBy(t => t.Category.name)
                 .Select(c => new
                 {

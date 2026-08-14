@@ -12,8 +12,8 @@ using financetrackerAPI.Data;
 namespace financetrackerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260812191811_v9")]
-    partial class v9
+    [Migration("20260814132324_FixCategoryTransactionRelationship")]
+    partial class FixCategoryTransactionRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,7 +87,6 @@ namespace financetrackerAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
 
                     b.Property<int>("amount")
-                        .HasPrecision(10, 2)
                         .HasColumnType("int");
 
                     b.Property<int>("categoryID")
