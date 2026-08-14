@@ -43,12 +43,19 @@ ADD CONSTRAINT FK_Budget_Category
 FOREIGN KEY (categoryID)
 REFERENCES Categories(categoryID);
 
-ALTER TABLE Transactions
-ADD CONSTRAINT FK_Transactions_Category
-FOREIGN KEY (categoryID)
-REFERENCES Categories(categoryID);
-
 ALTER TABLE Budget
 ADD CONSTRAINT FK_Budget_User
 FOREIGN KEY (userID)
 REFERENCES Users(userID);
+ 
+ALTER TABLE Transactions
+ADD CONSTRAINT [FK_Transactions_Users_userID]
+FOREIGN KEY (userID)
+REFERENCES Users(userID)
+ON DELETE NO ACTION;
+ 
+ALTER TABLE Transactions
+ADD CONSTRAINT [FK_Transactions_Categories_categoryID]
+FOREIGN KEY (categoryID)
+REFERENCES Categories(categoryID)
+ON DELETE CASCADE;
