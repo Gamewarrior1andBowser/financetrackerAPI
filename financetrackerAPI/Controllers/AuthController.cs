@@ -31,7 +31,8 @@ public class AuthController : ControllerBase
         {
             return BadRequest("Email is required");
         }
-        else if (string.IsNullOrWhiteSpace(user.password))
+
+        if (string.IsNullOrWhiteSpace(user.password))
         {
             return BadRequest("Password is required");
         }
@@ -46,14 +47,40 @@ public class AuthController : ControllerBase
             return BadRequest("An account with this email already exists");
         }
 
-        user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
-
-        user.creationTime = DateTime.Now;
-
-        _context.Users.Add(user);
-
         try
         {
+            user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
+
+            user.creationTime = DateTime.Now;
+
+            _context.Users.Add(user);
+
+            await _context.SaveChangesAsync();
+
+            List<Category> defaultCategories = new List<Category>
+            {
+                new Category
+                {
+                    name = "Rent",
+                    Type = "Expense",
+                    userID = user.userID
+                },
+                new Category
+                {
+                    name = "Food",
+                    Type = "Expense",
+                    userID = user.userID
+                },
+                new Category
+                {
+                    name = "Work",
+                    Type = "Income",
+                    userID = user.userID
+                }
+            };
+
+            _context.Categories.AddRange(defaultCategories);
+
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateException)
@@ -112,7 +139,7 @@ public class AuthController : ControllerBase
             new AuthenticationProperties
             {
                 IsPersistent = false,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1)
+                ExpiresUtc = DateTimeOffset.UtcNow.AddSeconds(10)
             }
         );
 
@@ -143,7 +170,7 @@ public class AuthController : ControllerBase
             issuer: _config["Jwt:Issuer"],
             audience: _config["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(2),
+            expires: DateTime.UtcNow.AddSeconds(10),
             signingCredentials: credentials
         );
 
