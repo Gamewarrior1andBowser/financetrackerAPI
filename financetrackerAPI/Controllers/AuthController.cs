@@ -139,7 +139,7 @@ public class AuthController : ControllerBase
             new AuthenticationProperties
             {
                 IsPersistent = false,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddSeconds(10)
+                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1)
             }
         );
 
@@ -170,7 +170,7 @@ public class AuthController : ControllerBase
             issuer: _config["Jwt:Issuer"],
             audience: _config["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddSeconds(10),
+            expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: credentials
         );
 
