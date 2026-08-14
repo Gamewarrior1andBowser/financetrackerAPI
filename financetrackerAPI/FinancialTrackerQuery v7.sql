@@ -32,7 +32,8 @@ CREATE TABLE Budget (
 	limits int NULL,
 	[date] [date] NOT NULL,
 	userID int NULL,
-	categoryID int NULL
+	categoryID int NULL,
+	username nvarchar (255)
 );
 
 ALTER TABLE Users

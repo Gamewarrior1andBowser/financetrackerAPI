@@ -89,7 +89,12 @@
                 const token = localStorage.getItem("token");
                 const navbar = document.getElementById("navbarLinks");
 
-                if (!token || !navbar) return;
+                function isValidJWT(token) {
+                    const parts = token.split(".");
+                    return parts.length === 3;
+                }
+
+                if (!token || !isValidJWT(token) || !navbar) return;
 
                 navbar.innerHTML = `
                             <li class="nav-item">
