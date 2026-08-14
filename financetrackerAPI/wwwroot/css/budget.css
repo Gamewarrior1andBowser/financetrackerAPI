@@ -20,6 +20,14 @@
     margin-bottom: 28px;
 }
 
+.budget-hero-visual {
+    min-height: 400px;
+    background-image: linear-gradient( rgba(42,40,56,.12), rgba(42,40,56,.12) ), url('/images/budgets/budget-hero-image.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .budget-title {
     margin: 0;
     color: #292938;
