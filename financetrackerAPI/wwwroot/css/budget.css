@@ -688,19 +688,9 @@
     border-radius: 16px;
     /*    background: linear-gradient(135deg, #4f46a5 0%, #6d5bd0 55%, #4f86c6 100%);*/
     position: relative;
-    background-image: linear-gradient( rgba(42,40,56,.12), rgba(42,40,56,.12) ), url('/images/budgets/budget-hero-image-again.webp');
+    background-image: linear-gradient( rgba(42,40,56,.12), rgba(42,40,56,.12) ), url('/images/budgets/budget-hero-image-two.jpg');
     overflow: hidden;
 }
-
-    /*.budget-hero-visual::before {
-        content: "\F620";*/ /* bi-piggy-bank-fill */
-        /*font-family: "bootstrap-icons";
-        position: absolute;
-        right: 24px;
-        bottom: -10px;
-        font-size: 9rem;
-        color: rgba(255, 255, 255, 0.15);
-    }*/
 
 /* Budget-flavored icon tint used inside shared .category-card-icon /
    .category-detail-icon so budget cards read distinctly from

@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\budgets\" />
     <Folder Include="wwwroot\images\transactions\" />
   </ItemGroup>
 
