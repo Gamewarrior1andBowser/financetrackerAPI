@@ -48,7 +48,7 @@
 
     <section class="home-feature-grid">
 
-        <a asp-controller="AuthPage" asp-action="Register">
+        <a asp-controller="AuthPage" asp-action="Register" id="cardTransactions">
             <div class="home-feature-card">
                 <div class="home-feature-icon purple">
                     <i class="bi bi-receipt me-2"></i>
@@ -58,7 +58,7 @@
             </div>
         </a>
 
-        <a asp-controller="AuthPage" asp-action="Register">
+        <a asp-controller="AuthPage" asp-action="Register" id="cardCategory">
             <div class="home-feature-card">
                 <div class="home-feature-icon amber">
                     <i class="bi bi-tags-fill"></i>
@@ -68,7 +68,7 @@
             </div>
         </a>
 
-        <a asp-controller="AuthPage" asp-action="Register">
+        <a asp-controller="AuthPage" asp-action="Register" id="cardReports">
             <div class="home-feature-card">
                 <div class="home-feature-icon blue">
                     <i class="bi bi-bar-chart-fill"></i>
@@ -146,6 +146,22 @@
     <script>
 
         let demoCategoryChartInstance = null;
+
+        (function redirectFeatureCardsIfLoggedIn() {
+            const token = localStorage.getItem("token");
+                if (!token) return;
+
+            const routes = {
+                cardTransactions: "/TransactionPage/Index",
+                cardCategory: "/CategoryPage/Index",
+                cardReports: "/DashboardPage/Index"
+            };
+
+                Object.entries(routes).forEach(([id, url]) => {
+                    const el = document.getElementById(id);
+                    if (el) el.href = url;
+                });
+            })();
 
         async function loadDemoData() {
             const response = await fetch("/data/demo-data.json");
