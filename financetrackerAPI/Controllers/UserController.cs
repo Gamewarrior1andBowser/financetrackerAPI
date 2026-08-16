@@ -39,7 +39,7 @@ public class UserController : ControllerBase
 
         return Ok(new
         {
-            name = user.email.Split('@')[0]
+            name = user.username
         });
     }
 }
