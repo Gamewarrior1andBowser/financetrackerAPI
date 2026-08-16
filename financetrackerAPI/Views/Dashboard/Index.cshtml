@@ -133,13 +133,30 @@
             }
         }
 
+        // async function getUserName() {
+        //     if (!token) return "User";
+
+        //     const user = getJwtPayload(token);
+        //     const name = user?.name || user?.given_name || user?.unique_name;
+
+        //     if (name) return name;
+
+        //     try {
+        //         const response = await fetch("/api/User/profile", {
+        //             headers: { Authorization: "Bearer " + token }
+        //         });
+
+        //         if (response.ok) {
+        //             const data = await response.json();
+        //             return data?.name || "User";
+        //         }
+        //     } catch { }
+
+        //     return "User";
+        // }
+
         async function getUserName() {
             if (!token) return "User";
-
-            const user = getJwtPayload(token);
-            const name = user?.name || user?.given_name || user?.unique_name;
-
-            if (name) return name;
 
             try {
                 const response = await fetch("/api/User/profile", {

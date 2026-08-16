@@ -683,14 +683,22 @@
 /* Hero illustration panel, matches the pattern used by
    .transaction-hero-visual on the Transactions page */
 .budget-hero-visual {
+    min-height: 400px;
+    background-image: linear-gradient( rgba(42,40,56,.12), rgba(42,40,56,.12) ), url('/images/budgets/budget-hero.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*.budget-hero-visual {
     flex: 1;
     min-height: 220px;
-    border-radius: 16px;
+    border-radius: 16px;*/
     /*    background: linear-gradient(135deg, #4f46a5 0%, #6d5bd0 55%, #4f86c6 100%);*/
-    position: relative;
-    background-image: linear-gradient( rgba(42,40,56,.12), rgba(42,40,56,.12) ), url('/images/budgets/budget-hero-image-two.jpg');
+    /*position: relative;
+    background-image: linear-gradient( rgba(42,40,56,.12), rgba(42,40,56,.12) ), url('/images/budgets/budget-hero.webp');
     overflow: hidden;
-}
+}*/
 
 /* Budget-flavored icon tint used inside shared .category-card-icon /
    .category-detail-icon so budget cards read distinctly from
