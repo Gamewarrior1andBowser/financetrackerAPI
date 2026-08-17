@@ -34,69 +34,58 @@
         font-size: 14px;
     }
 
-
- /* FINANCIAL PICTURE */
-.reports-picture {
+/* HERO */.reports-hero {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    min-height: 320px;
-    overflow: hidden;
+    min-height: 400px;
     margin-bottom: 55px;
-    background: #fff;
-    border: 1px solid #e0e2e8;
-    border-radius: 14px;
-    box-shadow: 0 2px 7px rgba(30,30,60,.05);
+    border-radius: 18px;
+    overflow: hidden;
+    background: #f5f3ff;
 }
-
-.reports-picture-content {
-    grid-column: 1;
-    grid-row: 1;
-    align-self: center;
-    padding: 35px;
+.reports-hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 55px;
 }
-
-.reports-picture-image {
-    grid-column: 2;
-    grid-row: 1;
-    min-height: 320px;
+.reports-hero-label {
+    width: fit-content;
+    margin-bottom: 18px;
+    padding: 7px 13px;
+    border-radius: 20px;
+    background: #e8e5fa;
+    color: #5b55b6;
+    font-size: 12px;
+    font-weight: 700;
 }
-
-    .reports-picture-image img {
+.reports-hero-content h2 {
+    max-width: 600px;
+    margin: 0 0 16px;
+    color: #292938;
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.15;
+}
+.reports-hero-content p {
+    max-width: 570px;
+    margin: 0 0 15px;
+    color: #666b7a;
+    font-size: 15px;
+    line-height: 1.7;
+}
+    .reports-hero-content p:last-child {
+        margin-bottom: 0;
+    }
+.reports-hero-visual {
+    min-height: 400px;
+}
+    .reports-hero-visual img {
         display: block;
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-
-.reports-picture-content > span {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #5b55b6;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .7px;
-}
-
-.reports-picture-content h2 {
-    margin: 9px 0 12px;
-    color: #292938;
-    font-size: 25px;
-    font-weight: 700;
-}
-
-.reports-picture-content p {
-    margin: 0 0 10px;
-    color: #777d8c;
-    font-size: 13px;
-    line-height: 1.7;
-}
-
-    .reports-picture-content p:last-child {
-        margin-bottom: 0;
-    }
-
-
 /* SUMMARY */
 
 .summary-grid {

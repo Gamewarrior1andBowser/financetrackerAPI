@@ -3,19 +3,6 @@
   "expenses": 3275,
   "balance": 2575,
 
-  "budget": {
-    "monthlylimits": 4000,
-    "used": 3275,
-    "remaining": 725,
-    "usagePercentage": 82
-  },
-
-  "savingsGoal": {
-    "goal": 10000,
-    "current": 6500,
-    "remaining": 3500,
-    "progress": 65
-  },
 
   "transactions": [
     {
@@ -49,70 +36,26 @@
       "date": "2026-08-10"
     },
     {
-      "date": "2026-08-12",
       "category": "Shopping",
       "type": "Expense",
       "amount": 400,
-      "date": "2026-08-01"
+      "date": "2026-08-13"
 
     },
     {
-      "date": "2026-08-15",
       "category": "Utilities",
       "type": "Expense",
       "amount": 300,
-      "date": "2026-08-01"
+      "date": "2026-08-015"
 
     },
     {
-      "date": "2026-08-18",
       "category": "Entertainment",
       "type": "Expense",
       "amount": 175,
-      "date": "2026-08-01"
+      "date": "2026-08-18"
 
-    }
-  ],
-
-  "categorySpending": [
-    {
-      "category": "Housing",
-      "amount": 1500
-    },
-    {
-      "category": "Food",
-      "amount": 600
-    },
-    {
-      "category": "Transportation",
-      "amount": 300
-    },
-    {
-      "category": "Shopping",
-      "amount": 400
-    },
-    {
-      "category": "Utilities",
-      "amount": 300
-    },
-    {
-      "category": "Entertainment",
-      "amount": 175
-    }
-  ],
-
-  "monthlySpending": [
-    {
-      "month": "January",
-      "amount": 2800
-    },
-    {
-      "month": "February",
-      "amount": 3100
-    },
-    {
-      "month": "March",
-      "amount": 3275
     }
   ]
+
 }

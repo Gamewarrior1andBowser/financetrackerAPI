@@ -1,19 +1,4 @@
-﻿
-
-
-
-/* ============================================================
-           Dashboard styles — scoped under .finance-dashboard so nothing
-           on the Budget/Transaction pages is affected.
-           Palette matches the rest of the site: purple/indigo gradient
-           (#4f46a5 → #6d5bd0 → #4f86c6) + the amber accent (#f59e0b)
-           already used on the auth cards.
-
-           Responsiveness follows site.css: mobile-first, one shared
-           breakpoint at 768px (matches the html font-size bump in
-           site.css) rather than a separate late max-width collapse.
-        ============================================================ */
-.finance-dashboard {
+﻿.finance-dashboard {
     --purple-1: #4f46a5;
     --purple-2: #6d5bd0;
     --blue-1: #4f86c6;
@@ -472,9 +457,7 @@
     transition-delay: 0.15s;
 }
 
-/* ---------- Responsive ----------
-   Mobile-first, one breakpoint — same 768px point site.css uses for
-   its html font-size bump, rather than a separate late collapse. */
+/*Responsive tweaks*/
 
 @media (min-width:768px) {
     .dashboard-hero {

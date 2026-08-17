@@ -1,12 +1,4 @@
-﻿/* ============================================================
-   Home / landing page styles — scoped under .home-page so nothing
-   on other pages is affected.
-   Palette matches dashboard.css: purple/indigo gradient
-   (#4f46a5 → #6d5bd0 → #4f86c6) + the amber accent (#f59e0b).
-
-   Margin-wrap follows the same pattern as .finance-dashboard:
-   margin: 0 32px, collapsing to 16px on small screens.
-============================================================ */
+﻿
 .home-page {
     --purple-1: #4f46a5;
     --purple-2: #6d5bd0;
@@ -513,9 +505,7 @@
     }
 
 
-/* ---------- Responsive ----------
-   Mobile-first, one shared breakpoint — same 768px point site.css
-   uses for its html font-size bump / dashboard.css uses throughout. */
+/* Responsive tweaks*/
 @media (min-width: 768px) {
     .home-hero {
         grid-template-columns: 1.1fr .9fr;

@@ -35,5 +35,15 @@ public class AppDbContext : DbContext
             .HasForeignKey(t => t.categoryID)
             .HasPrincipalKey(c => c.categoryID)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Budget>()
+            .HasKey(t => t.budgetID);
+
+        modelBuilder.Entity<Budget>()
+            .HasOne(t => t.Category)
+            .WithMany()
+            .HasForeignKey(t => t.categoryID)
+            .HasPrincipalKey(c => c.categoryID)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

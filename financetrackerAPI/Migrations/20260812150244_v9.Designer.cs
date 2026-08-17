@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using financetrackerAPI.Data;
 
@@ -11,9 +12,11 @@ using financetrackerAPI.Data;
 namespace financetrackerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260812150244_v9")]
+    partial class v9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,8 +51,6 @@ namespace financetrackerAPI.Migrations
 
                     b.HasKey("budgetID");
 
-                    b.HasIndex("categoryID");
-
                     b.ToTable("Budget");
                 });
 
@@ -61,11 +62,11 @@ namespace financetrackerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("categoryID"));
 
-                    b.Property<string>("Type")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -86,6 +87,7 @@ namespace financetrackerAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transactionsID"));
 
                     b.Property<int>("amount")
+                        .HasPrecision(10, 2)
                         .HasColumnType("int");
 
                     b.Property<int>("categoryID")
@@ -93,13 +95,6 @@ namespace financetrackerAPI.Migrations
 
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("userID")
                         .HasColumnType("int");
@@ -137,17 +132,6 @@ namespace financetrackerAPI.Migrations
                     b.HasKey("userID");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("financetrackerAPI.Models.Budget", b =>
-                {
-                    b.HasOne("financetrackerAPI.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("categoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("financetrackerAPI.Models.Transaction", b =>
