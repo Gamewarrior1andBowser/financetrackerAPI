@@ -60,3 +60,15 @@ ADD CONSTRAINT [FK_Transactions_Categories_categoryID]
 FOREIGN KEY (categoryID)
 REFERENCES Categories(categoryID)
 ON DELETE CASCADE;
+
+ALTER TABLE Budget
+ADD CONSTRAINT [FK_Budget_Users_userID]
+FOREIGN KEY (userID)
+REFERENCES Users(userID)
+ON DELETE NO ACTION;
+
+ALTER TABLE Budget
+ADD CONSTRAINT [FK_Budget_Categories_categoryID]
+FOREIGN KEY (categoryID)
+REFERENCES Categories(categoryID)
+ON DELETE CASCADE;
