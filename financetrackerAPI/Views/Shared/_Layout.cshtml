@@ -152,13 +152,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         `;
             });
 
-function logout(){
+            async function logout() {
+                localStorage.removeItem("token");
 
-    localStorage.removeItem("token");
+                await fetch("/api/Auth/logout", {
+                    method: "POST"
+                });
 
-    window.location.href="/";
-
-}
+                window.location.href = "/AuthPage/Login";
+            }
 
 
 </script>
