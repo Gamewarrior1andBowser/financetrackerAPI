@@ -148,6 +148,15 @@ public class AuthController : ControllerBase
             token
         });
     }
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme
+        );
+
+        return Ok();
+    }
 
     private string GenerateToken(User user)
     {
@@ -170,7 +179,7 @@ public class AuthController : ControllerBase
             issuer: _config["Jwt:Issuer"],
             audience: _config["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(1),
+           expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: credentials
         );
 
