@@ -16,5 +16,7 @@ namespace financetrackerAPI.Models
         public int limits { get; set; }
 
         public DateTime date { get; set; } = DateTime.Now;
+
+        public Category? Category { get; set; }
     }
 }
